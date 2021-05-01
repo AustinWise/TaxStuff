@@ -32,6 +32,9 @@ namespace TaxTest
         F,
     }
 
+    /// <summary>
+    /// Intended to load data from a schwab 1099-B export.
+    /// </summary>
     class Form8949Line
     {
         public Form8949Line(XElement el)
