@@ -57,6 +57,12 @@ public interface IExpressionVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitUnary([NotNull] ExpressionParser.UnaryContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="ExpressionParser.parameter_list"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitParameter_list([NotNull] ExpressionParser.Parameter_listContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="ExpressionParser.factor"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

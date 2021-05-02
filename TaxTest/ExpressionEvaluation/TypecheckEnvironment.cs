@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using TaxTest.FormModel;
 
 namespace TaxTest.ExpressionEvaluation
 {
     class TypecheckEnvironment
     {
+        public Dictionary<string, FormDefinition> Forms { get; set; }
     }
 }

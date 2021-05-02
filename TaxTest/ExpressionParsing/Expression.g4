@@ -8,6 +8,7 @@ PLUS     :  '+'   ;
 MINUS    :  '-'   ;
 TIMES    :  '*'   ;
 DIVIDE   :  '/'   ;
+COMMA    :  ','   ;
 
 INTEGER : ('0'..'9') ('0'..'9')*;
 
@@ -38,14 +39,17 @@ unary
    :  MINUS factor
    |  factor
    ;
+parameter_list
+   :  simple (COMMA simple)*
+   ;
 factor
-    : LPAREN simple RPAREN
-    | float_num
-    | identifier (LPAREN simple RPAREN)?
-    ;
+   : LPAREN simple RPAREN
+   | float_num
+   | identifier (LPAREN parameter_list? RPAREN)?
+   ;
 float_num
-    : INTEGER (DOT INTEGER)?
-    ;
+   : INTEGER (DOT INTEGER)?
+   ;
 complete_expression
-    : simple EOF
-    ;
+   : simple EOF
+   ;

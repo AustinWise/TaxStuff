@@ -7,7 +7,7 @@
             return EvaluationResult.CreateNumber(Number);
         }
 
-        public override ExpressionType GetType(TypecheckEnvironment env)
+        public override ExpressionType CheckType(TypecheckEnvironment env)
         {
             return NumberType.Instance;
         }

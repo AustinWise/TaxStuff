@@ -72,6 +72,16 @@ public interface IExpressionListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitUnary([NotNull] ExpressionParser.UnaryContext context);
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ExpressionParser.parameter_list"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterParameter_list([NotNull] ExpressionParser.Parameter_listContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ExpressionParser.parameter_list"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitParameter_list([NotNull] ExpressionParser.Parameter_listContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ExpressionParser.factor"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

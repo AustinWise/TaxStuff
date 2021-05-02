@@ -8,9 +8,9 @@
     <Field Name="Value" Type="Money" />
   </Struct>
   <Enum Name="Line14Codes">
-    <Vale Name="CASDI" Description="California state disability insurance" />
-    <Vale Name="DISQD" Description="Employee stock plan disqualifying distribution" />
-    <Vale Name="VPDI" Description="Voluntary Plan Disability Insurance" />
+    <Value Name="CASDI" Description="California state disability insurance" />
+    <Value Name="DISQD" Description="Employee stock plan disqualifying distribution" />
+    <Value Name="VPDI" Description="Voluntary Plan Disability Insurance" />
   </Enum>
   <Struct Name="Line14">
     <Field Name="Code" Type="Line14Codes" />

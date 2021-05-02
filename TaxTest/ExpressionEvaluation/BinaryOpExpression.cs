@@ -7,7 +7,7 @@ namespace TaxTest.ExpressionEvaluation
         Add,
         Substract,
         Multiply,
-        Devide,
+        Divide,
     }
 
     record BinaryOpExpression(BaseExpression Left, BinaryOp Operation, BaseExpression Right) : BaseExpression
@@ -29,7 +29,7 @@ namespace TaxTest.ExpressionEvaluation
                 case BinaryOp.Multiply:
                     ret = left * right;
                     break;
-                case BinaryOp.Devide:
+                case BinaryOp.Divide:
                     ret = left / right;
                     break;
                 default:
@@ -38,7 +38,7 @@ namespace TaxTest.ExpressionEvaluation
             return EvaluationResult.CreateNumber(ret);
         }
 
-        public override ExpressionType GetType(TypecheckEnvironment env)
+        public override ExpressionType CheckType(TypecheckEnvironment env)
         {
             Left.ValidateExpressionType(env, NumberType.Instance);
             Right.ValidateExpressionType(env, NumberType.Instance);

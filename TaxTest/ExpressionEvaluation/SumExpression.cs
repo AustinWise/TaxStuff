@@ -9,7 +9,7 @@ namespace TaxTest.ExpressionEvaluation
             return EvaluationResult.CreateNumber(Expression.Evaluate(env).Array.Sum());
         }
 
-        public override ExpressionType GetType(TypecheckEnvironment env)
+        public override ExpressionType CheckType(TypecheckEnvironment env)
         {
             Expression.ValidateExpressionType(env, NumberType.ArrayInstance);
             return NumberType.Instance;

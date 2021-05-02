@@ -85,6 +85,18 @@ public partial class ExpressionBaseListener : IExpressionListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitUnary([NotNull] ExpressionParser.UnaryContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ExpressionParser.parameter_list"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterParameter_list([NotNull] ExpressionParser.Parameter_listContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ExpressionParser.parameter_list"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitParameter_list([NotNull] ExpressionParser.Parameter_listContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ExpressionParser.factor"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
