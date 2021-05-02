@@ -28,7 +28,6 @@ WS       :   [ ]+ -> skip ;
 identifier
    : IDENTIFIER
    ;
-
 simple
    :  term ((PLUS | MINUS) term)*
    ;
@@ -42,12 +41,11 @@ unary
 factor
     : LPAREN simple RPAREN
     | float_num
-    | identifier
+    | identifier (LPAREN simple RPAREN)?
     ;
 float_num
     : INTEGER (DOT INTEGER)?
     ;
-
 complete_expression
     : simple EOF
     ;

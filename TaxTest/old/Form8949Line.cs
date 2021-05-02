@@ -47,8 +47,8 @@ namespace TaxTest
         public DateTime? Acquired { get; }
         public DateTime Sold { get; }
         public string Description { get; }
-        public Money CostBasis { get; }
-        public Money SalePrice { get; }
+        public decimal CostBasis { get; }
+        public decimal SalePrice { get; }
         public string SecName { get; }
         public double NumberOfShares { get; }
     }
