@@ -33,6 +33,12 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IExpressionVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="ExpressionParser.identifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIdentifier([NotNull] ExpressionParser.IdentifierContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="ExpressionParser.simple"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -62,5 +68,11 @@ public interface IExpressionVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitFloat_num([NotNull] ExpressionParser.Float_numContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ExpressionParser.complete_expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context);
 }
 } // namespace TaxTest.ExpressionParsing

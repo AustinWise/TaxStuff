@@ -16,7 +16,7 @@ fragment VALID_ID_START
    ;
 
 fragment VALID_ID_CHAR
-   : VALID_ID_START | ('0' .. '9') | '-'
+   : VALID_ID_START | ('0' .. '9') | '-' | DOT
    ;
 
 IDENTIFIER
@@ -24,6 +24,10 @@ IDENTIFIER
    ;
 
 WS       :   [ ]+ -> skip ;
+
+identifier
+   : IDENTIFIER
+   ;
 
 simple
    :  term ((PLUS | MINUS) term)*
@@ -38,8 +42,12 @@ unary
 factor
     : LPAREN simple RPAREN
     | float_num
-	| IDENTIFIER
+    | identifier
     ;
 float_num
     : INTEGER (DOT INTEGER)?
+    ;
+
+complete_expression
+    : simple EOF
     ;

@@ -32,6 +32,16 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IExpressionListener : IParseTreeListener {
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ExpressionParser.identifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterIdentifier([NotNull] ExpressionParser.IdentifierContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ExpressionParser.identifier"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitIdentifier([NotNull] ExpressionParser.IdentifierContext context);
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ExpressionParser.simple"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -81,5 +91,15 @@ public interface IExpressionListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitFloat_num([NotNull] ExpressionParser.Float_numContext context);
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ExpressionParser.complete_expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ExpressionParser.complete_expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context);
 }
 } // namespace TaxTest.ExpressionParsing

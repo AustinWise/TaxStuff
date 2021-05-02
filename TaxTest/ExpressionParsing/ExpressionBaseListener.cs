@@ -37,6 +37,18 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CLSCompliant(false)]
 public partial class ExpressionBaseListener : IExpressionListener {
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="ExpressionParser.identifier"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterIdentifier([NotNull] ExpressionParser.IdentifierContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ExpressionParser.identifier"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitIdentifier([NotNull] ExpressionParser.IdentifierContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="ExpressionParser.simple"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -96,6 +108,18 @@ public partial class ExpressionBaseListener : IExpressionListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitFloat_num([NotNull] ExpressionParser.Float_numContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="ExpressionParser.complete_expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="ExpressionParser.complete_expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

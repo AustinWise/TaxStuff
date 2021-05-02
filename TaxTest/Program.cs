@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
 using System.Diagnostics;
@@ -7,33 +8,43 @@ using TaxTest.ExpressionParsing;
 
 namespace TaxTest
 {
-    class Program : ExpressionBaseVisitor<float>, IAntlrErrorListener<IToken>
+    class Program : ExpressionBaseVisitor<float>, IAntlrErrorListener<int>, IAntlrErrorListener<IToken>
     {
         const string RETURN = @"d:\AustinWise\Desktop\Return.xml";
         static void Main(string[] args)
         {
-            new Program().Run("1.0");
-            new Program().Run("1.0 + 2.0");
-            new Program().Run("1.0-2");
-            new Program().Run("1.0*2");
+            new Program().Run("asdf-fff.asd - fff");
+        }
+
+        void IAntlrErrorListener<int>.SyntaxError(TextWriter output, IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
+        {
+            throw new Exception("lexer error");
         }
 
         void IAntlrErrorListener<IToken>.SyntaxError(TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
         {
-            throw new Exception("bad parse");
+            throw new Exception("parser error");
         }
 
         public void Run(string input)
         {
             ICharStream stream = CharStreams.fromString(input);
-            ITokenSource lexer = new ExpressionLexer(stream);
+            ExpressionLexer lexer = new ExpressionLexer(stream);
+            lexer.AddErrorListener(this);
             ITokenStream tokens = new CommonTokenStream(lexer);
             var parser = new ExpressionParser(tokens);
-            parser.BuildParseTree = true;
             parser.AddErrorListener(this);
-            var tree = parser.simple();
+            parser.BuildParseTree = true;
+            Console.WriteLine(parser.ErrorHandler.GetType().FullName);
+            var tree = parser.complete_expression();
+            // TODO: the default error listens write to the console
             float result = Visit(tree);
             Console.WriteLine($"{input} = {result}");
+        }
+
+        public override float VisitComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context)
+        {
+            return Visit(context.simple());
         }
 
         public override float VisitSimple([Antlr4.Runtime.Misc.NotNull] ExpressionParser.SimpleContext context)
@@ -84,6 +95,8 @@ namespace TaxTest
         {
             if (context.LPAREN() != null)
                 return Visit(context.simple());
+            else if (context.identifier() != null)
+                return Visit(context.identifier());
             else
                 return Visit(context.float_num());
         }
@@ -99,6 +112,12 @@ namespace TaxTest
         public override float VisitFloat_num([Antlr4.Runtime.Misc.NotNull] ExpressionParser.Float_numContext context)
         {
             return float.Parse(context.GetText());
+        }
+
+        public override float VisitIdentifier([NotNull] ExpressionParser.IdentifierContext context)
+        {
+            Console.WriteLine("ident: " + context.GetText());
+            return 42;
         }
     }
 }
