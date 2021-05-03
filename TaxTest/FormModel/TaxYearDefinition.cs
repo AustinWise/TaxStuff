@@ -9,31 +9,30 @@ namespace TaxTest.FormModel
     {
         public TaxYearDefinition(string folderPath)
         {
-            var forms = new List<FormDefinition>();
-            foreach (var f in Directory.GetFiles(folderPath, "*.xml"))
+            var forms = new Dictionary<string, FormDefinition>();
+            foreach (var path in Directory.GetFiles(folderPath, "*.xml"))
             {
-                forms.Add(FormDefinition.LoadFromFile(f));
+                var form = FormDefinition.LoadFromFile(path);
+                forms.Add(form.Name, form);
             }
-            this.Forms = new ReadOnlyCollection<FormDefinition>(forms);
+            this.Forms = new(forms);
+            
+            TypeCheck();
         }
 
-        public ReadOnlyCollection<FormDefinition> Forms { get; }
+        public ReadOnlyDictionary<string, FormDefinition> Forms { get; }
 
-        public void TypeCheck()
+        private void TypeCheck()
         {
-            var formMap = new Dictionary<string, FormDefinition>();
-            foreach (var f in Forms)
-            {
-                formMap.Add(f.Name, f);
-            }
             var env = new TypecheckEnvironment()
             {
-                Forms = formMap,
+                Forms = Forms,
             };
-            foreach (var f in Forms)
+            foreach (var f in Forms.Values)
             {
                 foreach (var line in f.Lines.Values)
                 {
+                    line.Calc?.CheckType(env);
                 }
             }
         }

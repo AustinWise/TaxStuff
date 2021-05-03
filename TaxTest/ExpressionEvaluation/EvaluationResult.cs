@@ -4,6 +4,9 @@ namespace TaxTest.ExpressionEvaluation
 {
     readonly struct EvaluationResult
     {
+        public static readonly EvaluationResult Zero = new EvaluationResult(decimal.Zero, null);
+        public static readonly EvaluationResult EmptyArray = new EvaluationResult(decimal.Zero, System.Array.Empty<decimal>());
+
         readonly decimal number;
         readonly object other;
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Linq;
 
 namespace TaxTest.FormModel
@@ -40,12 +41,35 @@ namespace TaxTest.FormModel
             return ret;
         }
 
-        public static bool? GetOptionalBoolAttributeValue(this XElement el, string attributeName)
+        public static bool? OptionalBoolAttributeValue(this XElement el, string attributeName)
         {
             var attr = el.Attribute(attributeName);
             if (attr is null)
                 return null;
             return bool.Parse(attr.Value);
+        }
+
+        public static T? OptionalEnumAttributeValue<T>(this XElement el, string attributeName) where T : struct, Enum
+        {
+            var attr = el.Attribute(attributeName);
+            if (attr is null)
+                return null;
+            return Enum.Parse<T>(attr.Value);
+        }
+
+        public static T EnumAttributeValue<T>(this XElement el, string attributeName) where T : struct, Enum
+        {
+            return OptionalEnumAttributeValue<T>(el, attributeName) ?? throw new FileLoadException(el, "Missing attribute: " + attributeName);
+        }
+
+        public static int IntAttributeValue(this XElement el, string attributeName)
+        {
+            return int.Parse(AttributeValue(el, attributeName), CultureInfo.InvariantCulture);
+        }
+
+        public static decimal DecimalAttributeValue(this XElement el, string attributeName)
+        {
+            return decimal.Parse(AttributeValue(el, attributeName), CultureInfo.InvariantCulture);
         }
     }
 }

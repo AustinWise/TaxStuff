@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 using TaxTest.FormModel;
 
 namespace TaxTest.ExpressionEvaluation
 {
     class TypecheckEnvironment
     {
-        public Dictionary<string, FormDefinition> Forms { get; set; }
+        public ReadOnlyDictionary<string, FormDefinition> Forms { get; set; }
     }
 }

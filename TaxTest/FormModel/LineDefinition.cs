@@ -5,8 +5,21 @@ using TaxTest.ExpressionParsing;
 
 namespace TaxTest.FormModel
 {
-    record LineDefinition(string Number, string Name, string Type, bool AllowMultiple, BaseExpression Calc) : IHasName
+    record LineDefinition(string Number, string Name, ExpressionType Type, bool AllowMultiple, BaseExpression Calc) : IHasName
     {
+        private static ExpressionType GetExprType(XAttribute attr)
+        {
+            if (attr is null || attr.Value == "Number")
+                return NumberType.Instance;
+            // TODO: implement support for other types
+            // Currently we don't have a way of looking up what types are available,
+            // so we can't tell if the type if valid or not.
+            // Also the ExpressionType type system is structual, while these lines reference nominal types.
+            // That is, ExpressionType describes a shape while Type here is just a name.
+            // So these systems are not really compatible right now, opps.
+            throw new FileLoadException(attr, "Unsupported line type: " + attr.Value);
+        }
+
         private static BaseExpression ParseCalc(XElement node)
         {
             var calc = node.OptionalAttributeValue("Calc");
@@ -26,8 +39,8 @@ namespace TaxTest.FormModel
         public LineDefinition(XElement el)
             : this(el.AttributeValue("Number"),
                    el.AttributeValue("Name"),
-                   el.OptionalAttributeValue("Type"),
-                   el.GetOptionalBoolAttributeValue("AllowMultiple") ?? false,
+                   GetExprType(el.Attribute("Type")),
+                   el.OptionalBoolAttributeValue("AllowMultiple") ?? false,
                    ParseCalc(el))
         {
             if (AllowMultiple && Calc is not null)
