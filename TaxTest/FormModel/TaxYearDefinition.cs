@@ -16,7 +16,7 @@ namespace TaxTest.FormModel
                 forms.Add(form.Name, form);
             }
             this.Forms = new(forms);
-            
+
             TypeCheck();
         }
 
@@ -32,7 +32,14 @@ namespace TaxTest.FormModel
             {
                 foreach (var line in f.Lines.Values)
                 {
-                    line.Calc?.CheckType(env);
+                    if (line.Calc is object)
+                    {
+                        var actualLineType = line.Calc.CheckType(env);
+                        if (line.Type != actualLineType)
+                        {
+                            throw new TypecheckException($"Form{f.Name}.Line{line.Number} ({line.Name}) expected type {line.Type}, actual {actualLineType}.");
+                        }
+                    }
                 }
             }
         }
