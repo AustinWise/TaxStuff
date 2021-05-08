@@ -1,32 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace TaxTest.ExpressionEvaluation
 {
     static class FunctionFactory
     {
-        static void CheckArgCount(string functionName, List<BaseExpression> arguments, int expected)
+        record FunctionInfo(int ArgCount, ConstructorInfo Ctor)
         {
-            if (arguments.Count != expected)
-                throw new Exception($"Expected {expected} argument for {functionName}, found " + arguments.Count);
+        }
+
+        static readonly Dictionary<string, FunctionInfo> sFunctions = new(StringComparer.OrdinalIgnoreCase);
+
+        static void AddFunction<T>() where T : BaseExpression
+        {
+            var type = typeof(T);
+            if (!type.Name.EndsWith("Expression"))
+                throw new Exception(type.Name + "'s name does not end with 'Expression'");
+            var ctors = type.GetConstructors();
+            if (ctors.Length != 1)
+                throw new Exception("too many ctors on " + type.Name);
+            var ctor = ctors[0];
+
+            foreach (var p in ctor.GetParameters())
+            {
+                if (p.ParameterType != typeof(BaseExpression))
+                    throw new Exception($"wrong type for parameter'{p.Name}' on constructor for '{type.Name}'.");
+            }
+
+            sFunctions.Add(type.Name.Substring(0, type.Name.Length - "Expression".Length), new FunctionInfo(ctor.GetParameters().Length, ctor));
+        }
+
+        static FunctionFactory()
+        {
+            AddFunction<SumExpression>();
+            AddFunction<MinExpression>();
+            AddFunction<MaxExpression>();
         }
 
         public static BaseExpression CreateFunction(string functionName, List<BaseExpression> arguments)
         {
-            switch (functionName.ToLowerInvariant())
+            if (!sFunctions.TryGetValue(functionName, out FunctionInfo funcInfo))
             {
-                case "sum":
-                    CheckArgCount(functionName, arguments, 1);
-                    return new SumExpression(arguments[0]);
-                case "max":
-                    CheckArgCount(functionName, arguments, 2);
-                    return new MaxExpression(arguments[0], arguments[1]);
-                case "min":
-                    CheckArgCount(functionName, arguments, 2);
-                    return new MinExpression(arguments[0], arguments[1]);
-                default:
-                    throw new Exception("Unknown function '" + functionName + "'.");
+                throw new Exception("Unknown function '" + functionName + "'.");
             }
+            if (funcInfo.ArgCount != arguments.Count)
+            {
+                throw new Exception($"Expected {funcInfo.ArgCount} argument for {functionName}, found " + arguments.Count);
+            }
+            return (BaseExpression)funcInfo.Ctor.Invoke(arguments.ToArray());
         }
     }
 }
