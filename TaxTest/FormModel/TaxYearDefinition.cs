@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Xml.Linq;
 using TaxTest.ExpressionEvaluation;
 
 namespace TaxTest.FormModel
@@ -12,8 +14,23 @@ namespace TaxTest.FormModel
             var forms = new Dictionary<string, FormDefinition>();
             foreach (var path in Directory.GetFiles(folderPath, "*.xml"))
             {
-                var form = FormDefinition.LoadFromFile(path);
-                forms.Add(form.Name, form);
+                try
+                {
+                    var doc = XDocument.Load(path, LoadOptions.SetLineInfo);
+                    switch (doc.Root.Name.LocalName)
+                    {
+                        case "Form":
+                            var form = new FormDefinition(Path.GetFileNameWithoutExtension(path), doc);
+                            forms.Add(form.Name, form);
+                            break;
+                        default:
+                            throw new FileLoadException(doc.Root, "Unexpected document type: " + doc.Root.Name);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new FileLoadException("Failed to load from " + path, ex);
+                }
             }
             this.Forms = new(forms);
 
@@ -24,12 +41,14 @@ namespace TaxTest.FormModel
 
         private void TypeCheck()
         {
-            var env = new TypecheckEnvironment()
-            {
-                Forms = Forms,
-            };
             foreach (var f in Forms.Values)
             {
+                var env = new TypecheckEnvironment()
+                {
+                    Forms = Forms,
+                    CurrentForm = f,
+                };
+
                 foreach (var line in f.Lines.Values)
                 {
                     if (line.Calc is object)

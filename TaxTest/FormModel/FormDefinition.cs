@@ -1,32 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 
 namespace TaxTest.FormModel
 {
     class FormDefinition : IHasName
     {
-        public static FormDefinition LoadFromFile(string filePath)
-        {
-            string name = Path.GetFileNameWithoutExtension(filePath);
-            using var reader = new StreamReader(filePath);
-            try
-            {
-                return new FormDefinition(name, reader);
-            }
-            catch (FileLoadException ex)
-            {
-                throw new FileLoadException($"Error loading '{filePath}'.", ex);
-            }
-        }
-
-        private FormDefinition(string name, TextReader reader)
+        public FormDefinition(string name, XDocument doc)
         {
             this.Name = name;
-
-            var doc = XDocument.Load(reader, LoadOptions.SetLineInfo);
 
             this.AllowMultiple = doc.Root.OptionalBoolAttributeValue("AllowMultiple") ?? false;
             this.Calculateable = doc.Root.OptionalBoolAttributeValue("Calculateable") ?? true;

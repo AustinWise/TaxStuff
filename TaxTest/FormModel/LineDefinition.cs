@@ -45,6 +45,8 @@ namespace TaxTest.FormModel
         {
             if (AllowMultiple && Calc is not null)
                 throw new FileLoadException(el, "Line cannot have a Calc when AllowMultiple is true.");
+            if (Name.StartsWith("Year") || Name.StartsWith("Form") || Name.StartsWith("Line"))
+                throw new FileLoadException(el, "Line name cannot start with any of the follow: Year, Form, or Line.");
         }
     }
 }

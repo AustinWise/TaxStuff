@@ -50,14 +50,16 @@ namespace TaxTest.FormModel
 
         public void Calculate()
         {
-            var env = new ExpressionEvaluation.EvaluationEnvironment()
-            {
-                Return = this,
-            };
             foreach (var form in Forms.Values.SelectMany(f => f))
             {
                 if (!form.Definition.Calculateable)
                     continue;
+
+                var env = new ExpressionEvaluation.EvaluationEnvironment()
+                {
+                    Return = this,
+                    CurrentFormName = form.Name,
+                };
 
                 foreach (var line in form.Definition.Lines.Values)
                 {

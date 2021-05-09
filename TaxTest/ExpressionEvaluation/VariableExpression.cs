@@ -8,7 +8,7 @@ namespace TaxTest.ExpressionEvaluation
     record VariableExpression(string Form, string Line) : BaseExpression
     {
         //TODO: move this parsing into the parser itself
-        private static readonly Regex sVariableRegex = new Regex(@"^Form(?<form>[^.]+)\.(?<name>[^\.]+)$", RegexOptions.ExplicitCapture);
+        private static readonly Regex sVariableRegex = new Regex(@"^(Form(?<form>[^.]+)\.)?(?<name>[^\.]+)$", RegexOptions.ExplicitCapture);
 
         private readonly string _originalExpression;
 
@@ -19,7 +19,9 @@ namespace TaxTest.ExpressionEvaluation
             var m = sVariableRegex.Match(originalExpression);
             if (!m.Success)
                 throw new Exception("Failed to parse expression: " + originalExpression);
-            this.Form = m.Groups["form"].Value;
+            var formGroup = m.Groups["form"];
+            if (formGroup.Success)
+                this.Form = formGroup.Value;
             this.Line = m.Groups["name"].Value;
         }
 
@@ -32,13 +34,20 @@ namespace TaxTest.ExpressionEvaluation
         {
             // TODO: make throw a nicer error when the line does not exist
             FormDefinition form;
-            try
+            if (Form == null)
             {
-                form = env.Forms[Form];
+                form = env.CurrentForm;
             }
-            catch (KeyNotFoundException)
+            else
             {
-                throw new Exception($"In expression {_originalExpression}, 'Form{Form}' does not exist.");
+                try
+                {
+                    form = env.Forms[Form];
+                }
+                catch (KeyNotFoundException)
+                {
+                    throw new Exception($"In expression {_originalExpression}, 'Form{Form}' does not exist.");
+                }
             }
 
             LineDefinition line;
