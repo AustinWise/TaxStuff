@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Linq;
 
-namespace TaxTest
+namespace TaxStuff
 {
     enum Form8949Code
     {

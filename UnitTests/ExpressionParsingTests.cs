@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TaxTest.ExpressionEvaluation;
-using TaxTest.ExpressionParsing;
+using TaxStuff.ExpressionEvaluation;
+using TaxStuff.ExpressionParsing;
 
 namespace UnitTests
 {

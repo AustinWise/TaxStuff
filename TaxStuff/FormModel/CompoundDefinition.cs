@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     abstract class CompoundDefinition<TElementType> : IHasName where TElementType : IHasName
     {

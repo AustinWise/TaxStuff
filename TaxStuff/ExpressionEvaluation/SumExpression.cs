@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace TaxTest.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation
 {
     record SumExpression(BaseExpression Expression) : BaseExpression
     {

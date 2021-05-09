@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     record TaxComputationWorksheetLine(decimal Min, decimal MultiplicationAmount, decimal SubtractionAmount)
     {

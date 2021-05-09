@@ -1,5 +1,5 @@
 
-# TaxTest - basic federal tax return calculator
+# TaxStuff - basic federal tax return calculator
 
 NOTE: work in progress, not ready to be used by anyone for anything other than
 their own amusement.

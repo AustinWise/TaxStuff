@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Xml.Linq;
-using TaxTest.ExpressionEvaluation;
-using TaxTest.ExpressionParsing;
+using TaxStuff.ExpressionEvaluation;
+using TaxStuff.ExpressionParsing;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     record LineDefinition(string Number, string Name, ExpressionType Type, bool AllowMultiple, BaseExpression Calc) : IHasName
     {

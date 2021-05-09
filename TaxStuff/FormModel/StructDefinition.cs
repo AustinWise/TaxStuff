@@ -1,6 +1,6 @@
 ﻿using System.Xml.Linq;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     class StructDefinition : CompoundDefinition<StructElement>
     {

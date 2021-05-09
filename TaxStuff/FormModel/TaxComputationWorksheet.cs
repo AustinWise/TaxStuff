@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     class TaxComputationWorksheet
     {

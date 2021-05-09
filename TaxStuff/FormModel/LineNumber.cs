@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     readonly struct LineNumber : IEquatable<LineNumber>, IComparable<LineNumber>
     {

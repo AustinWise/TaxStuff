@@ -1,4 +1,4 @@
-﻿namespace TaxTest.FormModel
+﻿namespace TaxStuff.FormModel
 {
     enum FilingStatus
     {

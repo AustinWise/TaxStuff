@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-namespace TaxTest.ExpressionParsing {
+namespace TaxStuff.ExpressionParsing {
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using IToken = Antlr4.Runtime.IToken;
@@ -116,4 +116,4 @@ public partial class ExpressionBaseVisitor<Result> : AbstractParseTreeVisitor<Re
 	/// <return>The visitor result.</return>
 	public virtual Result VisitComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context) { return VisitChildren(context); }
 }
-} // namespace TaxTest.ExpressionParsing
+} // namespace TaxStuff.ExpressionParsing

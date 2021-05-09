@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaxTest.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation
 {
     enum BinaryOp
     {

@@ -19,7 +19,7 @@
 // Ambiguous reference in cref attribute
 #pragma warning disable 419
 
-namespace TaxTest.ExpressionParsing {
+namespace TaxStuff.ExpressionParsing {
 using System;
 using System.IO;
 using System.Text;
@@ -164,4 +164,4 @@ public partial class ExpressionLexer : Lexer {
 
 
 }
-} // namespace TaxTest.ExpressionParsing
+} // namespace TaxStuff.ExpressionParsing

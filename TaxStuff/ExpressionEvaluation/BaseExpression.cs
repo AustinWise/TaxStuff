@@ -1,4 +1,4 @@
-﻿namespace TaxTest.ExpressionEvaluation
+﻿namespace TaxStuff.ExpressionEvaluation
 {
     abstract record BaseExpression
     {

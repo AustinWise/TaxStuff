@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace TaxTest.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation
 {
     abstract record ExpressionType
     {

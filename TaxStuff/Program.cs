@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using TaxTest.FormModel;
+using TaxStuff.FormModel;
 
-namespace TaxTest
+namespace TaxStuff
 {
     class Program
     {

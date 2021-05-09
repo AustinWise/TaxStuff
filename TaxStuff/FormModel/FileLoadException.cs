@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     class FileLoadException : Exception
     {

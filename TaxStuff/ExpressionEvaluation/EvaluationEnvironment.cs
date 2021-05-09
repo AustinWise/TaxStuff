@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TaxTest.FormModel;
+using TaxStuff.FormModel;
 
-namespace TaxTest.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation
 {
     class EvaluationEnvironment
     {

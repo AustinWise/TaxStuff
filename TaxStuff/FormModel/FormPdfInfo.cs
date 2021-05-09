@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     class FormPdfInfo
     {

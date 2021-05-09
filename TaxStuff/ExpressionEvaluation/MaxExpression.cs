@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaxTest.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation
 {
     record MaxExpression(BaseExpression Left, BaseExpression Right) : BaseExpression
     {

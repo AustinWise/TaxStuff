@@ -1,4 +1,4 @@
-﻿namespace TaxTest.ExpressionEvaluation
+﻿namespace TaxStuff.ExpressionEvaluation
 {
     record TaxExpression(BaseExpression Expr) : BaseExpression
     {

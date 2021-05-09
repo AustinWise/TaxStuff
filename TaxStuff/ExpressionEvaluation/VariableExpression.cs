@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using TaxTest.FormModel;
+using TaxStuff.FormModel;
 
-namespace TaxTest.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation
 {
     record VariableExpression(string Form, string Line) : BaseExpression
     {

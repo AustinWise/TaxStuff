@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using TaxTest.FormModel;
+using TaxStuff.FormModel;
 
-namespace TaxTest.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation
 {
     class TypecheckEnvironment
     {

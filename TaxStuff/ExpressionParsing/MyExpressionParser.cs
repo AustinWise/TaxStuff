@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using TaxTest.ExpressionEvaluation;
+using TaxStuff.ExpressionEvaluation;
 
-namespace TaxTest.ExpressionParsing
+namespace TaxStuff.ExpressionParsing
 {
     class MyExpressionParser : ExpressionBaseVisitor<BaseExpression>, IAntlrErrorListener<int>, IAntlrErrorListener<IToken>
     {

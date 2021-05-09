@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Xml.Linq;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     record TaxComputationWorksheetSection(FilingStatus Status, ReadOnlyCollection<TaxComputationWorksheetLine> Lines)
     {

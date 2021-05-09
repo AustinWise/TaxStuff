@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
-using TaxTest.ExpressionEvaluation;
-using TaxTest.ExpressionParsing;
+using TaxStuff.ExpressionEvaluation;
+using TaxStuff.ExpressionParsing;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     static class Extensions
     {

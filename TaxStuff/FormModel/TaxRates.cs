@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaxTest.FormModel
+namespace TaxStuff.FormModel
 {
     class TaxRates
     {
