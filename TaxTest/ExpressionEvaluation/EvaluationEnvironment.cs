@@ -13,7 +13,9 @@ namespace TaxTest.ExpressionEvaluation
         public EvaluationResult GetValue(string form, string line)
         {
             if (form == null)
+            {
                 form = CurrentFormName;
+            }
 
             var ret = new List<decimal>();
             bool multiple = false;
@@ -50,7 +52,11 @@ namespace TaxTest.ExpressionEvaluation
                     else
                     {
                         values = new List<decimal>();
-                        var result = lineDef.Calc.Evaluate(this);
+                        var result = lineDef.Calc.Evaluate(new EvaluationEnvironment()
+                        {
+                            Return = this.Return,
+                            CurrentFormName = form,
+                        });
                         ret.Add(result.Number);
                         values.Add(result.Number);
 
