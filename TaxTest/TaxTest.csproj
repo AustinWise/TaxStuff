@@ -15,4 +15,13 @@
     <PackageReference Include="itext7" Version="7.1.15" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="2020\*.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="2020\*.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

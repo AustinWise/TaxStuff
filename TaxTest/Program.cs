@@ -18,7 +18,7 @@ namespace TaxTest
             string returnPath = args[0];
             string outputFolder = args[1];
 
-            var taxUniverse = new TaxUniverse(@"C:\src\TaxTest\TaxTest\");
+            var taxUniverse = new TaxUniverse(Path.GetDirectoryName(typeof(Program).Assembly.Location));
             var taxReturn2020 = new TaxReturn(returnPath, taxUniverse);
             taxReturn2020.Calculate();
 
