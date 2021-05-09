@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Return Year="2020" FilingStatus="MarriedJoint">
+  <Form Name="W-2">
+    <Line Number="1" Value="150000" />
+    <Line Number="2" Value="14000" />
+  </Form>
+  <Form Name="1040-Schedule3">
+	<Line Number="7" Value="50" />
+	<Line Number="10" Value="4000" />
+  </Form>
+  <Form Name="1040-ScheduleD">
+	<Line Number="1ad" Value="4000" />
+	<Line Number="1ae" Value="5000" />
+	<Line Number="8ad" Value="10000" />
+	<Line Number="8ae" Value="11000" />
+  </Form>
+  <Form Name="1040-QualifiedDividendsAndCapitalGainTaxWorksheet">
+  </Form>
+  <Form Name="1040">
+    <Line Number="2b" Value="500" />
+    <Line Number="3a" Value="1000" />
+    <Line Number="3b" Value="1000" />
+    <Line Number="12" Value="24800" />
+    <Line Number="13" Value="5" />
+    <Line Number="30" Value="1000" />
+  </Form>
+</Return>
