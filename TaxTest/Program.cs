@@ -7,12 +7,19 @@ namespace TaxTest
 {
     class Program
     {
-        const string RETURN = @"d:\AustinWise\Desktop\Return.xml";
-        const string OUTPUT = @"c:\temp\output";
         static void Main(string[] args)
         {
+            if (args.Length != 2)
+            {
+                Console.WriteLine("Requires two arguments: input.xml outputFolder");
+                return;
+            }
+
+            string returnPath = args[0];
+            string outputFolder = args[1];
+
             var taxUniverse = new TaxUniverse(@"C:\src\TaxTest\TaxTest\");
-            var taxReturn2020 = new TaxReturn(RETURN, taxUniverse);
+            var taxReturn2020 = new TaxReturn(returnPath, taxUniverse);
             taxReturn2020.Calculate();
 
             //TODO: a better way of reporting
@@ -51,7 +58,7 @@ namespace TaxTest
                     foreach (var inst in formInsts)
                     {
                         string outputFileName = formInsts.Count == 1 ? pdfForm.FormName + ".pdf" : $"{pdfForm.FormName}-{i}.pdf";
-                        string outputPath = Path.Combine(OUTPUT, outputFileName);
+                        string outputPath = Path.Combine(outputFolder, outputFileName);
 
                         pdfForm.Save(outputPath, inst);
 
