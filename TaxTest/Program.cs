@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using TaxTest.FormModel;
 
 namespace TaxTest
@@ -7,7 +8,7 @@ namespace TaxTest
     class Program
     {
         const string RETURN = @"d:\AustinWise\Desktop\Return.xml";
-        const string OUTPUT = @"c:\temp\output.xml";
+        const string OUTPUT = @"c:\temp\output";
         static void Main(string[] args)
         {
             var taxUniverse = new TaxUniverse(@"C:\src\TaxTest\TaxTest\");
@@ -38,6 +39,23 @@ namespace TaxTest
                                 Console.WriteLine($"\t\t\t{v:c}");
                             }
                         }
+                    }
+                }
+            }
+
+            foreach (var pdfForm in taxReturn2020.TaxYearDef.PdfInfo.Forms.Values)
+            {
+                if (taxReturn2020.Forms.TryGetValue(pdfForm.FormName, out List<FormInstance> formInsts))
+                {
+                    int i = 1;
+                    foreach (var inst in formInsts)
+                    {
+                        string outputFileName = formInsts.Count == 1 ? pdfForm.FormName + ".pdf" : $"{pdfForm.FormName}-{i}.pdf";
+                        string outputPath = Path.Combine(OUTPUT, outputFileName);
+
+                        pdfForm.Save(outputPath, inst);
+
+                        i++;
                     }
                 }
             }

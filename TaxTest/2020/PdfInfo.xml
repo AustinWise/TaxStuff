@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<PdfInfo>
+  <Form Name="1040" File="f1040.pdf">
+    <Line Number="1" Assist="1. Wages" />
+    <Line Number="2b" Assist="2b. Taxable interest" />
+    <Line Number="3a" Assist="3a. Qualified dividends" />
+    <Line Number="3b" Assist="3b. Ordinary dividends" />
+    <Line Number="7" Assist="7. Capital gain or (loss). " />
+    <Line Number="9" Assist="9. Add lines 1, 2b, 3b, 4b, 5b, 6b, 7, and 8. This is your total income." />
+    <Line Number="11" Assist="11. Subtract line 10c from line 9. This is your adjusted gross income." />
+    <Line Number="12" Assist="12. Standard deduction or itemized deductions" />
+    <Line Number="13" Assist="13. Qualified business income deduction" />
+    <Line Number="14" Assist="14. Add lines 12 and 13" />
+    <Line Number="15" Assist="15. Taxable income" />
+
+    <Line Number="16" Assist="16. Tax (see instructions)" />
+    <Line Number="17" Assist="17. Amount from Schedule 2, line 3." />
+    <Line Number="18" Assist="18. Add lines 16 and 17." />
+    <Line Number="19" Assist="19. Child tax credit" />
+    <Line Number="20" Assist="20. Amount from Schedule 3, line 7" />
+    <Line Number="21" Assist="21. Add lines 19 and 20" />
+    <Line Number="22" Assist="22. Subtract line 21 from line 18" />
+    <Line Number="23" Assist="23. Other taxes" />
+    <Line Number="24" Assist="24. Add lines 22 and 23" />
+    <Line Number="25a" Assist="25. Federal income tax withheld from: a. Form(s) W-2." />
+    <Line Number="25b" Assist="25b. Form(s) 1099" />
+    <Line Number="25c" Assist="25c. Other forms" />
+    <Line Number="25d" Assist="25d. Add lines 25a through 25c" />
+    <Line Number="26" Assist="26. 2020 estimated tax payments" />
+    <Line Number="27" Assist="27. Earned income credit" />
+    <Line Number="28" Assist="28. Additional child tax credit" />
+    <Line Number="29" Assist="29. American opportunity credit" />
+    <Line Number="30" Assist="30. Recovery rebate credit" />
+    <Line Number="31" Assist="31. Amount from Schedule 3, line 13" />
+    <Line Number="32" Assist="32. Add lines 27 through 31" />
+    <Line Number="33" Assist="33. Add lines 25d, 26, and 32" />
+
+    <Line Number="34" Assist="Refund. 34." />
+    <Line Number="37" Assist="Amount You Owe" />
+  </Form>
+</PdfInfo>

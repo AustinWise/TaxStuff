@@ -12,6 +12,7 @@ namespace TaxTest.FormModel
         public TaxYearDefinition(string folderPath)
         {
             TaxComputationWorksheet taxComputationWorksheet = null;
+            PdfInfo pdfInfo = null;
             var forms = new Dictionary<string, FormDefinition>();
             foreach (var path in Directory.GetFiles(folderPath, "*.xml"))
             {
@@ -29,6 +30,11 @@ namespace TaxTest.FormModel
                                 throw new Exception("Duplicate TaxComputationWorksheet");
                             taxComputationWorksheet = new TaxComputationWorksheet(doc);
                             break;
+                        case "PdfInfo":
+                            if (pdfInfo is not null)
+                                throw new Exception("Duplicate PdfInfo");
+                            pdfInfo = new PdfInfo(folderPath, doc);
+                            break;
                         default:
                             throw new FileLoadException(doc.Root, "Unexpected document type: " + doc.Root.Name);
                     }
@@ -41,12 +47,14 @@ namespace TaxTest.FormModel
 
             this.Forms = new(forms);
             this.Rates = new TaxRates(taxComputationWorksheet);
+            this.PdfInfo = pdfInfo;
 
             TypeCheck();
         }
 
         public ReadOnlyDictionary<string, FormDefinition> Forms { get; }
         public TaxRates Rates { get; }
+        public PdfInfo PdfInfo { get; }
 
         private void TypeCheck()
         {
