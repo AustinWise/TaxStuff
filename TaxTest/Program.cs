@@ -1,5 +1,5 @@
 ﻿using System;
-using TaxTest.ExpressionParsing;
+using System.Collections.Generic;
 using TaxTest.FormModel;
 
 namespace TaxTest
@@ -21,17 +21,19 @@ namespace TaxTest
                 foreach (var form in formKvp.Value)
                 {
                     Console.WriteLine("\tForm");
-                    foreach (var line in form.Values)
+                    foreach (var lineDef in form.Definition.Lines.Values)
                     {
-                        var lineDef = form.Definition.Lines[line.Key];
-                        if (line.Value.Count == 0)
+                        if (!form.Values.TryGetValue(lineDef.Name, out List<decimal> values))
+                            continue;
+
+                        if (values.Count == 0)
                             throw new Exception("wut");
-                        else if (line.Value.Count == 1)
-                            Console.WriteLine($"\t\tLine: {lineDef.Number} Name: {line.Key} Value: {line.Value[0]:c}");
+                        else if (values.Count == 1)
+                            Console.WriteLine($"\t\tLine: {lineDef.Number} Name: {lineDef.Name} Value: {values[0]:c}");
                         else
                         {
-                            Console.WriteLine($"\t\tLine: {lineDef.Number} Name: {line.Key}");
-                            foreach (var v in line.Value)
+                            Console.WriteLine($"\t\tLine: {lineDef.Number} Name: {lineDef.Name}");
+                            foreach (var v in values)
                             {
                                 Console.WriteLine($"\t\t\t{v:c}");
                             }
