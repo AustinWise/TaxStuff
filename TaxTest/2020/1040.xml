@@ -2,6 +2,7 @@
 <Form>
   <Line Number="1" Name="W-2Income" Calc="SUM(FormW-2.Wages)" />
   <Line Number="2b" Name="TaxableInterest" />
+  <Line Number="3a" Name="QualifiedDividends" />
   <Line Number="3b" Name="OrdinaryDividends" />
   <Line Number="7" Name="CapitalGain" Calc="MAX(-3000, Form1040-ScheduleD.NetCapitalGain)"/>
   <Line Number="9" Name="TotalIncome" Calc="Form1040.Line1 + Form1040.Line2b + Form1040.Line3b + Form1040.Line7" />
@@ -11,6 +12,10 @@
   <Line Number="13" Name="QualifiedBusinessIncomeDeduction" />
   <Line Number="14" Name="AllDeductions" Calc="Form1040.Line12 + Form1040.Line13" />
   <Line Number="15" Name="TaxableIncome" Calc="MAX(0, Form1040.Line11 - Form1040.Line14)" />
-  <Line Number="16" Name="Tax" Calc="TAX(TaxableIncome)">
+  <Line Number="16" Name="Tax">
+    <ValueFromFirstFormThatExists>
+      <Form Name="1040-QualifiedDividendsAndCapitalGainTaxWorksheet" ValueExpr="Form1040-QualifiedDividendsAndCapitalGainTaxWorksheet.TaxOnAllTaxableIncome" />
+      <Form Name="1040" ValueExpr="TAX(TaxableIncome)" />
+    </ValueFromFirstFormThatExists>
   </Line>
 </Form>

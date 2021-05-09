@@ -14,9 +14,11 @@ namespace TaxTest.ExpressionEvaluation
 
         static void AddFunction<T>() where T : BaseExpression
         {
+            const string EXPRESSION = "Expression";
+
             var type = typeof(T);
-            if (!type.Name.EndsWith("Expression"))
-                throw new Exception(type.Name + "'s name does not end with 'Expression'");
+            if (!type.Name.EndsWith(EXPRESSION))
+                throw new Exception($"Type {type.Name}'s name does not end with '{EXPRESSION}'");
             var ctors = type.GetConstructors();
             if (ctors.Length != 1)
                 throw new Exception("too many ctors on " + type.Name);
@@ -28,7 +30,7 @@ namespace TaxTest.ExpressionEvaluation
                     throw new Exception($"wrong type for parameter'{p.Name}' on constructor for '{type.Name}'.");
             }
 
-            sFunctions.Add(type.Name.Substring(0, type.Name.Length - "Expression".Length), new FunctionInfo(ctor.GetParameters().Length, ctor));
+            sFunctions.Add(type.Name.Substring(0, type.Name.Length - EXPRESSION.Length), new FunctionInfo(ctor.GetParameters().Length, ctor));
         }
 
         static FunctionFactory()

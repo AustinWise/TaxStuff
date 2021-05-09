@@ -58,15 +58,18 @@ namespace TaxTest.FormModel
 
         public LineDefinition(XElement el)
             : this(el.AttributeValue("Number"),
-                   el.AttributeValue("Name"),
+                   el.OptionalAttributeValue("Name"),
                    GetExprType(el.Attribute("Type")),
                    el.OptionalBoolAttributeValue("AllowMultiple") ?? false,
                    ParseCalc(el))
         {
+            if (Name is null)
+                Name = "Line" + Number;
+            else if (Name.StartsWith("Year") || Name.StartsWith("Form") || Name.StartsWith("Line"))
+                throw new FileLoadException(el, "Line name cannot start with any of the follow: Year, Form, or Line.");
+
             if (AllowMultiple && Calc is not null)
                 throw new FileLoadException(el, "Line cannot have a Calc when AllowMultiple is true.");
-            if (Name.StartsWith("Year") || Name.StartsWith("Form") || Name.StartsWith("Line"))
-                throw new FileLoadException(el, "Line name cannot start with any of the follow: Year, Form, or Line.");
         }
     }
 }

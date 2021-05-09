@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using TaxTest.FormModel;
 
 namespace TaxTest.ExpressionEvaluation
@@ -13,12 +8,16 @@ namespace TaxTest.ExpressionEvaluation
     /// </summary>
     static class XmlExpressionParser
     {
-        public static BaseExpression Parse(XElement calcElement)
+        public static BaseExpression Parse(XElement node)
         {
-            switch (calcElement.Name.LocalName)
+            switch (node.Name.LocalName)
             {
+                case "ValueFromFirstFormThatExists":
+                    return new ValueFromFirstFormThatExistsExpression(node);
+                case "SelectBasedOnStatus":
+                    return new SelectBasedOnStatusExpression(node);
                 default:
-                    throw new FileLoadException(calcElement, "Unknown node type: " + calcElement.Name);
+                    throw new FileLoadException(node, "Unknown node type: " + node.Name);
             }
         }
     }

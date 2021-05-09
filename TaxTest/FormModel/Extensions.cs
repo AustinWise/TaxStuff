@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
+using TaxTest.ExpressionEvaluation;
+using TaxTest.ExpressionParsing;
 
 namespace TaxTest.FormModel
 {
@@ -70,6 +72,21 @@ namespace TaxTest.FormModel
         public static decimal DecimalAttributeValue(this XElement el, string attributeName)
         {
             return decimal.Parse(AttributeValue(el, attributeName), CultureInfo.InvariantCulture);
+        }
+
+        public static BaseExpression ExpressionAttributeValue(this XElement el, string attributeName)
+        {
+            XAttribute attr = el.Attribute(attributeName);
+            if (attr is null)
+                throw new FileLoadException(el, $"Missing {attributeName} attribute");
+            try
+            {
+                return MyExpressionParser.Parse(attr.Value);
+            }
+            catch (Exception ex)
+            {
+                throw new FileLoadException(attr, "Failed to parse ValueExpr", ex);
+            }
         }
     }
 }

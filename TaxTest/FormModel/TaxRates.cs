@@ -13,6 +13,12 @@ namespace TaxTest.FormModel
 
         public decimal CalculateTax(FilingStatus status, decimal taxableAmount)
         {
+            if (taxableAmount < 0)
+                throw new ArgumentOutOfRangeException(nameof(taxableAmount), "Negitive taxable amount");
+
+            if (taxableAmount == 0)
+                return 0;
+
             var section = mWorksheet.GetSection(status);
 
             TaxComputationWorksheetLine theLine = null;
