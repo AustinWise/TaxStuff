@@ -24,8 +24,8 @@ This program has the ability to file in PDFs with the result of computations.
 
 # Example
 
-See example [input file](ExampleReturn.xml) and example
-[1040 output](Example1040.pdf).
+Requires [.NET 5 SDK](https://dotnet.microsoft.com/download/dotnet/5.0) to build
+and run.
 
 When you run the program, it takes two arguments: the path to the return file
 and a folder to put the PDFs in:
@@ -34,6 +34,9 @@ and a folder to put the PDFs in:
 mkdir output
 dotnet run --project TaxStuff/TaxStuff.csproj ExampleReturn.xml output
 ```
+
+See example [input file](ExampleReturn.xml) and example
+[1040 output](Example1040.pdf).
 
 # License
 
