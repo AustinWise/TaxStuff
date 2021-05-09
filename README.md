@@ -32,7 +32,7 @@ and a folder to put the PDFs in:
 
 ```bash
 mkdir output
-dotnet run --project TaxTest/TaxTest.csproj ExampleReturn.xml output
+dotnet run --project TaxStuff/TaxStuff.csproj ExampleReturn.xml output
 ```
 
 # License
