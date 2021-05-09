@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+  <Line Number="1ad" Name="ShortTermProceeds" />
+  <Line Number="1ae" Name="ShortTermCost" />
+  <Line Number="1ah" Name="ShortTermGain" Calc="ShortTermProceeds - ShortTermCost" />
+  <Line Number="1bd" Name="BoxAProceeds" />
+  <Line Number="1be" Name="BoxACost" />
+  <Line Number="1bg" Name="BoxAAdjustments" />
+  <Line Number="1bh" Name="BoxAGain" Calc="BoxAProceeds - BoxACost + BoxAAdjustments" />
+  <Line Number="2d" Name="BoxBProceeds" />
+  <Line Number="2e" Name="BoxBCost" />
+  <Line Number="2g" Name="BoxBAdjustments" />
+  <Line Number="2h" Name="BoxBGain" Calc="BoxBProceeds - BoxBCost + BoxBAdjustments" />
+  <Line Number="3d" Name="BoxCProceeds" />
+  <Line Number="3e" Name="BoxCCost" />
+  <Line Number="3g" Name="BoxCAdjustments" />
+  <Line Number="3h" Name="BoxCGain" Calc="BoxCProceeds - BoxCCost + BoxCAdjustments" />
+  <!-- 4 Short-term gain from Form 6252 and short-term gain or (loss) from Forms 4684, 6781, and 8824 -->
+  <!-- 5 Net short-term gain or (loss) from partnerships, S corporations, estates, and trusts from Schedule(s) K-1 -->
+  <Line Number="6" Name="ShortTermCapitalLossCarryover" Calc="Form1040-ScheduleD-CapitalLossCarryoverWorksheet.ShortTermCapitalLossCarryover" />
+  <Line Number="7" Name="NetShortTermCapitalGain" Calc="Line1ah + Line1bh + Line2h + Line3h + Line6" />
+
+  <!-- TODO: Long term -->
+  <Line Number="14" Name="LongTermCapitalLossCarryover" Calc="Form1040-ScheduleD-CapitalLossCarryoverWorksheet.LongTermCapitalLossCarryover" />
+  <Line Number="15" Name="NetLongTermCapitalGain" Calc="0" />
+
+  <Line Number="16" Name="NetCapitalGain" Calc="NetShortTermCapitalGain + NetLongTermCapitalGain" />
+
+  <!--
+    Line 18 through 20 are notsupported:
+      28% Rate Gain Worksheet
+      Unrecaptured Section 1250 Gain Worksheet
+      Schedule D Tax Worksheet
+  -->
+</Form>

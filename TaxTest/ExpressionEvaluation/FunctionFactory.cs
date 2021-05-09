@@ -36,6 +36,7 @@ namespace TaxTest.ExpressionEvaluation
             AddFunction<SumExpression>();
             AddFunction<MinExpression>();
             AddFunction<MaxExpression>();
+            AddFunction<TaxExpression>();
         }
 
         public static BaseExpression CreateFunction(string functionName, List<BaseExpression> arguments)

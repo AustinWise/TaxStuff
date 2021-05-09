@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TaxComputationWorksheet>
+  <Section Status="Single">
+    <Case Min="100000" MultiplicationAmount="0.24" SubtractionAmount="5920.50" />
+    <Case Min="163300" MultiplicationAmount="0.32" SubtractionAmount="18984.50" />
+    <Case Min="207350" MultiplicationAmount="0.35" SubtractionAmount="25205.00" />
+    <Case Min="518400" MultiplicationAmount="0.37" SubtractionAmount="35573.00" />
+  </Section>
+  <Section Status="MarriedJoint">
+    <Case Min="100000" MultiplicationAmount="0.22" SubtractionAmount="8420" />
+    <Case Min="171050" MultiplicationAmount="0.24" SubtractionAmount="11841" />
+    <Case Min="326600" MultiplicationAmount="0.32" SubtractionAmount="37969" />
+    <Case Min="414700" MultiplicationAmount="0.35" SubtractionAmount="50410" />
+    <Case Min="622050" MultiplicationAmount="0.37" SubtractionAmount="62851" />
+  </Section>
+</TaxComputationWorksheet>

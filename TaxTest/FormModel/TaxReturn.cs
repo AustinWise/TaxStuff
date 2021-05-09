@@ -10,6 +10,7 @@ namespace TaxTest.FormModel
         public int Year { get; }
         public FilingStatus Status { get; }
         public Dictionary<string, List<FormInstance>> Forms { get; }
+        public TaxYearDefinition TaxYearDef { get; }
 
         public TaxReturn(string filePath, TaxUniverse universe)
         {
@@ -21,14 +22,14 @@ namespace TaxTest.FormModel
             this.Status = doc.Root.EnumAttributeValue<FilingStatus>("FilingStatus");
             this.Forms = new();
 
-            var taxYear = universe.TaxYears[Year];
+            TaxYearDef = universe.TaxYears[Year];
 
             foreach (var node in doc.Root.Elements())
             {
                 switch (node.Name.LocalName)
                 {
                     case "Form":
-                        var formInst = new FormInstance(node, taxYear);
+                        var formInst = new FormInstance(node, TaxYearDef);
                         List<FormInstance> formList;
                         if (Forms.TryGetValue(formInst.Name, out formList))
                         {

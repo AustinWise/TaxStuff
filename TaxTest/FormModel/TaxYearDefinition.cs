@@ -11,6 +11,7 @@ namespace TaxTest.FormModel
     {
         public TaxYearDefinition(string folderPath)
         {
+            TaxComputationWorksheet taxComputationWorksheet = null;
             var forms = new Dictionary<string, FormDefinition>();
             foreach (var path in Directory.GetFiles(folderPath, "*.xml"))
             {
@@ -23,6 +24,11 @@ namespace TaxTest.FormModel
                             var form = new FormDefinition(Path.GetFileNameWithoutExtension(path), doc);
                             forms.Add(form.Name, form);
                             break;
+                        case "TaxComputationWorksheet":
+                            if (taxComputationWorksheet is not null)
+                                throw new Exception("Duplicate TaxComputationWorksheet");
+                            taxComputationWorksheet = new TaxComputationWorksheet(doc);
+                            break;
                         default:
                             throw new FileLoadException(doc.Root, "Unexpected document type: " + doc.Root.Name);
                     }
@@ -32,12 +38,15 @@ namespace TaxTest.FormModel
                     throw new FileLoadException("Failed to load from " + path, ex);
                 }
             }
+
             this.Forms = new(forms);
+            this.Rates = new TaxRates(taxComputationWorksheet);
 
             TypeCheck();
         }
 
         public ReadOnlyDictionary<string, FormDefinition> Forms { get; }
+        public TaxRates Rates { get; }
 
         private void TypeCheck()
         {

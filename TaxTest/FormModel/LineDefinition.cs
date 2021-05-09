@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using TaxTest.ExpressionEvaluation;
 using TaxTest.ExpressionParsing;
@@ -22,12 +23,31 @@ namespace TaxTest.FormModel
 
         private static BaseExpression ParseCalc(XElement node)
         {
-            var calc = node.OptionalAttributeValue("Calc");
-            if (calc is null)
+            var calcStr = node.OptionalAttributeValue("Calc");
+            var calcNode = node.Elements().ToArray();
+
+            //make sure there is at most one Calc definition
+            if (calcStr is null && calcNode.Length == 0)
                 return null;
+            if (calcStr is object && calcNode.Length > 0)
+                throw new FileLoadException(node, "Line contains both and Calc attribute and a Calc node.");
+
+            // do some light validation
+            if (calcStr is not null)
+            {
+                if (string.IsNullOrWhiteSpace(calcStr))
+                {
+                    if (calcStr is null)
+                        return null;
+                    throw new FileLoadException(node, "Empty expression.");
+                }
+            }
+            else if (calcNode.Length > 1)
+                throw new FileLoadException(calcNode[1], "Multiple calculation elements.");
+
             try
             {
-                return MyExpressionParser.Parse(calc);
+                return calcStr is not null ? MyExpressionParser.Parse(calcStr) : XmlExpressionParser.Parse(calcNode[0]);
             }
             catch (Exception ex)
             {

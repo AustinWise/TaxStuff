@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using TaxTest.FormModel;
 
 namespace TaxTest.ExpressionEvaluation
@@ -9,6 +8,7 @@ namespace TaxTest.ExpressionEvaluation
     {
         public TaxReturn Return { get; set; }
         public string CurrentFormName { get; set; }
+        public TaxRates Rates => Return.TaxYearDef.Rates;
 
         public EvaluationResult GetValue(string form, string line)
         {
