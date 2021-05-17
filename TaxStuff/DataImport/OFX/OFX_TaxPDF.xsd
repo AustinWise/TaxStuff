@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--
+
+	Open Financial Exchange Specification (c)1996-2003 ("Specification") by all of its publishers: 
+	CheckFree Corp., Intuit Inc., and Microsoft Corporation. All rights reserved. 
+
+	Revision History:
+
+	Version	Date    	Editor Email Addr    		    Short Description
+    Tax2.0  2019-09-30  clyde.e.cutting@wellsfargo.com  Introduction of TAXPDF for exchange of PDF tax documents for TY19.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ofx="http://ofx.net/types/2003/04" targetNamespace="http://ofx.net/types/2003/04" elementFormDefault="qualified">
+	<xsd:include schemaLocation="OFXTax_Common.xsd"/>
+	<xsd:complexType name="AbstractTaxFormPDFType" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="SRVRTID" type="ofx:ServerIdType"/>
+			<xsd:element name="TAXYEAR" type="ofx:YearType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TaxDocumentAsPDF_V100">
+		<xsd:annotation>
+			<xsd:documentation>PDF delivery of tax documents</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxFormPDFType">
+				<xsd:sequence>
+					<xsd:element name="PDFCATEGORY" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Category of the PDF attachment. For use in specifying tax software documents, send one of: 
+Form8288-A or Form1120-F-FIRPTACredit
+Form8805 or Form1120-F-FIRPTACredit
+Form1128
+Form2439
+Form2553
+Form3115
+Form4466
+Form461
+Form4684 or RevProc2009-20
+Form5471ScheduleE
+Form5471ScheduleH
+Form5471ScheduleI-1
+Form5471ScheduleP
+Form5884A
+Form8082 or 8082SignatureDocument
+Form8283 or 8283SignatureDocument
+Form8283 or HistoricPropertyAppraisal
+Form8283 or Photograph
+Form8283 or DevelopmentRestrictionDescription
+Form8283 or DoneeOrganizationContemporaneousWrittenAcknowledgement
+Form8283 or ArtAppraisal
+Form8283 or Form1098C or 1098-CContributions
+Form8283 or QualifiedAppraisal
+Form8716
+Form8830
+Form8832
+Form8838
+Form8865ScheduleG
+Form8865ScheduleH
+Form8904
+Form8949 or Form8949ExceptionReportingStatement
+Form8990
+Form8991
+Form8992
+Form8993
+Form8994
+Form8996
+Form8848 or AdditionalInfo-Form1120-F
+Form2553 or Form1120S-SElectionForm2553
+Form1120S or Form1120SScheduleB-1
+Pre-computedPenaltyAndInterest
+</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="96"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="PDFDESCRIPTION">
+						<xsd:annotation>
+							<xsd:documentation>
+								Per page 41 of Pub 4164, "The 'Description' element in the BinaryAttachment.xsd cannot exceed 128 characters".
+								Certain form descriptions are exactly specified by the IRS, see https://www.irs.gov/pub/irs-pdf/p4164.pdf
+								and https://www.irs.gov/pub/irs-schema/ty2018_recommended_names_for_PDF_files_by_form.pdf.
+							</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="128"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="PDFFILENAME">
+						<xsd:annotation>
+							<xsd:documentation>
+								Per page 41 of Pub 4164, "The name of each PDF file cannot exceed 64 characters", https://www.irs.gov/pub/irs-pdf/p4164.pdf.
+								See https://www.irs.gov/pub/irs-schema/ty2018_recommended_names_for_PDF_files_by_form.pdf
+							</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="64"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="PDFCONTENT">
+						<xsd:annotation>
+							<xsd:documentation>
+								Per page 41 of Pub 4164, "Each individual PDF cannot exceed 60 megabytes uncompressed", https://www.irs.gov/pub/irs-pdf/p4164.pdf.
+								Since Base64 string lengths are 4/3 of original binary file length, maxLength here is 80Mb = 83886080.
+							</xsd:documentation>
+						</xsd:annotation>
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:base64Binary">
+								<xsd:minLength value="1"/>
+								<xsd:maxLength value="83886080"/>
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

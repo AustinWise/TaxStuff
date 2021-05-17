@@ -1,0 +1,2096 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by Kathy Eusepi (Intuit) -->
+<!--
+
+	Open Financial Exchange Specification (c)1996-2003 ("Specification") by all of its publishers: 
+	CheckFree Corp., Intuit Inc., and Microsoft Corporation. All rights reserved. 
+
+	Revision History:
+
+    Version Date        Editor Email Addr               Short Description
+    _______ __________  ____________________________    _________________
+    p16     2002-02-10  altenburgd@businesslogic.com    Initial revision
+    p17     2002-02-11  Gil_Clark@intuit.com            
+    p18     2002-02-11  Gil_Clark@intuit.com            Changed 'Tax1099OId_V100' to 'Tax1099OID_V100'
+    p20     2002-03-17  Gil_Clark@intuit.com            Changed name of base types to use Abstract naming convention.
+    p21     2002-03-17  altenburgd@businesslogic.com    Changed elementFormDefault to "unqualified"
+                                                            Changed namespace to "http://ofx.net/types/2003/04"
+    p23    2002-05-13   altenburgd@businesslogic.com    Bugfixes based on Intuit Schema QA
+    RC4    2003-06-24   gil_clark@intuit.com            Added collapse to fixed length, non-string types and enums.
+    p24    2010-07-05   @intuit.com                     Added CUSIPNUM to 1099Int
+
+    2011-05-23 kathy_eusepi@intuit.com : added three new tag for 1099-B update to <TAX1099B_V100> <PROCDET_V100>
+       the change was made in the <ProceedDescription_V100> aggregate.
+
+    2011-08-03 Kle : added two new optional tags to Tax1099R_V100 : <AMTALLOCABLEIRR> and <FIRSTYEARDESIGROTH>
+
+    2012-09-05 KLE: added three new optional tags <STATECODE>,<STATEIDNUM>,<STATETAXWHELD> to Tax1099INT_V100,Tax1099DIV_V100,Tax1099OID_V100 and ProceedDescription_V100;
+      Added two optional tags to Tax1099DIV_V100 for <EXEMPTINTDIV>, <SPECIFIEDPADINTDIV>;
+      Modified the ProceedDescription_V100 to allow both <SECNAME> and <SALEDESCRIPTION>.
+9-14-2012kle: added new complex element <FIDirectDepositInfo> to supporting direct deposit of tax refunds to customers brokerage accounts.
+AUG 15 2013-kle Added new OFX element ADDLSTATETAXWHELDAGG to report Multiple State Tax wheld on INT, DIV and OID.
+        In addition, added a "choice" to INT, DIV and OID for either single state reporting, or multi-state using ADDLSTATETAXWHAGG based on new 
+        ADDLSTATETAXWHELDAGG element.
+Sep 19 2013-kle Added Box 5 and 6 (Foreign Tax and Country) to 1099-OID
+
+Oct 11 2013 kle: added two new optional elements to TAX1099MISC_V100: <FORTAXPD>, <FORCNT>
+
+Jun30 2014 - IRS removed Box 5 and 6 (Foreign Tax/Country) from 1099-OID; and from TAX1099MISC_V100 - changed annotation
+                        Added new Box 5 and 6 to 1099-OID  MARKETDISCOUNT and ACQPREMIUM;
+                        Added new Box 10 and 11 1099-INT  MARKETDISCOUNT and BONDPREMIUM
+Jun30 2014 kle <PROCDET_V100> now supports multiple State tax whelds. Added STATECODE1,STATEIDNUM2,STATETAXWHELD2
+                  
+      Added to PROCDET_V100 new optional tags FORM8949CODE, SALECODE and ADJUSTMENTAMT
+Oct11 2014 - PROCDET_V100 : SALECODE changed from CharCode type to GenericDescription. Added the enumerations of C,D,W. Added new optional boolean tag <LOSSNOTALLOWED>
+Oct 11 2014 : finalized TY14 
+Nov 11 2014 : SALECODE changed from GenericDescription to String with max size 3 and chars within the pattern {C, D, W}
+
+Jun 25 2015: <FATCA> boolean type added to TAX1099INT,TAX1099DIV,TAX1099MISC,TAX1099OID.  Also added to TAX1099INT   is an ofx amount tag called <TEBONDPREMIUM>
+
+Jul 15 2016 kle: added <BONDPREMUSOBLIGATIONS> to Tax1099Int_V100; added <BONDPREMIUM> to Tax1099Oid_V100; added <FATCA> TO Tax1099R_V100;  added <FATCA>, <ORDINARY>, <COLLECTIBLE>, <ACCRUEDMKTDISCOUNT> to ProceedDescription_V100; removed <SALECODE> AND <ADJUSTMENTAMT> FROM ProceedDescription_V100;
+
+Aug 24 2017 christy_nicholson@intuit.com: added <TAXEXEMPTOID> to TAX1099OID_V100
+Oct 18 2017 christy_nicholson@intuit.com: added <PRIVACTBONDAMT> and <PRIVACTBONDINT> to TAX1099OID_V100 for completeness in reporting AMT on tax exempt OID
+
+2017-08-31  brucevwilcox@itips.info                 Added 11 forms to schema including related data types:
+                                                    1099-A : Acquisition or Abandonment of Secured Property
+                                                    1099-C : Cancellation of Debt
+                                                    1099-CAP : Changes in Corporate Control and Capital Structure
+                                                    1099-G : Certain Government Payments
+                                                    1099-H : Health Coverage Tax Credit (HCTC) Advance Payments
+                                                    1099-K : Merchant Card and Third-Party Network Payments
+                                                    1099-LTC : Long-Term Care and Accelerated Death Benefits
+                                                    1099-PATR : Taxable Distributions Received From Cooperatives
+                                                    1099-Q : Payments From Qualified Education Programs
+                                                    1099-S : Proceeds From Real Estate Transactions
+                                                    1099-SA : Distributions From an HSA, Archer MSA, or Medicare Advantage MSA
+
+Jul 24 2018 bill.cary@innovision.com: Changes for Tax Year 2018.  Added new <PROCSUM_V100> as an optional aggregate inside <EXTDBINFO_V100> for summary transaction reporting.  Added new <FORINCOMEAMT> as optional tag inside TAX1099INT & TAX1099DIV.  Added new <FORINCOME> as optional aggregate inside TAX1099INT & TAX1099DIV.  Added new <ORIGSTATE> as optional aggregate inside TAX1099INT, TAX1099DIV & TAX1099OID.  Fixed documentation typo in Tax1099INT_V100. 
+
+Aug 13 2018 bill.cary@innovision.com: Changes for Tax Year 2018.  Added new <SEC199A> as optional element inside TAX1099DIV.  Added new <DTBENEFITPMT> as optional element inside TAX1099R.
+
+    Tax2.0  2019-09-30  clyde.e.cutting@wellsfargo.com  Added TAX1099CONSOLIDATEDSTATEMENTINFO for TY19 and PDF statements
+                                                        Added many new explicit Form 8949 adjustment codes in 1099-B's ProceedDescription_V100 for TY19
+    2020.0  2020-09-08  clyde.e.cutting@wellsfargo.com  Added Tax1099NEC_V100 type for Non-Employee Compensation in TY20
+                                                        Tax1099MISC_V100 changes for TY20, deprecate two elements and add NONQUALDEFERREDCOMP
+                                                        Tax1099PATR_V100 changes for TY20, deprecate two elements and add four new elements
+                                                        Removed LongShortEnum value QUAL5YEAR, which is now obsolete
+    2020.0  2020-09-15  brucevwilcox@itips.info         Added CORRECTEDCOSTBASIS, TOTALADJ and ADJCODES to PROCDET_V100 for Tax1099B_V100
+    2020.0  2020-09-24  clyde.e.cutting@wellsfargo.com  Corrected naming of RecurringAddress type to RecipientAddress
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ofx="http://ofx.net/types/2003/04" targetNamespace="http://ofx.net/types/2003/04" elementFormDefault="qualified">
+	<xsd:include schemaLocation="OFXTax_Common.xsd"/>
+	<xsd:complexType name="AdditionalStateTaxWithheldAggregate">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "ADDLSTTAXWHAGG" is of type "AdditionalStateTaxWithheldAggregate"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="STTAXWH" type="ofx:AmountType"/>
+			<xsd:element name="PAYERSTATE" type="ofx:StateCodeType"/>
+			<xsd:element name="PAYERSTID" type="ofx:IdType" minOccurs="0"/>
+			<xsd:element name="STINCOME" type="ofx:AmountType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ForeignIncomeAggregate">
+		<xsd:annotation>
+			<xsd:documentation>
+				The OFX element "FORINCOME" is of type "ForeignIncomeAggregate"
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="COUNTRYSTRING" type="ofx:CountryStringType" minOccurs="1"/>
+			<xsd:element name="FORINCOMEALLOCAMT" type="ofx:AmountType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OriginatingStateAggregate">
+		<xsd:annotation>
+			<xsd:documentation>
+				The OFX element "ORIGSTATE" is of type "OriginatingStateAggregate"
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="ORIGSTATECODE" type="ofx:StateCodeType" minOccurs="1"/>
+			<xsd:element name="ORIGSTATEALLOCAMT" type="ofx:AmountType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="ProceedsSummaryAdjustmentCodeType">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "ADJCODE" is of type "ProceedsSummaryAdjustmentCodeType".
+				Possible codes include B T N H D Q X R W L E S C M O and Z. (As of TY20.)
+				See https://www.irs.gov/pub/irs-pdf/i8949.pdf pages 8 - 10 for further code information.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="9"/>
+			<xsd:whiteSpace value="collapse"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="ExtendedBInfo_V100">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "EXTDBINFO_V100" is of type "ExtendedBInfo_V100"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PROCSUM_V100" type="ofx:ProceedSummary_V100" minOccurs="0" maxOccurs="unbounded">
+				<xsd:annotation>
+					<xsd:documentation>New TY18</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PROCDET_V100" type="ofx:ProceedDescription_V100" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="TEINTEREST" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>OBSOLETE</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PABINTEREST" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>OBSOLETE</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TEINTDIVIDEND" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>OBSOLETE</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PABDIVIDEND" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>OBSOLETE</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="LocalTaxWithheldAggregate">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "LCLTAXWHAGG" is of type "LocalTaxWithheldAggregate"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="AMOUNT" type="ofx:AmountType"/>
+			<xsd:element name="NAMELCL" type="ofx:GenericNameType"/>
+			<xsd:element name="LCLDIST" type="ofx:AmountType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="LongMessageType">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "LONGMSG" is of type "LongMessageType"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:minLength value="1"/>
+			<xsd:maxLength value="2000"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="LongShortEnum">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "LONGSHORTENUM" is of type "LongShortEnum"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:whiteSpace value="collapse"/>
+			<xsd:enumeration value="LONG"/>
+			<xsd:enumeration value="SHORT"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="PayerAddress">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "PAYERADDR" is of type "PayerAddress"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="PAYERNAME1" type="ofx:GenericNameType"/>
+			<xsd:element name="PAYERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+			<xsd:element name="ADDR1" type="ofx:AddressType"/>
+			<xsd:element name="ADDR2" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="ADDR3" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="CITY" type="ofx:AddressType"/>
+			<xsd:element name="STATE" type="ofx:StateType"/>
+			<xsd:element name="POSTALCODE" type="ofx:ZipType"/>
+			<xsd:element name="PHONE" type="ofx:PhoneType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ProceedDescription_V100">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "PROCDET_V100" is of type "ProceedDescription_V100"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FORM8949CODE" type="ofx:CharType" minOccurs="0"/>
+			<xsd:choice minOccurs="0">
+				<xsd:element name="DTAQD" type="ofx:DateTimeType"/>
+				<xsd:element name="DTVAR" type="ofx:BooleanType"/>
+			</xsd:choice>
+			<xsd:element name="DTSALE" type="ofx:DateTimeType"/>
+			<xsd:element name="SECNAME" type="ofx:SecurityNameType" minOccurs="0"/>
+			<xsd:element name="SALEDESCRIPTION" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="120"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="NUMSHRS" type="ofx:AmountType" minOccurs="0"/>
+			<xsd:element name="COSTBASIS" type="ofx:AmountType" minOccurs="0"/>
+			<xsd:element name="SALESPR" type="ofx:AmountType"/>
+			<xsd:element name="ACCRUEDMKTDISCOUNT" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code D, a Form 1099-B showing accrued market discount in box 1f. 
+						Note: The amount of the adjustment might not be the same as the amount of the discount. New TY16</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="LONGSHORT" type="ofx:LongShortEnum" minOccurs="0"/>
+			<xsd:element name="ORDINARY" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>New TY16</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:element name="SALECODE" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>REMOVED FROM TY16 form - OBSOLETE</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:maxLength value="3"/>
+							<xsd:pattern value="([CDW])+"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:element>
+				<xsd:element name="WASHSALE" type="ofx:BooleanType" minOccurs="0"/>
+			</xsd:choice>
+			<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0"/>
+			<xsd:choice>
+				<xsd:element name="WASHSALELOSSDISALLOWED" type="ofx:AmountType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>Code W, a nondeductible loss from a wash sale</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="ADJUSTMENTAMT" type="ofx:AmountType" minOccurs="0">
+					<xsd:annotation>
+						<xsd:documentation>REMOVED FROM FORM TY16 </xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="NONCOVEREDSECURITY" type="ofx:BooleanType" minOccurs="0"/>
+			<xsd:element name="LOSSNOTALLOWED" type="ofx:BooleanType" minOccurs="0"/>
+			<xsd:element name="BASISNOTSHOWN" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Use when supplying cost basis for a non-covered security and NOT reporting on the 1099B</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FORM1099BNOTRECEIVED" type="ofx:BooleanType" minOccurs="0"/>
+			<xsd:element name="COLLECTIBLE" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code C flag, disposed of collectibles (see the Schedule D instructions). New TY16</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="MULTIPLETRAN" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code M flag, report multiple transactions on a single row as described in Exception 2 or 
+					Special provision for certain corporations, partnerships, securities dealers, and other qualified entities 
+					under Exceptions to reporting each transaction on a separate row. 
+					Note: When ProceedSummary_V100 used, this code is implied. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="INCORRECTGAINTYPE" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code T flag, received a Form 1099-B (or substitute statement) and the type of gain or (loss) shown in box 2 is incorrect. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="INCORRECTCOSTBASIS" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code B flag, received a Form 1099-B (or substitute statement) and the basis shown in box 1e is incorrect. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="COSTBASISADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Adjustment amount for code B. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="CORRECTEDCOSTBASIS" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Corrected cost basis. May be supplied in lieu of COSTBASISADJ. 
+						If both COSTBASISADJ and CORRECTEDCOSTBASIS are supplied, 
+						COSTBASIS plus COSTBASISADJ should equal CORRECTEDCOSTBASIS. Added TY20</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="EXPENSEADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code E, received a Form 1099-B or 1099-S (or substitute statement) for a transaction and 
+					there are selling expenses or option premiums that aren't reflected on the form or statement by an adjustment 
+					to either the proceeds or basis shown. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="HOMESALEADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code H, sold or exchanged main home at a gain, must report the sale or exchange on Part II of Form 8949 
+					(as explained in Sale of Your Home in the Instructions for Schedule D (Form 1040)), and can exclude some or all of the gain. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OTHERNDLOSSADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code L, a nondeductible loss other than a loss indicated by code W. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="NOMINEEADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code N, received a Form 1099-B or 1099-S (or substitute statement) as a nominee for the actual owner of the property. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="OTHERADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code O, sold or exchanged qualified small business stock and can exclude part of the gain. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="QUALSMBSTOCKADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code Q, sold or exchanged qualified small business stock and can exclude part of the gain. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ROLLOVERADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code R, electing to postpone all or part of your gain under the rules explained in the 
+					Schedule D instructions for any rollover of gain (for example, rollover of gain from QSB stock). Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="S1244MAXADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code S, had a loss from the sale, exchange, or worthlessness of small business (section 1244) stock 
+					and the total loss is more than the maximum amount that can be treated as an ordinary loss. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DCQCAADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code X, can exclude all or part of your gain under the rules explained in the Schedule D instructions 
+					for DC Zone assets or qualified community assets. Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="QOFADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Code Z, electing to postpone all or part of your gain under the rules explained in the 
+					Schedule D instructions for investments in QO Fund(s). Added TY19</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="TOTALADJ" type="ofx:AmountType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Total of adjustments to be reported on Form 8949, column (g), Amount of adjustment.
+						Recommended for use when ADJCODES contains codes that indicate amounts (i.e. other than codes M and T). Added TY20</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="ADJCODES" type="ofx:ProceedsSummaryAdjustmentCodeType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>String of code(s) to be reported on Form 8949, column (f), code(s) from instructions.
+						When containing codes that indicate amounts (i.e. other than codes M and T), enter the total in TOTALADJ.
+						Possible codes include B T N H D Q X R W L E S C M O and Z.
+						See https://www.irs.gov/instructions/i8949 for list of codes. Added TY20</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="QOF" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Qualified Opportunity Fund flag. New TY19.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:element name="STATECODE" type="ofx:StateCodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>2 DIGIT STATE CODE</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="STATEIDNUM" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYER STATE  ID NUMBER</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="STATETAXWHELD" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="STATECODE2" type="ofx:StateCodeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>STATE CODE (2)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="STATEIDNUM2" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYER STATE ID NUMBER(2)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="STATETAXWHELD2" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>STATE TX WHELD (2)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:element name="ADDLSTATETAXWHAGG" type="ofx:AddlStateTaxWheldAggregate" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>For additional states beyond 1 and 2. Cleanup TY19.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="FATCA" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>New TY16</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SBGROS" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Cleanup TY19.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="SBGROSLESS" type="ofx:BooleanType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Cleanup TY19.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="ProceedSummary_V100">
+		<xsd:annotation>
+			<xsd:documentation>
+				The OFX element "PROCSUM_V100" is of type "ProceedSummary_V100"
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FORM8949CODE" type="ofx:CharType" minOccurs="1"/>
+			<xsd:element name="ADJCODE" type="ofx:ProceedsSummaryAdjustmentCodeType" minOccurs="0"/>
+			<xsd:element name="SUMCOSTBASIS" type="ofx:AmountType" minOccurs="0"/>
+			<xsd:element name="SUMSALESPR" type="ofx:AmountType" minOccurs="1"/>
+			<xsd:element name="SUMADJAMT" type="ofx:AmountType" minOccurs="0"/>
+			<xsd:element name="SUMDESCRIPTION" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="120"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="RecipientAddress">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "RECADDR" is of type "RecipientAddress"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="RECNAME1" type="ofx:GenericNameType"/>
+			<xsd:element name="RECNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+			<xsd:element name="ADDR1" type="ofx:AddressType"/>
+			<xsd:element name="ADDR2" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="ADDR3" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="CITY" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="STATE" type="ofx:StateType" minOccurs="0"/>
+			<xsd:element name="POSTALCODE" type="ofx:ZipType" minOccurs="0"/>
+			<xsd:element name="COUNTRYSTRING" type="ofx:CountryStringType" minOccurs="0"/>
+			<xsd:element name="PHONE" type="ofx:PhoneType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="StocksBonds">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "STKBND" is of type "StocksBonds"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="STKBNDAMT" type="ofx:AmountType"/>
+			<xsd:element name="SBGROS" type="ofx:BooleanType" minOccurs="0"/>
+			<xsd:element name="SBGROSLESS" type="ofx:BooleanType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="StateTaxWithheldAggregate">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "STTAXWHAGG" is of type "StateTaxWithheldAggregate"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="AMOUNT" type="ofx:AmountType"/>
+			<xsd:element name="PAYERSTATE" type="ofx:StateCodeType"/>
+			<xsd:element name="PAYERSTID" type="ofx:IdType" minOccurs="0"/>
+			<xsd:element name="STDIST" type="ofx:AmountType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AbstractTaxForm1099" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="SRVRTID" type="ofx:ServerIdType"/>
+			<xsd:element name="TAXYEAR" type="ofx:YearType"/>
+			<xsd:element name="VOID" type="ofx:BooleanType" minOccurs="0"/>
+			<xsd:element name="CORRECTED" type="ofx:BooleanType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099B_V100">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "TAX1099B_V100" is of type "Tax1099B_V100"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="DTSALE" type="ofx:DateTimeType" minOccurs="0"/>
+					<xsd:element name="CUSIPNUM" type="ofx:CusipType" minOccurs="0"/>
+					<xsd:element name="STKBND" type="ofx:StocksBonds" minOccurs="0"/>
+					<xsd:element name="BARTERING" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="DSCR" type="ofx:ShortMessageType" minOccurs="0"/>
+					<xsd:element name="PROFIT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="UNRELPROFITPREV" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="UNRELPROFIT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="AGGPROFIT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="EXTDBINFO_V100" type="ofx:ExtendedBInfo_V100" minOccurs="0"/>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddress"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType"/>
+					<xsd:element name="RECADDR" type="ofx:RecipientAddress" minOccurs="0"/>
+					<xsd:element name="RECID" type="ofx:IdType"/>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="TINNOT" type="ofx:BooleanType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099DIV_V100">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "TAX1099DIV_V100" is of type "Tax1099DIV_V100"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="ORDDIV" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="QUALIFIEDDIV" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="TOTCAPGAIN" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="POSTMAY5CAPGAIN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>OBSOLETE!</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="P28GAIN" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="UNRECSEC1250" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="SEC1202" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="QUAL5YEAR" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>OBSOLETE</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NONTAXDIST" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="SEC199A" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY18</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="INVESTEXP" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FORTAXPD" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FORINCOMEAMT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY18</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:element name="FORCNT" type="ofx:GenericNameType" minOccurs="0"/>
+						<xsd:element name="FORINCOME" type="ofx:ForeignIncomeAggregate" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>New TY18</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+					<xsd:element name="CASHLIQ" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="NONCASHLIQ" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="EXEMPTINTDIV" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="ORIGSTATE" type="ofx:OriginatingStateAggregate" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>New TY18</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SPECIFIEDPABINTDIV" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:choice>
+						<xsd:sequence>
+							<xsd:element name="STATECODE" type="ofx:StateCodeType" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>2 DIGIT STATE CODE</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="STATEIDNUM" type="ofx:IdType" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>PAYER STATE ID NUMBER</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="STATETAXWHELD" type="ofx:AmountType" minOccurs="0"/>
+						</xsd:sequence>
+						<xsd:element name="ADDLSTATETAXWHAGG" type="ofx:AddlStateTaxWheldAggregate" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:choice>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddress"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType"/>
+					<xsd:element name="RECADDR" type="ofx:RecipientAddress" minOccurs="0"/>
+					<xsd:element name="RECID" type="ofx:IdType"/>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="TINNOT" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="FATCA" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>FATCA filing requirement</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099INT_V100">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "TAX1099INT_V100" is of type "Tax1099INT_V100"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="PAYERRTN" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="INTINCOME" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="ERLWITHPEN" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="INTUSBNDTRS" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="INVESTEXP" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FORTAXPD" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FORINCOMEAMT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY18</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:element name="FORCNT" type="ofx:GenericNameType" minOccurs="0"/>
+						<xsd:element name="FORINCOME" type="ofx:ForeignIncomeAggregate" minOccurs="0" maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>New TY18</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+					<xsd:element name="TAXEXEMPTINT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="ORIGSTATE" type="ofx:OriginatingStateAggregate" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>New TY18</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SPECIFIEDPABINT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="MARKETDISCOUNT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>NEW for TY14</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BONDPREMIUM" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>NEW for TY14</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BONDPREMUSOBLIGATIONS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>new FOR ty16</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="TEBONDPREMIUM" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>NEW for TY15</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="CUSIPNUM" type="ofx:CusipType" minOccurs="0"/>
+					<xsd:choice>
+						<xsd:sequence>
+							<xsd:element name="STATECODE" type="ofx:StateCodeType" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>2 DIGIT STATE CODE</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="STATEIDNUM" type="ofx:IdType" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>PAYER STATE ID NUMBER</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="STATETAXWHELD" type="ofx:AmountType" minOccurs="0"/>
+						</xsd:sequence>
+						<xsd:element name="ADDLSTATETAXWHAGG" type="ofx:AddlStateTaxWheldAggregate" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:choice>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddress"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType"/>
+					<xsd:element name="RECADDR" type="ofx:RecipientAddress" minOccurs="0"/>
+					<xsd:element name="RECID" type="ofx:IdType"/>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="TINNOT" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="FATCA" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>FATCA filing requirement</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099MISC_V100">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "TAX1099MISC_V100" is of type "Tax1099Misc_V100"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="RENTS" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="ROYALTIES" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="OTHERINCOME" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FISHBOATPRO" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="MEDHEALTHPAY" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="NONEMPCOMP" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>IRS removed TY20, now on 1099-NEC</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SUBPMTS" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="PAYER5KSALES" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="CROPINSPRO" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FORTAXPD" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>IRS removed from form TY14</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FORCNT" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>IRS removed from form TY14</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:sequence>
+							<xsd:element name="STTAXWH" type="ofx:AmountType" minOccurs="0"/>
+							<xsd:element name="PAYERSTATE" type="ofx:StateCodeType" minOccurs="0"/>
+							<xsd:element name="PAYERSTID" type="ofx:IdType" minOccurs="0"/>
+							<xsd:element name="STINCOME" type="ofx:AmountType" minOccurs="0"/>
+						</xsd:sequence>
+						<xsd:element name="ADDLSTTAXWHAGG" type="ofx:AdditionalStateTaxWithheldAggregate" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:choice>
+					<xsd:element name="GROSSATTOR" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="EXCSGLDN" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="SEC409ADEFERRALS" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="SEC409AINCOME" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>IRS removed TY20</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddress"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType"/>
+					<xsd:element name="RECADDR" type="ofx:RecipientAddress" minOccurs="0"/>
+					<xsd:element name="RECID" type="ofx:IdType"/>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="TINNOT" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="FATCA" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>FATCA filing requirement</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NONQUALDEFERREDCOMP" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 14, Nonqualified Deferred Compensation. New TY20</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="AddlStateTaxWheldAggregate">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "ADDLSTATETAXWHAGG" is of type "AddlStateTaxWheldAggregate"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="STATECODE" type="ofx:StateCodeType"/>
+			<xsd:element name="STATEIDNUM" type="ofx:IdType" minOccurs="0"/>
+			<xsd:element name="STATETAXWHELD" type="ofx:AmountType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099OID_V100">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "TAX1099OID_V100" is of type "Tax1099OID_V100"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="ORIGISDISC" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="OTHERPERINT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="ERLWITHPEN" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="MARKETDISCOUNT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>NEW for TY14</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACQPREMIUM" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>NEW for TY14</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FORTAXPD" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>TY14 IRS removed from form</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FORCNT" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>TY14 - IRS removed from form</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DESCRIPTION" type="ofx:LongMessageType" minOccurs="0"/>
+					<xsd:element name="OIDONUSTRES" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="INVESTEXP" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="BONDPREMIUM" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY16</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="TAXEXEMPTOID" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY17</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ORIGSTATE" type="ofx:OriginatingStateAggregate" minOccurs="0" maxOccurs="unbounded">
+						<xsd:annotation>
+							<xsd:documentation>New TY18</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PRIVACTBONDAMT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY17 - not on IRS 1099-OID 2017 form but requested for reporting AMT to IRS</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PRIVACTBONDINT" type="ofx:RateType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY17 - not on IRS 1099-OID 2017 form but requested for reporting AMT interest percentage to IRS</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:sequence>
+							<xsd:element name="STATECODE" type="ofx:StateCodeType" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>2 DIGIT STATE CODE</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="STATEIDNUM" type="ofx:IdType" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>PAYER STATE ID NUMBER</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="STATETAXWHELD" type="ofx:AmountType" minOccurs="0"/>
+						</xsd:sequence>
+						<xsd:element name="ADDLSTATETAXWHAGG" type="ofx:AddlStateTaxWheldAggregate" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:choice>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddress"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType"/>
+					<xsd:element name="RECADDR" type="ofx:RecipientAddress" minOccurs="0"/>
+					<xsd:element name="RECID" type="ofx:IdType"/>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="TINNOT" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="FATCA" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>FATCA filing requirement</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099R_V100">
+		<xsd:annotation>
+			<xsd:documentation>
+        The OFX element "TAX1099R_V100" is of type "Tax1099R_V100"
+      </xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="GROSSDIST" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="TAXAMT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="TAXAMTND" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="TOTALDIST" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="CAPGAIN" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="EMPCONTINS" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="NETUNAPEMP" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="DISTCODE" type="ofx:CharType" maxOccurs="unbounded"/>
+					<xsd:element name="IRASEPSIMP" type="ofx:BooleanType" minOccurs="0"/>
+					<xsd:element name="ANNCTRCTDIST" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="ANNCTRCTPER" type="ofx:RateType" minOccurs="0"/>
+					<xsd:element name="PERTOTDIST" type="ofx:RateType" minOccurs="0"/>
+					<xsd:element name="TOTEMPCONT" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="AMTALLOCABLEIRR" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>added 8-3-11</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FIRSTYEARDESIGROTH" type="ofx:YearType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>added 8-3-11</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="STTAXWHAGG" type="ofx:StateTaxWithheldAggregate" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="LCLTAXWHAGG" type="ofx:LocalTaxWithheldAggregate" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddress"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType"/>
+					<xsd:element name="RECADDR" type="ofx:RecipientAddress" minOccurs="0"/>
+					<xsd:element name="RECID" type="ofx:IdType"/>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="FATCA" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY16</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DTBENEFITPMT" type="ofx:DateTimeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY18</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="FIDirectDepositInfo">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "FIDIRECTDEPOSITINFO" is of type" FIDirectDepositInfo"</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="FINAME_DIRECTDEPOSIT" type="ofx:GenericNameType">
+				<xsd:annotation>
+					<xsd:documentation>Financial Insti. name</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FIROUTINGNUM" type="ofx:BankIdType">
+				<xsd:annotation>
+					<xsd:documentation>Routing number</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FIACCTNUM" type="ofx:AccountIdType">
+				<xsd:annotation>
+					<xsd:documentation>Account number for the Direct Deposit</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="FIACCOUNTNICKNAME" type="ofx:GenericNameType" minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Account nickname</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099ConsolidatedStatementInfo">
+		<xsd:annotation>
+			<xsd:documentation>The OFX element "TAX1099CONSOLIDATEDSTMTINFO" is of type "Tax1099ConsolidatedStatementInfo"
+				Various tax-related items reported on consolidated brokerage or mutual fund statements not on the base forms. Added TY19</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="MARGININTERESTPAID" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="PAYMENTINLIEUPAID" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="ADVISORFEESPAID" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="OTHERFEESPAID" type="ofx:AmountType" minOccurs="0"/>
+					<xsd:element name="CORPORATEBONDINTPAID" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Accrued Interest Paid offset to form 1099-INT box 1, Corporate bond interest income</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="INTUSBNDTRSPAID" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Accrued Interest Paid offset to form 1099-INT box 3, accrued U.S. Treasury Notes and Bonds interest income</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="TAXEXEMPTINTPAID" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Accrued Interest Paid offset to form 1099-INT box 8, tax exempt interest income from municipal bonds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SPECIFIEDPABINTPAID" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Accrued Interest Paid offset to form 1099-INT box 9, tax exempt interest income from private activity bonds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<!-- Types used by below new 1099 tax documents -->
+	<xsd:complexType name="AbstractIssuerAddressType" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="ADDR1" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="ADDR2" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="ADDR3" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="CITY" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="STATE" type="ofx:StateType" minOccurs="0"/>
+			<xsd:element name="POSTALCODE" type="ofx:ZipType" minOccurs="0"/>
+			<xsd:element name="COUNTRYSTRING" type="ofx:CountryStringType" minOccurs="0"/>
+			<xsd:element name="PHONE" type="ofx:PhoneType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CorporationAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractIssuerAddressType">
+				<xsd:sequence>
+					<xsd:element name="CORPORATIONNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="CORPORATIONNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="CreditorAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractIssuerAddressType">
+				<xsd:sequence>
+					<xsd:element name="CREDITORNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="CREDITORNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="FilerAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractIssuerAddressType">
+				<xsd:sequence>
+					<xsd:element name="FILERNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="FILERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="IssuerAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractIssuerAddressType">
+				<xsd:sequence>
+					<xsd:element name="ISSUERNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="ISSUERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="LenderAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractIssuerAddressType">
+				<xsd:sequence>
+					<xsd:element name="LENDERNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="LENDERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PayerAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractIssuerAddressType">
+				<xsd:sequence>
+					<xsd:element name="PAYERNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="PAYERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="AbstractRecipientAddressType" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="ADDR1" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="ADDR2" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="ADDR3" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="CITY" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="STATE" type="ofx:StateType" minOccurs="0"/>
+			<xsd:element name="POSTALCODE" type="ofx:ZipType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BorrowerAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="BORROWERNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="BORROWERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="DebtorAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="DEBTORNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="DEBTORNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PayeeAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="PAYEENAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="PAYEENAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PolicyholderAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="POLICYHOLDERNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="POLICYHOLDERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="RecipientAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="RECIPNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="RECIPNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ShareholderAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="SHAREHOLDERNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="SHAREHOLDERNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="StudentAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="STUDENTNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="STUDENTNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="TransferorAddressType">
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractRecipientAddressType">
+				<xsd:sequence>
+					<xsd:element name="TRANSFERORNAME1" type="ofx:GenericNameType"/>
+					<xsd:element name="TRANSFERORNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="InsuredAddressType">
+		<xsd:sequence>
+			<xsd:element name="INSUREDNAME1" type="ofx:GenericNameType"/>
+			<xsd:element name="INSUREDNAME2" type="ofx:GenericNameType" minOccurs="0"/>
+			<xsd:element name="ADDR1" type="ofx:AddressType"/>
+			<xsd:element name="ADDR2" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="ADDR3" type="ofx:AddressType" minOccurs="0"/>
+			<xsd:element name="CITY" type="ofx:AddressType"/>
+			<xsd:element name="STATE" type="ofx:StateType"/>
+			<xsd:element name="POSTALCODE" type="ofx:ZipType"/>
+			<xsd:element name="PHONE" type="ofx:PhoneType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AbstractTaxForm1099Type" abstract="true">
+		<xsd:sequence>
+			<xsd:element name="SRVRTID" type="ofx:ServerIdType"/>
+			<xsd:element name="TAXYEAR" type="ofx:YearType"/>
+			<xsd:element name="VOID" type="ofx:BooleanType" minOccurs="0"/>
+			<xsd:element name="CORRECTED" type="ofx:BooleanType" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="AddlStateTaxWheldAggregateType">
+		<xsd:sequence>
+			<xsd:element name="STATECODE" type="ofx:StateCodeType"/>
+			<xsd:element name="STATEIDNUM" type="ofx:IdType" minOccurs="0"/>
+			<xsd:element name="STATETAXWHELD" type="ofx:AmountType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="MonthType">
+		<xsd:restriction base="xsd:string">
+			<xsd:whiteSpace value="collapse"/>
+			<xsd:pattern value="[0-9]{2}"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="Tax1099A_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-A - Acquisition or Abandonment of Secured Property</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="LENDERADDRESS" type="ofx:LenderAddressType" minOccurs="0"/>
+					<xsd:element name="BORROWERADDRESS" type="ofx:BorrowerAddressType" minOccurs="0"/>
+					<xsd:element name="LENDERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>LENDER’S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BORROWERID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>BORROWER’S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DATEACQ" type="ofx:DateTimeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Date of lender's acquisition or knowledge of abandonment</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BALANCE" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Balance of principal outstanding</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FMV" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Fair market value property</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PERSLIAB" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5. If checked, the borrower was personally liable for repayment of the debt </xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DESCPROP" type="ofx:MessageType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 6. Description of property</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099C_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-C - Cancellation of Debt</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="CREDITORADDR" type="ofx:CreditorAddressType" minOccurs="0"/>
+					<xsd:element name="DEBTORADDR" type="ofx:DebtorAddressType" minOccurs="0"/>
+					<xsd:element name="CREDITORID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>CREDITOR'S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DEBTORID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>DEBTOR'S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DATEEVENT" type="ofx:DateTimeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Date of identifiable event</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DEBTDISCHARGED" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Amount of debt discharged</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="INTERESTINCL" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Interest if included in box 2</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DEBTDESC" type="ofx:MessageType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Debt description</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PERSLIAB" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5. If checked, the debtor was personally liable for repayment of the debt</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DEBTCODE" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 6. Identifiable debt code</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FMVPROP" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 7. Fair market value of property</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099CAP_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-CAP - Changes in Corporate Control and Capital Structure</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="SHAREHOLDERADDR" type="ofx:ShareholderAddressType" minOccurs="0"/>
+					<xsd:element name="CORPORATIONADDR" type="ofx:CorporationAddressType" minOccurs="0"/>
+					<xsd:element name="CORPORATIONID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>CORPORATION'S federal identification no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SHAREHOLDERID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>SHAREHOLDER'S identification no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DATESALE" type="ofx:DateTimeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Date of sale or exchange</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="AGGRAMOUNT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Aggregate amount received</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NUMSHARES" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Number of shares exchanged</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="CLASSSTOCK" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Classes of stock exchanged</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099G_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-G - Certain Government Payments</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddressType" minOccurs="0"/>
+					<xsd:element name="RECIPADDR" type="ofx:RecipientAddressType" minOccurs="0"/>
+					<xsd:element name="ADDLSTATETAXWHAGG" type="ofx:AddlStateTaxWheldAggregateType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYER'S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RECID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>RECIPIENT'S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="UNEMP" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Unemployment compensation</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="STREFUND" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. State or local income tax refunds, credits, or offsets</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="REFUNDYEAR" type="ofx:YearType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Box 2 amount is for tax year</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Federal income tax withheld</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RTAA" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5. RTAA payments</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="GRANTS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 6. Taxable grants</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="AGRPMTS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 7. Agriculture payments</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BUSINESSINCOME" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 8. If checked, box 2 is trade or business income</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="MKTGAIN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 9. Market gain</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099H_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-H - Health Coverage Tax Credit (HCTC) Advance Payments</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="ISSUERADDR" type="ofx:IssuerAddressType" minOccurs="0"/>
+					<xsd:element name="RECIPADDR" type="ofx:RecipientAddressType" minOccurs="0"/>
+					<xsd:element name="ISSUERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>ISSUER'S/PROVIDER'S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RECID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>RECIPIENT'S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ADVANCE" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Amount of HCTC advance payments</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NUMMONTHS" type="ofx:MonthType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Number of months HCTC advance payments and reimbursement credits paid to you</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="JAN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. January</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FEB" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. February</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="MAR" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5. March</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="APR" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 6. April</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="MAY" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 7. May</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="JUN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 8. June</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="JUL" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 9. July</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="AUG" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 10. August</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SEP" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 11. September</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="OCT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 12. October</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NOV" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 13. November</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DEC" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 14. December</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099K_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-K - Merchant Card and Third-Party Network Payments</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="PAYEEADDR" type="ofx:PayeeAddressType" minOccurs="0"/>
+					<xsd:element name="FILERADDR" type="ofx:FilerAddressType" minOccurs="0"/>
+					<xsd:element name="ADDLSTATETAXWHAGG" type="ofx:AddlStateTaxWheldAggregateType" minOccurs="0" maxOccurs="unbounded"/>
+					<xsd:element name="PSE" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Check to indicate if FILER is a (an): Payment settlement entity (PSE)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="EPF" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Check to indicate if FILER is a (an): Electronic payment facilitator (EPF)/Other third party</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PAYCARD" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Check to indicate transactions reported are: Payment card</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="THIRDNET" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Check to indicate transactions reported are: Third party network</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FILERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>FILER’S federal identification no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PAYEEID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYEE’S taxpayer identification no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="GROSS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1a. Gross amount of payment card/third party network transactions</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="CARDNOTPRESENT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1b. Card Not Present Transactions</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="CATCODE" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Merchant category code</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NUMTRAN" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Number of purchase transactions</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Federal income tax withheld</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="JAN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5a. January</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FEB" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5b. February</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="MAR" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5c. March</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="APR" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5d. April</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="MAY" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5e. May</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="JUN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5f. June</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="JUL" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5g. July</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="AUG" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5h. August</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SEP" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5i. September</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="OCT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5j. October</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NOV" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5k. November</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DEC" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5l. December</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PSENAME" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PSE's name</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PSEPHONE" type="ofx:PhoneType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PSE's phone number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099LTC_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-LTC - Long-Term Care and Accelerated Death Benefits</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="POLICYHOLDERADDR" type="ofx:PolicyholderAddressType" minOccurs="0"/>
+					<xsd:element name="INSUREDADDR" type="ofx:InsuredAddressType" minOccurs="0"/>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddressType" minOccurs="0"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYER’S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="POLICYHOLDERID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>POLICYHOLDER'S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="LONGTERMBEN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Gross long-term care benefits paid</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DEATHBEN" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Accelerated death benefits paid</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PERDIEM" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Per diem</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="REIMB" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Reimbursed amount</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="INSUREDID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>INSURED'S taxpayer identification no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="QUALCONTRACT" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Qualified contract</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="CHRONIC" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Chronically ill</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="TERMINAL" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Terminally ill</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DATECERT" type="ofx:DateTimeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Date certified (MM/DD/YY)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099PATR_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-PATR - Taxable Distributions Received From Cooperatives</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddressType" minOccurs="0"/>
+					<xsd:element name="RECIPADDR" type="ofx:RecipientAddressType" minOccurs="0"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYER’S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RECID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>RECIPIENT’S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PATRDIV" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Patronage dividends</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NONPATRDIST" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Nonpatronage distributions</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PERUNIT" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Per-unit retain allocations</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FEDWITHHOLDING" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Federal income tax withheld</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="REDEMPTION" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5. Redeemed nonqualified notices</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DPADED" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Domestic production activities deduction. IRS removed TY20.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="QUALIFIEDPAYMENTS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>New TY19. Box 7. Qualified payments (Section 199A(b)(7))</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="INVESTCRED" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 10. Investment credit</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="WORKOPPCRED" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 11. Work opportunity credit</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="AMTADJUST" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Patron’s AMT adjustment. IRS removed TY20.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="OTHER" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 12. Other credits and deductions</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="S199AGDEDUCTION" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 6, Section 199A(g) deduction. New TY20</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="S199AAQUALITEMS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 8, Section 199A(a) qualified items. New TY20</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="S199AASSTBITEMS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 9, Section 199A(a) SSTB (Specified Service Trade or Business) items. New TY20</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="SPECIFIEDCOOP" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 13. Specified Cooperative. New TY20</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099Q_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-Q - Payments From Qualified Education Programs</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddressType" minOccurs="0"/>
+					<xsd:element name="RECIPADDR" type="ofx:RecipientAddressType" minOccurs="0"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYER’S/TRUSTEE'S federal identification no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RECID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>RECIPIENT’S taxpayer identification no.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="GROSSDISTRIB" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Gross distribution</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="EARNINGS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Earnings</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="BASIS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Basis</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="TRUSTEE" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Trustee-to-trustee transfer</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="NOTBENEFICIARY" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 6. If this box is checked, the recipient is not the designated beneficiary</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:element name="QTPPRIV" type="ofx:BooleanType" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Box 5a. Qualified tuition plan - Private</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="QTPPUBLIC" type="ofx:BooleanType" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Box 5b. Qualified tuition plan - Public</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="COVERDELL" type="ofx:BooleanType" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Box 5c. Coverdell ESA</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099S_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-S - Proceeds From Real Estate Transactions</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="FILERADDR" type="ofx:FilerAddressType" minOccurs="0"/>
+					<xsd:element name="TRANSFERORADDR" type="ofx:TransferorAddressType" minOccurs="0"/>
+					<xsd:element name="FILERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>FILER'S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="TRANSFERORID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>TRANSFEROR'S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account or escrow number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DATECLOSE" type="ofx:DateTimeType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Date of closing</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="GROSSPROC" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Gross proceeds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ADDRDESC" type="ofx:MessageType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Address or legal description</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PROPSERV" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Transferor received or will receive property or services as part of the consideration (if checked) .</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FOREIGNPERSON" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 5. If checked, transferor is a foreign person (nonresident alien, Foreign partnership, foreign estate, or foreign trust)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RETAX" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 6. Buyer's part of real estate tax</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099SA_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-SA - Distributions From an HSA, Archer MSA, or Medicare Advantage MSA</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099Type">
+				<xsd:sequence>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddressType" minOccurs="0"/>
+					<xsd:element name="RECIPADDR" type="ofx:RecipientAddressType" minOccurs="0"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>PAYER'S federal identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="RECID" type="ofx:IdType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>RECIPIENT'S identification number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ACCTNUM" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="GROSSDIST" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Gross distribution</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="EARNINGS" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 2. Earnings on excess cont.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="DISTCODE" type="ofx:GenericNameType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 3. Distribution code</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FMVON" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. FMV on date of death</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:element name="HSA" type="ofx:BooleanType" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Box 5a. HSA</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="ARCHER" type="ofx:BooleanType" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Box 5b. Archer MSA</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="MSA" type="ofx:BooleanType" minOccurs="0">
+							<xsd:annotation>
+								<xsd:documentation>Box 5c. MA MSA</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Tax1099NEC_V100">
+		<xsd:annotation>
+			<xsd:documentation>Form 1099-NEC - Non-Employee Compensation. New TY20</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="ofx:AbstractTaxForm1099">
+				<xsd:sequence>
+					<xsd:element name="NONEMPCOMP" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 1. Nonemployee compensation</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FEDTAXWH" type="ofx:AmountType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Box 4. Federal income tax withheld</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:sequence>
+							<xsd:element name="STTAXWH" type="ofx:AmountType" minOccurs="0"/>
+							<xsd:element name="PAYERSTATE" type="ofx:StateCodeType" minOccurs="0"/>
+							<xsd:element name="PAYERSTID" type="ofx:IdType" minOccurs="0"/>
+							<xsd:element name="STINCOME" type="ofx:AmountType" minOccurs="0"/>
+						</xsd:sequence>
+						<xsd:element name="ADDLSTTAXWHAGG" type="ofx:AdditionalStateTaxWithheldAggregate" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:choice>
+					<xsd:element name="PAYERADDR" type="ofx:PayerAddress"/>
+					<xsd:element name="PAYERID" type="ofx:GenericNameType"/>
+					<xsd:element name="RECADDR" type="ofx:RecipientAddress" minOccurs="0"/>
+					<xsd:element name="RECID" type="ofx:IdType"/>
+					<xsd:element name="RECACCT" type="ofx:GenericNameType" minOccurs="0"/>
+					<xsd:element name="TINNOT" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>Second TIN Notice</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="FATCA" type="ofx:BooleanType" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>FATCA filing requirement</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>
