@@ -1,7 +1,4 @@
-﻿using System;
-using System.Xml.Linq;
-
-namespace TaxStuff
+﻿namespace TaxStuff.FormModel
 {
     enum Form8949Code
     {
@@ -30,26 +27,5 @@ namespace TaxStuff
         /// Long-term transactions not reported to you on Form 1099-B
         /// </summary>
         F,
-    }
-
-    /// <summary>
-    /// Intended to load data from a schwab 1099-B export.
-    /// </summary>
-    class Form8949Line
-    {
-        public Form8949Line(XElement el)
-        {
-            this.Code = Enum.Parse<Form8949Code>(el.Element("FORM8949CODE").Value);
-            throw new NotImplementedException();
-        }
-
-        public Form8949Code Code { get; }
-        public DateTime? Acquired { get; }
-        public DateTime Sold { get; }
-        public string Description { get; }
-        public decimal CostBasis { get; }
-        public decimal SalePrice { get; }
-        public string SecName { get; }
-        public double NumberOfShares { get; }
     }
 }

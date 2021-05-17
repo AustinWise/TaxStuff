@@ -3,12 +3,16 @@ grammar Expression;
 
 LPAREN   :  '('   ;
 RPAREN   :  ')'   ;
+LBRACKET :  '['   ;
+RBRACKET :  ']'   ;
 DOT      :  '.'   ;
 PLUS     :  '+'   ;
 MINUS    :  '-'   ;
 TIMES    :  '*'   ;
 DIVIDE   :  '/'   ;
 COMMA    :  ','   ;
+EQUAL    :  '=='  ;
+NEQUAL   :  '!='  ;
 
 INTEGER : ('0'..'9') ('0'..'9')*;
 
@@ -17,7 +21,7 @@ fragment VALID_ID_START
    ;
 
 fragment VALID_ID_CHAR
-   : VALID_ID_START | ('0' .. '9') | '-' | DOT
+   : VALID_ID_START | ('0' .. '9') | '-'
    ;
 
 IDENTIFIER
@@ -30,6 +34,9 @@ identifier
    : IDENTIFIER
    ;
 simple
+   :  plusMinus ((EQUAL | NEQUAL) plusMinus)*
+   ;
+plusMinus
    :  term ((PLUS | MINUS) term)*
    ;
 term
@@ -42,14 +49,23 @@ unary
 parameter_list
    :  simple (COMMA simple)*
    ;
+selector
+   : identifier
+   | functionInvoke
+   | selector DOT identifier
+   | selector LBRACKET simple RBRACKET
+   ;
+functionInvoke
+   : identifier LPAREN parameter_list? RPAREN
+   ;
 factor
    : LPAREN simple RPAREN
-   | float_num
-   | identifier (LPAREN parameter_list? RPAREN)?
+   | floatNum
+   | selector
    ;
-float_num
+floatNum
    : INTEGER (DOT INTEGER)?
    ;
-complete_expression
+completeExpression
    : simple EOF
    ;

@@ -1,14 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Linq;
+using TaxStuff.ExpressionParsing;
 using TaxStuff.FormModel;
 
 namespace TaxStuff.ExpressionEvaluation
 {
     record SelectBasedOnStatusExpression(ReadOnlyDictionary<FilingStatus, BaseExpression> Values) : BaseExpression
     {
-        public SelectBasedOnStatusExpression(XElement node)
-            : this(new ReadOnlyDictionary<FilingStatus, BaseExpression>(node.Elements("Choice").ToDictionary(n => n.EnumAttributeValue<FilingStatus>("Status"), n => n.ExpressionAttributeValue("ValueExpr"))))
+        public SelectBasedOnStatusExpression(ParsingEnvironment env, XElement node)
+            : this(new ReadOnlyDictionary<FilingStatus, BaseExpression>(node.Elements("Choice").ToDictionary(n => n.EnumAttributeValue<FilingStatus>("Status"), n => n.ExpressionAttributeValue(env, "ValueExpr"))))
         {
         }
 

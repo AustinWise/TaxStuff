@@ -4,23 +4,13 @@
 NOTE: work in progress, not ready to be used by anyone for anything other than
 their own amusement.
 
-How hard could it be to clone TruboTax. Quite hard, given the complexity of the
+How hard could it be to clone TruboTax? Quite hard, given the complexity of the
 tax code. So this is not really user-friendly. It is about on the level of
 [Free File Fillable Forms](https://www.irs.gov/e-file-providers/free-file-fillable-forms):
 it assumes you understand the tax code enough to know which forms you need to
 file.
 
 I was inspired by Robert Sesek's excellent [ustaxlib](https://github.com/rsesek/ustaxlib).
-
-Unlike ustaxlib and Open Tax Solver, this program defines its own file format
-and expression language for describing tax forms. The goal was constrain the
-the system from using arbitrary computation, to hopefully make the form
-definitions easier to comprehend and easier to implement correctly. At the same
-by providing a language and format tailored for tax forms, the forms can be more
-easily translated. I'm not sure this program really succeeds at either goal, as
-I have not implemented that many forms
-
-This program has the ability to file in PDFs with the result of computations.
 
 # Example
 
@@ -38,6 +28,16 @@ dotnet run --project TaxStuff/TaxStuff.csproj ExampleReturn.xml output
 See example [input file](ExampleReturn.xml) and example
 [1040 output](Example1040.pdf).
 
+# Features
+
+* Can import OFX tax exports (from Schwab for example), to support interest
+  dividends, and stock transactions. The contents of the 1099-Bs will be turned
+  into Form 8949s and will be referenced by !040 Schedule D. The 1009-DIVs and
+  1099-INTs will be put into the right places on Form 1040.
+* Fill in the results of tax computations into PDF tax forms.
+* A custom XML format and expression language for defining tax forms. See the
+  [2020 folder](./TaxStuff/2020/) for the forms.
+
 # License
 
 I'm not really sure what to license this as right now. The dependencies has a
@@ -45,14 +45,43 @@ couple of different license, which makes this more complicated.
 
 * iText: GNU Affero General Public License
 * ANTLR: BSD 3-clause
+* [OFX](https://www.ofx.net/) XML Schema files: Just "All Rights Reserved",
+  though the specification says
+  > A royalty-free, worldwide, and perpetual
+  > license is hereby granted to any party to use the Open Financial Exchange
+  > Specification to make, use, and sell products and services that conform to
+  > this Specification.
+
+  I don't know how "conform" is evaluated.
 
 # TODO
 
 * Add an `Assert` element in forms to check for errors.
 * Unit tests probably
-* Support for parsing 1099-B forms and generated form 8949 and Schedule D automatically.
 * Support for references to previous years, to support things like capital loss
   carryover and Schedule J.
+* Support for filling in personal information into PDFs.
+* Support for filtering array values, probably using a bracket syntax. Use cases:
+  *  Replace the special filter function `FilterForm8949` with native filitering
+     support.
+* Similar to the above filtering, support a "group by" feature.
+    * For 2020 Form 1040 Schedule 3 Line 10, it would be nice  to write something
+      like:
+      ```c#
+      FormW-2.GroupBy(f => f.SSN)
+             .Select(g => Math.Max(0, g.Sum(f => f.SocialSecurityTaxWithheld) - 8537.40))
+             .Sum()
+      ```
+* Clean up PDF writing
+    * Leave spaces blank when appropriate instead of writing 0.
+    * Round to whole dollars.
+* Somehow unify the parsing, typechecking, and evaluation representation of
+  language semantics. Particularly `EvaluationResult` and `ExpressionType` have
+  a similar shape.
+* Maybe instead of interpreting the expression language, it could be compiled
+  to C# using a source generator. This might allow for the execution engine
+  having type-safe knowledge of different forms, for the benefit of the OXF
+  transaction importer.
 
 # Adding support for filling in PDFs
 

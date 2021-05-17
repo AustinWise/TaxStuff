@@ -1,10 +1,12 @@
 ﻿using iText.Forms.Fields;
 using iText.Forms.Xfa;
 using iText.Kernel.Pdf;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using TaxStuff.ExpressionEvaluation;
 
 namespace TaxStuff.FormModel
 {
@@ -59,7 +61,7 @@ namespace TaxStuff.FormModel
             }
         }
 
-        public void Save(string outputPath, FormInstance valueMap)
+        public void Save(string outputPath, FormInstance formInst)
         {
             using var reader = new PdfReader(_filePath);
             using var writer = new PdfWriter(outputPath);
@@ -67,15 +69,24 @@ namespace TaxStuff.FormModel
 
             var pdfformn = iText.Forms.PdfAcroForm.GetAcroForm(pdfdoc, false);
 
+            var valueMap = formInst.GetValueSnapshot();
 
             foreach (var kvp in _lineToFieldName)
             {
-                var lineDef = valueMap.Definition.LinesByNumber[kvp.Key];
-                var values = valueMap.Values[lineDef.Name];
-                if (values.Count != 1)
-                    continue;
+                var lineDef = formInst.Definition.LinesByNumber[kvp.Key];
+                var value = valueMap[lineDef.Name];
                 var field = pdfformn.GetField(kvp.Value);
-                field.SetValue(values[0].ToString("c"));
+                field.SetValue(FormatResult(value));
+            }
+
+            static string FormatResult(EvaluationResult result)
+            {
+                return result switch
+                {
+                    NumberResult num => num.Value.ToString("c"),
+                    StringResult str => str.Value,
+                    _ => throw new NotSupportedException(),
+                };
             }
         }
 

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using TaxStuff.FormModel;
 
 namespace TaxStuff.ExpressionEvaluation
 {
@@ -9,27 +11,88 @@ namespace TaxStuff.ExpressionEvaluation
 
     sealed record NumberType : ExpressionType
     {
-        public static NumberType Instance { get; } = new NumberType();
-        public static ArrayType ArrayInstance { get; } = new ArrayType(Instance);
+        public static NumberType Instance { get; } = new();
+        public static ArrayType ArrayInstance { get; } = new(Instance);
     }
 
-    sealed record EnumType(string Name, ReadOnlyCollection<string> Elements) : ExpressionType
+    sealed record BoolType : ExpressionType
     {
-        public EnumType(string name, IList<string> elements)
-            : this(name, new ReadOnlyCollection<string>(elements))
+        public static BoolType Instance { get; } = new();
+    }
+
+    record StringType : ExpressionType
+    {
+        public static StringType Instance { get; } = new();
+    }
+
+    sealed record FormType(FormDefinition Form) : ExpressionType, IHasFieldTypes
+    {
+        ExpressionType IHasFieldTypes.GetFieldType(TypecheckEnvironment env, string fieldName)
         {
+            LineDefinition lineDef;
+            try
+            {
+                if (fieldName.StartsWith("Line"))
+                    lineDef = Form.LinesByNumber[fieldName.Substring(4)];
+                else
+                    lineDef = Form.Lines[fieldName];
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new Exception($"Could not find field '{fieldName}' on form '{Form.Name}'.");
+            }
+
+            return lineDef.Type;
         }
     }
 
-    sealed record StructType(string Name, ReadOnlyDictionary<string, ExpressionType> Fields) : ExpressionType
+    sealed record ArrayType(ExpressionType ElementType) : ExpressionType, IHasFieldTypes
     {
-        public StructType(string name, IDictionary<string, ExpressionType> fields)
-            : this(name, new ReadOnlyDictionary<string, ExpressionType>(fields))
+        ExpressionType IHasFieldTypes.GetFieldType(TypecheckEnvironment env, string fieldName)
         {
+            var elementFields = ElementType as IHasFieldTypes;
+            if (elementFields is null)
+                throw new NotSupportedException($"Array element type {ElementType} does not support fields.");
+            return new ArrayType(elementFields.GetFieldType(env, fieldName));
         }
     }
 
-    sealed record ArrayType(ExpressionType ElementType) : ExpressionType
+    sealed record EnumNameType(Type ClrType) : ExpressionType, IHasFieldTypes
     {
+        ExpressionType IHasFieldTypes.GetFieldType(TypecheckEnvironment env, string fieldName)
+        {
+            Enum.Parse(ClrType, fieldName);
+            return new EnumElementType(ClrType);
+        }
+    }
+
+    sealed record EnumElementType(Type ClrType) : ExpressionType
+    {
+        public static EnumElementType Form8949Code = new(typeof(Form8949Code));
+    }
+
+    sealed record Form8949LineType() : ExpressionType, IHasFieldTypes
+    {
+        public static Form8949LineType Instance { get; } = new();
+        public static ArrayType ArrayInstance { get; } = new(Instance);
+
+        ExpressionType IHasFieldTypes.GetFieldType(TypecheckEnvironment env, string fieldName)
+        {
+            switch (fieldName)
+            {
+                case nameof(Form8949Line.CostBasis):
+                    return NumberType.Instance;
+                case nameof(Form8949Line.SalePrice):
+                    return NumberType.Instance;
+                case nameof(Form8949Line.Adjustment):
+                    return NumberType.Instance;
+                case nameof(Form8949Line.Description):
+                case nameof(Form8949Line.Acquired):
+                case nameof(Form8949Line.Sold):
+                    throw new NotImplementedException($"Support for field named {fieldName} not yet implemented.");
+                default:
+                    throw new Exception("Unknown field name: " + fieldName);
+            }
+        }
     }
 }

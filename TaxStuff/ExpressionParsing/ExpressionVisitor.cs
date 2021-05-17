@@ -45,6 +45,12 @@ public interface IExpressionVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitSimple([NotNull] ExpressionParser.SimpleContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="ExpressionParser.plusMinus"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPlusMinus([NotNull] ExpressionParser.PlusMinusContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="ExpressionParser.term"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -63,22 +69,34 @@ public interface IExpressionVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitParameter_list([NotNull] ExpressionParser.Parameter_listContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="ExpressionParser.selector"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSelector([NotNull] ExpressionParser.SelectorContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="ExpressionParser.functionInvoke"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFunctionInvoke([NotNull] ExpressionParser.FunctionInvokeContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="ExpressionParser.factor"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitFactor([NotNull] ExpressionParser.FactorContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="ExpressionParser.float_num"/>.
+	/// Visit a parse tree produced by <see cref="ExpressionParser.floatNum"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitFloat_num([NotNull] ExpressionParser.Float_numContext context);
+	Result VisitFloatNum([NotNull] ExpressionParser.FloatNumContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="ExpressionParser.complete_expression"/>.
+	/// Visit a parse tree produced by <see cref="ExpressionParser.completeExpression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context);
+	Result VisitCompleteExpression([NotNull] ExpressionParser.CompleteExpressionContext context);
 }
 } // namespace TaxStuff.ExpressionParsing

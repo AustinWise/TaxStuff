@@ -3,17 +3,57 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using TaxStuff.ExpressionEvaluation;
+using TaxStuff.FormModel;
 
 namespace TaxStuff.ExpressionParsing
 {
     class MyExpressionParser : ExpressionBaseVisitor<BaseExpression>, IAntlrErrorListener<int>, IAntlrErrorListener<IToken>
     {
-        public static BaseExpression Parse(string input)
+        private ParsingEnvironment _environment;
+
+        public static BaseExpression Parse(ParsingEnvironment env, XElement node, string attributeName)
         {
-            var vistor = new MyExpressionParser();
+            var calcStr = node.Attribute(attributeName)?.Value;
+            var calcNode = node.Elements().ToArray();
+
+            //make sure there is at most one Calc definition
+            if (calcStr is null && calcNode.Length == 0)
+                return null;
+            if (calcStr is object && calcNode.Length > 0)
+                throw new FileLoadException(node, $"Line contains both and {attributeName} attribute and a {attributeName} node.");
+
+            // do some light validation
+            if (calcStr is not null)
+            {
+                if (string.IsNullOrWhiteSpace(calcStr))
+                {
+                    if (calcStr is null)
+                        return null;
+                    throw new FileLoadException(node, "Empty expression.");
+                }
+            }
+            else if (calcNode.Length > 1)
+                throw new FileLoadException(calcNode[1], $"Multiple {attributeName} sub-elements.");
+
+            try
+            {
+                return calcStr is not null ? Parse(env, calcStr) : XmlExpressionParser.Parse(env, calcNode[0]);
+            }
+            catch (Exception ex)
+            {
+                throw new FileLoadException(node, $"Failed to parse {attributeName}.", ex);
+            }
+        }
+
+        public static BaseExpression Parse(ParsingEnvironment env, string input)
+        {
+            var vistor = new MyExpressionParser()
+            {
+                _environment = env
+            };
             ICharStream stream = CharStreams.fromString(input);
             ExpressionLexer lexer = new ExpressionLexer(stream);
             lexer.AddErrorListener(vistor);
@@ -21,7 +61,7 @@ namespace TaxStuff.ExpressionParsing
             var parser = new ExpressionParser(tokens);
             parser.AddErrorListener(vistor);
             parser.BuildParseTree = true;
-            var tree = parser.complete_expression();
+            var tree = parser.completeExpression();
             // TODO: the default error listens write to the console
             BaseExpression result = vistor.Visit(tree);
             if (result is null)
@@ -32,17 +72,26 @@ namespace TaxStuff.ExpressionParsing
             return result;
         }
 
-        void IAntlrErrorListener<int>.SyntaxError(TextWriter output, IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
+        static Exception createException(string recognizerName, int line, int charPositionInLine, string msg, RecognitionException e)
         {
-            throw new Exception("lexer error");
+            string exceptionMessage = $"{recognizerName} error parsing expression at line ({line}:{charPositionInLine}): {msg}";
+            if (e is null)
+                return new Exception(exceptionMessage);
+            else
+                return new Exception(exceptionMessage, e);
         }
 
-        void IAntlrErrorListener<IToken>.SyntaxError(TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
+        void IAntlrErrorListener<int>.SyntaxError(System.IO.TextWriter output, IRecognizer recognizer, int offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
         {
-            throw new Exception("parser error");
+            throw createException("Lexer", line, charPositionInLine, msg, e);
         }
 
-        public override BaseExpression VisitFloat_num([NotNull] ExpressionParser.Float_numContext context)
+        void IAntlrErrorListener<IToken>.SyntaxError(System.IO.TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg, RecognitionException e)
+        {
+            throw createException("Parser", line, charPositionInLine, msg, e);
+        }
+
+        public override BaseExpression VisitFloatNum([NotNull] ExpressionParser.FloatNumContext context)
         {
             return new NumberExpression(decimal.Parse(context.GetText()));
         }
@@ -70,6 +119,12 @@ namespace TaxStuff.ExpressionParsing
                     case ExpressionLexer.DIVIDE:
                         binOp = BinaryOp.Divide;
                         break;
+                    case ExpressionLexer.EQUAL:
+                        binOp = BinaryOp.Equal;
+                        break;
+                    case ExpressionLexer.NEQUAL:
+                        binOp = BinaryOp.NotEqual;
+                        break;
                     default:
                         throw new Exception("Unexpected op: " + op.Text);
                 }
@@ -80,6 +135,11 @@ namespace TaxStuff.ExpressionParsing
         }
 
         public override BaseExpression VisitTerm([NotNull] ExpressionParser.TermContext context)
+        {
+            return VisitBinaryOp(context);
+        }
+
+        public override BaseExpression VisitPlusMinus([NotNull] ExpressionParser.PlusMinusContext context)
         {
             return VisitBinaryOp(context);
         }
@@ -97,44 +157,67 @@ namespace TaxStuff.ExpressionParsing
             return ret;
         }
 
-        public override BaseExpression VisitFactor([NotNull] ExpressionParser.FactorContext context)
+        public override BaseExpression VisitFunctionInvoke([NotNull] ExpressionParser.FunctionInvokeContext context)
         {
-            if (context.identifier() != null)
+            var functionName = context.identifier().GetText();
+            var parameters = context.parameter_list();
+            var arguments = new List<BaseExpression>();
+            for (int i = 0; i < parameters.ChildCount; i += 2)
             {
-                if (context.parameter_list() != null)
-                {
-                    var functionName = context.identifier().GetText();
-                    var parameters = context.parameter_list();
-                    var arguments = new List<BaseExpression>();
-                    for (int i = 0; i < parameters.ChildCount; i += 2)
-                    {
-                        arguments.Add(Visit(parameters.children[i]));
-                    }
-                    return FunctionFactory.CreateFunction(functionName, arguments);
-                }
-                return new VariableExpression(context.GetText());
+                arguments.Add(Visit(parameters.children[i]));
             }
-            else if (context.LPAREN() != null)
-                return Visit(context.simple());
-            else
-                return Visit(context.float_num());
+            return FunctionFactory.CreateFunction(functionName, arguments);
         }
 
-        public override BaseExpression VisitComplete_expression([NotNull] ExpressionParser.Complete_expressionContext context)
+        public override BaseExpression VisitSelector([NotNull] ExpressionParser.SelectorContext context)
+        {
+            if (context.DOT() is not null)
+            {
+                var baseExpression = Visit(context.selector());
+                var fieldName = context.identifier().GetText();
+                return new FieldSelectorExpression(baseExpression, fieldName);
+            }
+            else if (context.LBRACKET() is not null)
+            {
+                throw new NotImplementedException();
+            }
+            else if (context.functionInvoke() is not null)
+            {
+                return Visit(context.functionInvoke());
+            }
+            else
+            {
+                var thingName = context.identifier().GetText();
+                if (thingName.StartsWith("Year"))
+                {
+                    throw new NotImplementedException("Year-qualified references not yet implemented.");
+                }
+                else if (thingName == "Form8949Code")
+                {
+                    return new Form8949CodeReferenceExpression();
+                }
+                else if (thingName.StartsWith("Form"))
+                {
+                    return new FormReferenceExpression(thingName.Substring(4));
+                }
+                else
+                {
+                    var fieldName = context.identifier().GetText();
+                    return new FieldSelectorExpression(new FormReferenceExpression(_environment.CurrentFormName), fieldName);
+                }
+            }
+        }
+
+        public override BaseExpression VisitCompleteExpression([NotNull] ExpressionParser.CompleteExpressionContext context)
         {
             return Visit(context.simple());
         }
 
         protected override BaseExpression AggregateResult(BaseExpression aggregate, BaseExpression nextResult)
         {
-            Debug.Fail("This should not be called.");
-            return base.AggregateResult(aggregate, nextResult);
-        }
-
-        protected override bool ShouldVisitNextChild(IRuleNode node, BaseExpression currentResult)
-        {
-            Debug.Fail("This should not be called.");
-            return base.ShouldVisitNextChild(node, currentResult);
+            if (aggregate is not null && nextResult is not null)
+                throw new Exception("Aggregation of multiple values is not supported.");
+            return aggregate ?? nextResult;
         }
     }
 }

@@ -10,7 +10,7 @@
 
         public override EvaluationResult Evaluate(EvaluationEnvironment env)
         {
-            return EvaluationResult.CreateNumber(env.Rates.CalculateTax(env.Return.Status, Expr.Evaluate(env).Number));
+            return EvaluationResult.CreateNumber(env.Rates.CalculateTax(env.Return.Status, Expr.Evaluate(env).AsNumber()));
         }
     }
 }

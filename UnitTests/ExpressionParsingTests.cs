@@ -9,7 +9,7 @@ namespace UnitTests
     {
         static void ValidateParse(string input, BaseExpression expectedParse)
         {
-            var actual = MyExpressionParser.Parse(input);
+            var actual = MyExpressionParser.Parse(null, input);
             Assert.AreEqual(expectedParse, actual, $"\nFrom input '{input}'\nexpected:\n{expectedParse}\nactual:\n{actual}");
         }
 

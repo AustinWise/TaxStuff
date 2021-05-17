@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Return Year="2020" FilingStatus="MarriedJoint">
+  <!--
+  <DataImporters>
+    NOTE: these XML exports from Schab contain your Social Security Number
+          and account numbers. You don't want to check them into a public
+          Git repository!!!
+    <OfxXml File="Schwab Brokerage.xml" />
+  </DataImporters>
+  -->
   <Form Name="W-2">
     <Line Number="1" Value="150000" />
     <Line Number="2" Value="14000" />

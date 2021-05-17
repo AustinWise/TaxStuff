@@ -69,19 +69,43 @@ namespace TaxStuff.FormModel
             return int.Parse(AttributeValue(el, attributeName), CultureInfo.InvariantCulture);
         }
 
-        public static decimal DecimalAttributeValue(this XElement el, string attributeName)
+        public static decimal? OptionalDecimalAttributeValue(this XElement el, string attributeName)
         {
-            return decimal.Parse(AttributeValue(el, attributeName), CultureInfo.InvariantCulture);
+            var attr = el.Attribute(attributeName);
+            if (attr is null)
+                return null;
+            return decimal.Parse(attr.Value, CultureInfo.InvariantCulture);
         }
 
-        public static BaseExpression ExpressionAttributeValue(this XElement el, string attributeName)
+        public static decimal DecimalAttributeValue(this XElement el, string attributeName)
+        {
+            return OptionalDecimalAttributeValue(el, attributeName) ?? throw new FileLoadException(el, $"Missing attribute '{attributeName}'.");
+        }
+
+        public static DateTime? OptionalDateAttributeValue(this XElement el, string attributeName)
+        {
+            var attr = el.Attribute(attributeName);
+            if (attr is null)
+                return null;
+            return DateTime.ParseExact(attr.Value, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
+        public static DateTime DateAttributeValue(this XElement el, string attributeName)
+        {
+            var ret = el.OptionalDateAttributeValue(attributeName);
+            if (!ret.HasValue)
+                throw new FileLoadException(el, $"Missing attribute '{attributeName}'.");
+            return ret.Value;
+        }
+
+        public static BaseExpression ExpressionAttributeValue(this XElement el, ParsingEnvironment env, string attributeName)
         {
             XAttribute attr = el.Attribute(attributeName);
             if (attr is null)
                 throw new FileLoadException(el, $"Missing {attributeName} attribute");
             try
             {
-                return MyExpressionParser.Parse(attr.Value);
+                return MyExpressionParser.Parse(env, attr.Value);
             }
             catch (Exception ex)
             {

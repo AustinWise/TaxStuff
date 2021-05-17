@@ -2,19 +2,22 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Xml.Linq;
+using TaxStuff.ExpressionParsing;
 using TaxStuff.FormModel;
 
 namespace TaxStuff.ExpressionEvaluation
 {
     record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseExpression)> Forms) : BaseExpression
     {
-        static (string, BaseExpression) ParseNode(XElement node)
+        static (string, BaseExpression) ParseNode(ParsingEnvironment env, XElement node)
         {
-            return (node.AttributeValue("Name"), node.ExpressionAttributeValue("ValueExpr"));
+            string formName = node.AttributeValue("Name");
+            var expr = node.ExpressionAttributeValue(env, "ValueExpr");
+            return (formName, expr);
         }
 
-        public ValueFromFirstFormThatExistsExpression(XElement node)
-            : this(new ReadOnlyCollection<(string, BaseExpression)>(node.Elements("Form").Select(ParseNode).ToList()))
+        public ValueFromFirstFormThatExistsExpression(ParsingEnvironment env, XElement node)
+            : this(new ReadOnlyCollection<(string, BaseExpression)>(node.Elements("Form").Select(n => ParseNode(env, n)).ToList()))
         {
         }
 

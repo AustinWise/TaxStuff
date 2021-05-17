@@ -27,7 +27,7 @@ namespace TaxStuff.ExpressionEvaluation
             foreach (var p in ctor.GetParameters())
             {
                 if (p.ParameterType != typeof(BaseExpression))
-                    throw new Exception($"wrong type for parameter'{p.Name}' on constructor for '{type.Name}'.");
+                    throw new Exception($"wrong type for parameter '{p.Name}' on constructor for '{type.Name}'.");
             }
 
             sFunctions.Add(type.Name.Substring(0, type.Name.Length - EXPRESSION.Length), new FunctionInfo(ctor.GetParameters().Length, ctor));
@@ -39,6 +39,7 @@ namespace TaxStuff.ExpressionEvaluation
             AddFunction<MinExpression>();
             AddFunction<MaxExpression>();
             AddFunction<TaxExpression>();
+            AddFunction<FilterForm8949Expression>();
         }
 
         public static BaseExpression CreateFunction(string functionName, List<BaseExpression> arguments)
@@ -49,7 +50,7 @@ namespace TaxStuff.ExpressionEvaluation
             }
             if (funcInfo.ArgCount != arguments.Count)
             {
-                throw new Exception($"Expected {funcInfo.ArgCount} argument for {functionName}, found " + arguments.Count);
+                throw new Exception($"Expected {funcInfo.ArgCount} argument for {functionName}, found {arguments.Count}");
             }
             return (BaseExpression)funcInfo.Ctor.Invoke(arguments.ToArray());
         }

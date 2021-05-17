@@ -16,7 +16,7 @@ namespace TaxStuff.FormModel
             {
                 if (!int.TryParse(dir.Name, out int year))
                     continue;
-                years.Add(year, new TaxYearDefinition(dir.FullName));
+                years.Add(year, new TaxYearDefinition(year, dir.FullName));
             }
             this.TaxYears = new(years);
         }

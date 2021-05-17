@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
+using TaxStuff.ExpressionParsing;
 
 namespace TaxStuff.FormModel
 {
@@ -17,6 +18,10 @@ namespace TaxStuff.FormModel
             var structs = new Dictionary<string, StructDefinition>();
             var lines = new Dictionary<string, LineDefinition>();
             var lineByNumber = new Dictionary<string, LineDefinition>();
+            var env = new ParsingEnvironment()
+            {
+                CurrentFormName = name,
+            };
             foreach (var node in doc.Root.Elements())
             {
                 switch (node.Name.LocalName)
@@ -28,8 +33,8 @@ namespace TaxStuff.FormModel
                         structs.CheckNameAndAdd(node, new StructDefinition(node));
                         break;
                     case "Line":
-                        var lineDef = lines.CheckNameAndAdd(node, new LineDefinition(node));
-                        if (!lineByNumber.TryAdd(lineDef.Number, lineDef))
+                        var lineDef = lines.CheckNameAndAdd(node, new LineDefinition(env, node));
+                        if (lineDef.Number is not null && !lineByNumber.TryAdd(lineDef.Number, lineDef))
                             throw new FileLoadException(node, $"Duplicate line number '{lineDef.Number}'.");
                         break;
                     default:
@@ -45,7 +50,6 @@ namespace TaxStuff.FormModel
         }
 
         public string Name { get; }
-
         public bool AllowMultiple { get; }
         public bool Calculateable { get; }
 

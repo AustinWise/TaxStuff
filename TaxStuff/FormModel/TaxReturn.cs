@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
+using TaxStuff.DataImport;
 
 namespace TaxStuff.FormModel
 {
@@ -9,7 +9,7 @@ namespace TaxStuff.FormModel
     {
         public int Year { get; }
         public FilingStatus Status { get; }
-        public Dictionary<string, List<FormInstance>> Forms { get; }
+        public Dictionary<string, FormInstances> Forms { get; }
         public TaxYearDefinition TaxYearDef { get; }
 
         public TaxReturn(string filePath, TaxUniverse universe)
@@ -30,18 +30,17 @@ namespace TaxStuff.FormModel
                 {
                     case "Form":
                         var formInst = new FormInstance(node, TaxYearDef);
-                        List<FormInstance> formList;
-                        if (Forms.TryGetValue(formInst.Name, out formList))
+                        AddForm(formInst);
+                        break;
+                    case "DataImporters":
+                        foreach (var el in node.Elements())
                         {
-                            if (!formInst.Definition.AllowMultiple)
-                                throw new FileLoadException(node, "Duplicate form: " + formInst.Name);
+                            var dataImporter = DataImporterFactory.Create(el.Name.LocalName, el.AttributeValue("File"));
+                            foreach (var f in dataImporter.GetForms(TaxYearDef.Year))
+                            {
+                                AddForm(f.ConvertToFormInstance(TaxYearDef));
+                            }
                         }
-                        else
-                        {
-                            formList = new List<FormInstance>();
-                            Forms.Add(formInst.Name, formList);
-                        }
-                        formList.Add(formInst);
                         break;
                     default:
                         throw new FileLoadException(node, "Unkown node name: " + node.Name);
@@ -49,33 +48,22 @@ namespace TaxStuff.FormModel
             }
         }
 
+        public void AddForm(FormInstance formInst)
+        {
+            FormInstances formList;
+            if (!Forms.TryGetValue(formInst.Name, out formList))
+            {
+                formList = new FormInstances(formInst.Definition);
+                Forms.Add(formInst.Name, formList);
+            }
+            formList.AddForm(formInst);
+        }
+
         public void Calculate()
         {
-            foreach (var form in Forms.Values.SelectMany(f => f))
+            foreach (var form in Forms.Values)
             {
-                if (!form.Definition.Calculateable)
-                    continue;
-
-                var env = new ExpressionEvaluation.EvaluationEnvironment()
-                {
-                    Return = this,
-                    CurrentFormName = form.Name,
-                };
-
-                foreach (var line in form.Definition.Lines.Values)
-                {
-                    if (!form.Values.ContainsKey(line.Name))
-                    {
-                        if (line.Calc is null)
-                        {
-                            form.Values.Add(line.Name, new List<decimal>() { 0m });
-                        }
-                        else
-                        {
-                            form.Values.Add(line.Name, new List<decimal>() { line.Calc.Evaluate(env).Number });
-                        }
-                    }
-                }
+                form.Calculate(this);
             }
         }
     }

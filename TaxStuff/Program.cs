@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using TaxStuff.ExpressionEvaluation;
 using TaxStuff.FormModel;
 
 namespace TaxStuff
@@ -26,38 +26,45 @@ namespace TaxStuff
             foreach (var formKvp in taxReturn2020.Forms)
             {
                 Console.WriteLine(formKvp.Key);
-                foreach (var form in formKvp.Value)
+                foreach (var form in formKvp.Value.Forms)
                 {
                     Console.WriteLine("\tForm");
+                    var formValues = form.GetValueSnapshot();
                     foreach (var lineDef in form.Definition.Lines.Values)
                     {
-                        if (!form.Values.TryGetValue(lineDef.Name, out List<decimal> values))
+                        if (!formValues.TryGetValue(lineDef.Name, out EvaluationResult value))
                             continue;
 
-                        if (values.Count == 0)
-                            throw new Exception("wut");
-                        else if (values.Count == 1)
-                            Console.WriteLine($"\t\tLine: {lineDef.Number} Name: {lineDef.Name} Value: {values[0]:c}");
-                        else
+                        Console.Write("\t\t");
+                        if (lineDef.Number is not null)
+                            Console.Write($"Line: {lineDef.Number} ");
+                        Console.Write($"Name: {lineDef.Name}");
+
+                        if (value is ArrayResult array)
                         {
-                            Console.WriteLine($"\t\tLine: {lineDef.Number} Name: {lineDef.Name}");
-                            foreach (var v in values)
+                            Console.WriteLine(" Values:");
+                            foreach (var v in array.Values)
                             {
-                                Console.WriteLine($"\t\t\t{v:c}");
+                                Console.WriteLine($"\t\t\t{v}");
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine($" Value: {value}");
+                        }
+
                     }
                 }
             }
 
             foreach (var pdfForm in taxReturn2020.TaxYearDef.PdfInfo.Forms.Values)
             {
-                if (taxReturn2020.Forms.TryGetValue(pdfForm.FormName, out List<FormInstance> formInsts))
+                if (taxReturn2020.Forms.TryGetValue(pdfForm.FormName, out FormInstances formInsts))
                 {
                     int i = 1;
-                    foreach (var inst in formInsts)
+                    foreach (var inst in formInsts.Forms)
                     {
-                        string outputFileName = formInsts.Count == 1 ? pdfForm.FormName + ".pdf" : $"{pdfForm.FormName}-{i}.pdf";
+                        string outputFileName = formInsts.Forms.Count == 1 ? pdfForm.FormName + ".pdf" : $"{pdfForm.FormName}-{i}.pdf";
                         string outputPath = Path.Combine(outputFolder, outputFileName);
 
                         pdfForm.Save(outputPath, inst);

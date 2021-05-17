@@ -1,22 +1,61 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Xml.Linq;
+using TaxStuff.ExpressionEvaluation;
+using TaxStuff.ExpressionParsing;
 
 namespace TaxStuff.FormModel
 {
-    class FormInstance
+    class FormInstance : IHasFieldEvaluation
     {
-        public string Name { get; }
-
-        public Dictionary<string, List<decimal>> Values { get; }
+        readonly Dictionary<string, EvaluationResult> _values = new();
 
         public FormDefinition Definition { get; }
+        public string Name => Definition.Name;
+
+        public FormInstance(FormDefinition def, Dictionary<string, decimal> numberValues, Dictionary<string, string> stringValues)
+        {
+            if (def is null)
+                throw new ArgumentNullException(nameof(def));
+            Definition = def;
+
+            foreach (var kvp in numberValues)
+            {
+                addLineFromCtor(kvp.Key, NumberType.Instance, new NumberResult(kvp.Value));
+            }
+            foreach (var kvp in stringValues)
+            {
+                addLineFromCtor(kvp.Key, StringType.Instance, new StringResult(kvp.Value));
+            }
+        }
+
+        public FormInstance(FormDefinition def, Form8949Code code, List<Form8949Line> transactions)
+        {
+            if (def is null)
+                throw new ArgumentNullException(nameof(def));
+            Definition = def;
+
+            if (def.Name != "8949")
+                throw new Exception("This constructor is form Form 8949 only.");
+
+            addLineFromCtor("Code", EnumElementType.Form8949Code, new Form8949EnumElementResult(code));
+            addLineFromCtor("Transactions", Form8949LineType.ArrayInstance, new ArrayResult(transactions.Select(t => new Form8949LineResult(t))));
+        }
+
+        void addLineFromCtor(string lineName, ExpressionType valueType, EvaluationResult value)
+        {
+            var lineDef = Definition.Lines[lineName];
+            if (lineDef.Type != valueType)
+                throw new Exception($"Form{Definition.Name}.{lineDef.Name} is should be of type {lineDef.Type}, recieved a {valueType}");
+            _values.Add(lineName, value);
+        }
 
         public FormInstance(XElement node, TaxYearDefinition taxYear)
         {
-            this.Name = node.AttributeValue("Name");
-            this.Values = new();
-            this.Definition = taxYear.Forms[Name];
+            var formName = node.AttributeValue("Name");
+            this.Definition = taxYear.Forms[formName];
 
             foreach (var el in node.Elements())
             {
@@ -38,24 +77,75 @@ namespace TaxStuff.FormModel
                             lineDef = Definition.LinesByNumber[number]; // TODO: nicer exception for missing line
                         }
 
-                        if (Values.TryGetValue(lineDef.Name, out List<decimal> lineValues))
-                        {
-                            if (!lineDef.AllowMultiple)
-                                throw new FileLoadException(el, $"Multiple definitions for Form{name}.{lineDef.Name}.");
-                        }
-                        else
-                        {
-                            lineValues = new List<decimal>();
-                            Values.Add(lineDef.Name, lineValues);
-                        }
-                        lineValues.Add(el.DecimalAttributeValue("Value"));
+                        _values.Add(lineDef.Name, ParseValue(lineDef, el));
 
                         break;
                     default:
                         throw new FileLoadException(el, "Unkown node name: " + el.Name);
                 }
             }
+
+            static EvaluationResult ParseValue(LineDefinition lineDef, XElement el)
+            {
+                var attr = el.Attribute("Value");
+                if (attr is not null && lineDef.Type is StringType)
+                    return new StringResult(attr.Value);
+
+                try
+                {
+                    var parsedExpr = MyExpressionParser.Parse(new ParsingEnvironment(), el, "Value");
+                    var actualType = parsedExpr.CheckType(new TypecheckEnvironment());
+                    if (actualType != lineDef.Type)
+                        throw new Exception($"Expected type {lineDef.Type}, found {actualType}.");
+                    return parsedExpr.Evaluate(new EvaluationEnvironment(null, null));
+                }
+                catch (Exception ex)
+                {
+                    throw new FileLoadException(attr, "Failed to parse Value", ex);
+                }
+            }
         }
 
+        public Dictionary<string, EvaluationResult> GetValueSnapshot()
+        {
+            return new Dictionary<string, EvaluationResult>(_values);
+        }
+
+        public void Calculate(EvaluationEnvironment env)
+        {
+            foreach (var line in Definition.Lines.Values)
+            {
+                if (!_values.ContainsKey(line.Name))
+                {
+                    EvaluateField(env, line.Name);
+                }
+            }
+        }
+
+        public EvaluationResult EvaluateField(EvaluationEnvironment env, string fieldName)
+        {
+            LineDefinition lineDef;
+            if (fieldName.StartsWith("Line"))
+                lineDef = Definition.LinesByNumber[fieldName.Substring(4)];
+            else
+                lineDef = Definition.Lines[fieldName];
+
+            if (_values.TryGetValue(lineDef.Name, out EvaluationResult value))
+            {
+                return value;
+            }
+
+            if (lineDef.Calc is object)
+                value = lineDef.Calc.Evaluate(env with { CurrentForm = this });
+            else if (lineDef.Type == NumberType.Instance)
+                value = EvaluationResult.CreateNumber(0m);
+            else if (lineDef.Type is ArrayType)
+                value = new ArrayResult(new List<EvaluationResult>());
+            else
+                throw new Exception($"Don't know how to make a default value for line {lineDef.Name} of type {lineDef.Type}.");
+
+            _values.Add(lineDef.Name, value);
+            return value;
+        }
     }
 }

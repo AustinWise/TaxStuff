@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Form>
-  <Line Number="1" Name="ForeignTaxCredit" />
+  <Line Number="1" Name="ForeignTaxCredit" Calc="SUM(Form1099-DIV.ForeignTaxPaid)" />
   <!-- TODO: line 2-6 -->
   <Line Number="7" Calc="Line1" />
 

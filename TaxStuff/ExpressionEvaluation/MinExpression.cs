@@ -13,7 +13,7 @@ namespace TaxStuff.ExpressionEvaluation
 
         public override EvaluationResult Evaluate(EvaluationEnvironment env)
         {
-            return EvaluationResult.CreateNumber(Math.Min(Left.Evaluate(env).Number, Right.Evaluate(env).Number));
+            return EvaluationResult.CreateNumber(Math.Min(Left.Evaluate(env).AsNumber(), Right.Evaluate(env).AsNumber()));
         }
     }
 }

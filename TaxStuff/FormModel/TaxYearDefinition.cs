@@ -9,7 +9,7 @@ namespace TaxStuff.FormModel
 {
     class TaxYearDefinition
     {
-        public TaxYearDefinition(string folderPath)
+        public TaxYearDefinition(int year, string folderPath)
         {
             TaxComputationWorksheet taxComputationWorksheet = null;
             PdfInfo pdfInfo = null;
@@ -45,6 +45,7 @@ namespace TaxStuff.FormModel
                 }
             }
 
+            this.Year = year;
             this.Forms = new(forms);
             this.Rates = new TaxRates(taxComputationWorksheet);
             this.PdfInfo = pdfInfo;
@@ -52,6 +53,7 @@ namespace TaxStuff.FormModel
             TypeCheck();
         }
 
+        public int Year { get; }
         public ReadOnlyDictionary<string, FormDefinition> Forms { get; }
         public TaxRates Rates { get; }
         public PdfInfo PdfInfo { get; }

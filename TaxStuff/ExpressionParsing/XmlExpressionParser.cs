@@ -1,21 +1,24 @@
 ﻿using System.Xml.Linq;
+using TaxStuff.ExpressionEvaluation;
 using TaxStuff.FormModel;
 
-namespace TaxStuff.ExpressionEvaluation
+namespace TaxStuff.ExpressionParsing
 {
     /// <summary>
     /// For more complex expressions, an XML representation can be used.
     /// </summary>
     static class XmlExpressionParser
     {
-        public static BaseExpression Parse(XElement node)
+        public static BaseExpression Parse(ParsingEnvironment env, XElement node)
         {
             switch (node.Name.LocalName)
             {
                 case "ValueFromFirstFormThatExists":
-                    return new ValueFromFirstFormThatExistsExpression(node);
+                    return new ValueFromFirstFormThatExistsExpression(env, node);
                 case "SelectBasedOnStatus":
-                    return new SelectBasedOnStatusExpression(node);
+                    return new SelectBasedOnStatusExpression(env, node);
+                case "Form8949Lines":
+                    return new Form8949LinesLiteralExpression(node);
                 default:
                     throw new FileLoadException(node, "Unknown node type: " + node.Name);
             }
