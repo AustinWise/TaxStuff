@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+  <Line Number="1" Name="TaxableIncome" Calc="Form1040.TaxableIncome" />
+  <Line Number="2" Name="QualifiedDividends" Calc="Form1040.QualifiedDividends" />
+  <Line Number="3">
+    <ValueFromFirstFormThatExists>
+      <Form Name="1040-ScheduleD" ValueExpr="MAX(0, MIN(Form1040-ScheduleD.Line15, Form1040-ScheduleD.Line16))" />
+      <Form Name="1040" ValueExpr="Form1040.Line7" />
+    </ValueFromFirstFormThatExists>
+  </Line>
+  <Line Number="4" Calc="Line2 + Line3" />
+  <Line Number="5" Calc="MAX(0, Line1 - Line4)" />
+  <Line Number="6">
+    <SelectBasedOnStatus>
+      <Choice Status="Single" ValueExpr="40400" />
+      <Choice Status="MarriedJoint" ValueExpr="80800" />
+    </SelectBasedOnStatus>
+  </Line>
+  <Line Number="7" Calc="MIN(Line1, Line6)" />
+  <Line Number="8" Calc="MIN(Line5, Line7)" />
+  <Line Number="9" Calc="Line7 - Line8" />
+  <Line Number="10" Calc="MIN(Line1, Line4)" />
+  <Line Number="11" Calc="Line9" />
+  <Line Number="12" Calc="Line10 - Line11" />
+  <Line Number="13">
+    <SelectBasedOnStatus>
+      <Choice Status="Single" ValueExpr="445850" />
+      <Choice Status="MarriedJoint" ValueExpr="501600" />
+    </SelectBasedOnStatus>
+  </Line>
+  <Line Number="14" Calc="MIN(Line1, Line13)" />
+  <Line Number="15" Calc="Line5 + Line9" />
+  <Line Number="16" Calc="MAX(0, Line14 - Line15)" />
+  <Line Number="17" Calc="MIN(Line12, Line16)" />
+  <Line Number="18" Calc="0.15 * Line17" />
+  <Line Number="19" Calc="Line9 + Line17" />
+  <Line Number="20" Calc="Line10 - Line19" />
+  <Line Number="21" Calc="0.2 * Line20" />
+  <Line Number="22" Calc="TAX(Line5)" />
+  <Line Number="23" Calc="Line18 + Line21 + Line22" />
+  <Line Number="24" Calc="TAX(Line1)" />
+  <Line Number="25" Name="TaxOnAllTaxableIncome" Calc="MIN(Line23, Line24)" />
+</Form>

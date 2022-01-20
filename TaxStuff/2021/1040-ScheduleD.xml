@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+  <Line Number="1ad" Name="ShortTermProceeds" />
+  <Line Number="1ae" Name="ShortTermCost" />
+  <Line Number="1ah" Name="ShortTermGain" Calc="ShortTermProceeds - ShortTermCost" />
+  <Line Number="1bd" Name="BoxAProceeds" Calc="SUM(FilterForm8949(Form8949, Form8949Code.A).TotalProceeds)" />
+  <Line Number="1be" Name="BoxACost" Calc="SUM(FilterForm8949(Form8949, Form8949Code.A).TotalCost)" />
+  <Line Number="1bg" Name="BoxAAdjustments" Calc="SUM(FilterForm8949(Form8949, Form8949Code.A).TotalAdjustments)" />
+  <Line Number="1bh" Name="BoxAGain" Calc="BoxAProceeds - BoxACost + BoxAAdjustments" />
+  <Line Number="2d" Name="BoxBProceeds" Calc="SUM(FilterForm8949(Form8949, Form8949Code.B).TotalProceeds)" />
+  <Line Number="2e" Name="BoxBCost" Calc="SUM(FilterForm8949(Form8949, Form8949Code.B).TotalCost)" />
+  <Line Number="2g" Name="BoxBAdjustments" Calc="SUM(FilterForm8949(Form8949, Form8949Code.B).TotalAdjustments)" />
+  <Line Number="2h" Name="BoxBGain" Calc="BoxBProceeds - BoxBCost + BoxBAdjustments" />
+  <Line Number="3d" Name="BoxCProceeds" Calc="SUM(FilterForm8949(Form8949, Form8949Code.C).TotalProceeds)" />
+  <Line Number="3e" Name="BoxCCost" Calc="SUM(FilterForm8949(Form8949, Form8949Code.C).TotalCost)" />
+  <Line Number="3g" Name="BoxCAdjustments" Calc="SUM(FilterForm8949(Form8949, Form8949Code.C).TotalProceeds)" />
+  <Line Number="3h" Name="BoxCGain" Calc="BoxCProceeds - BoxCCost + BoxCAdjustments" />
+  <!-- 4 Short-term gain from Form 6252 and short-term gain or (loss) from Forms 4684, 6781, and 8824 -->
+  <!-- 5 Net short-term gain or (loss) from partnerships, S corporations, estates, and trusts from Schedule(s) K-1 -->
+  <Line Number="6" Name="ShortTermCapitalLossCarryover" Calc="Form1040-ScheduleD-CapitalLossCarryoverWorksheet.ShortTermCapitalLossCarryover" />
+  <Line Number="7" Name="NetShortTermCapitalGain" Calc="Line1ah + Line1bh + Line2h + Line3h + Line6" />
+
+  <Line Number="8ad" Name="LongTermProceeds" />
+  <Line Number="8ae" Name="LongTermCost" />
+  <Line Number="8ah" Name="LongTermGain" Calc="LongTermProceeds - LongTermCost" />
+  <Line Number="8bd" Name="BoxDProceeds" Calc="SUM(FilterForm8949(Form8949, Form8949Code.D).TotalProceeds)" />
+  <Line Number="8be" Name="BoxDCost" Calc="SUM(FilterForm8949(Form8949, Form8949Code.D).TotalCost)" />
+  <Line Number="8bg" Name="BoxDAdjustments" Calc="SUM(FilterForm8949(Form8949, Form8949Code.D).TotalAdjustments)" />
+  <Line Number="8bh" Name="BoxDGain" Calc="BoxDProceeds - BoxDCost + BoxDAdjustments" />
+  <Line Number="9d" Name="BoxEProceeds" Calc="SUM(FilterForm8949(Form8949, Form8949Code.E).TotalProceeds)" />
+  <Line Number="9e" Name="BoxECost" Calc="SUM(FilterForm8949(Form8949, Form8949Code.E).TotalCost)" />
+  <Line Number="9g" Name="BoxEAdjustments" Calc="SUM(FilterForm8949(Form8949, Form8949Code.E).TotalAdjustments)" />
+  <Line Number="9h" Name="BoxEGain" Calc="BoxEProceeds - BoxECost + BoxEAdjustments" />
+  <Line Number="10d" Name="BoxFProceeds" Calc="SUM(FilterForm8949(Form8949, Form8949Code.F).TotalProceeds)" />
+  <Line Number="10e" Name="BoxFCost" Calc="SUM(FilterForm8949(Form8949, Form8949Code.F).TotalCost)" />
+  <Line Number="10g" Name="BoxFAdjustments" Calc="SUM(FilterForm8949(Form8949, Form8949Code.F).TotalAdjustments)" />
+  <Line Number="10h" Name="BoxFGain" Calc="BoxFProceeds - BoxFCost + BoxFAdjustments" />
+  <Line Number="14" Name="LongTermCapitalLossCarryover" Calc="Form1040-ScheduleD-CapitalLossCarryoverWorksheet.LongTermCapitalLossCarryover" />
+  <Line Number="15" Name="NetLongTermCapitalGain" Calc="Line8ah + Line8bh + Line9h + Line10h" />
+
+  <Line Number="16" Name="NetCapitalGain" Calc="NetShortTermCapitalGain + NetLongTermCapitalGain" />
+
+  <!--
+    Line 18 through 20 are notsupported:
+      28% Rate Gain Worksheet
+      Unrecaptured Section 1250 Gain Worksheet
+      Schedule D Tax Worksheet
+  -->
+</Form>

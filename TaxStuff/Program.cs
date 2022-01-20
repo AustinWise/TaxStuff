@@ -28,11 +28,11 @@ namespace TaxStuff
             }
 
             var taxUniverse = new TaxUniverse(Path.GetDirectoryName(typeof(Program).Assembly.Location));
-            var taxReturn2020 = new TaxReturn(returnPath, taxUniverse);
-            taxReturn2020.Calculate();
+            var taxReturn = new TaxReturn(returnPath, taxUniverse);
+            taxReturn.Calculate();
 
             //TODO: a better way of reporting
-            foreach (var formKvp in taxReturn2020.Forms)
+            foreach (var formKvp in taxReturn.Forms)
             {
                 Console.WriteLine(formKvp.Key);
                 foreach (var form in formKvp.Value.Forms)
@@ -66,9 +66,9 @@ namespace TaxStuff
                 }
             }
 
-            foreach (var pdfForm in taxReturn2020.TaxYearDef.PdfInfo.Forms.Values)
+            foreach (var pdfForm in taxReturn.TaxYearDef.PdfInfo.Forms.Values)
             {
-                if (taxReturn2020.Forms.TryGetValue(pdfForm.FormName, out FormInstances formInsts))
+                if (taxReturn.Forms.TryGetValue(pdfForm.FormName, out FormInstances formInsts))
                 {
                     int i = 1;
                     foreach (var inst in formInsts.Forms)

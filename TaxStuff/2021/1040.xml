@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+	<Line Number="1" Name="W-2Income" Calc="SUM(FormW-2.Wages)" />
+	<Line Number="2a" Name="TaxExemptInterest" Calc="SUM(Form1099-INT.TaxExemptInterest) + SUM(Form1099-DIV.ExemptInterestDividends)" />
+	<Line Number="2b" Name="TaxableInterest" Calc="SUM(Form1099-INT.InterestIncome)" />
+	<Line Number="3a" Name="QualifiedDividends" Calc="SUM(Form1099-DIV.QualifiedDividends)" />
+	<Line Number="3b" Name="OrdinaryDividends" Calc="SUM(Form1099-DIV.TotalOrdinaryDividends)" />
+	<Line Number="7" Name="CapitalGain" Calc="MAX(-3000, Form1040-ScheduleD.NetCapitalGain)"/>
+	<!-- TODO: line 8: from schedule 1 -->
+	<Line Number="9" Name="TotalIncome" Calc="Line1 + Line2b + Line3b + Line7" />
+	<!-- TODO: line 10: adjustments from schedule 1 -->
+	<Line Number="11" Name="AGI" Calc="TotalIncome" />
+	<Line Number="12a" Name="Deductions" />
+	<Line Number="12b" Name="CharitableContributions" />
+	<Line Number="12c" Calc="Line12a + Line12b" />
+	<Line Number="13" Name="QualifiedBusinessIncomeDeduction" />
+	<Line Number="14" Name="AllDeductions" Calc="Line12c + Line13" />
+	<Line Number="15" Name="TaxableIncome" Calc="MAX(0, Line11 - Line14)" />
+
+	<Line Number="16" Name="Tax">
+		<ValueFromFirstFormThatExists>
+			<Form Name="1040-QualifiedDividendsAndCapitalGainTaxWorksheet" ValueExpr="Form1040-QualifiedDividendsAndCapitalGainTaxWorksheet.TaxOnAllTaxableIncome" />
+			<Form Name="1040" ValueExpr="TAX(TaxableIncome)" />
+		</ValueFromFirstFormThatExists>
+	</Line>
+	<Line Number="17" />
+	<Line Number="18" Calc="Line16 + Line17" />
+	<Line Number="19" Name="ChildTaxCredit" />
+	<Line Number="20" Calc="Form1040-Schedule3.Line8" />
+	<Line Number="21" Calc="Line19 + Line20" />
+	<Line Number="22" Calc="MAX(0, Line18 - Line21)" />
+	<Line Number="23" />
+	<Line Number="24" Name="TotalTax" Calc="Line22 + Line23" />
+	<Line Number="25a" Name="FederalTaxWithheldOnW-2" Calc="SUM(FormW-2.FederalIncomeTaxWithheld)" />
+	<Line Number="25b" Name="FederalTaxWithheldOn1099" />
+	<Line Number="25c" Name="FederalTaxWithheldOnOtherForms" />
+	<Line Number="25d" Calc="Line25a + Line25b + Line25c" />
+	<Line Number="26" Name="EstimatedTaxPayments" />
+	<Line Number="27a" Name="EarnedIncomeCredit" />
+	<Line Number="28" Name="AdditionalChildTaxCredit" />
+	<Line Number="29" Name="AmericanOpportunityCredit" />
+	<Line Number="30" Name="RecoveryRebateCredit" />
+	<Line Number="31" Calc="Form1040-Schedule3.Line15" />
+	<Line Number="32" Name="TotalOtherPaymentsAndRefundableCredits" Calc="Line27a + Line28 + Line29 + Line30 + Line31" />
+	<Line Number="33" Name="TotalPayments" Calc="Line25d + Line26 + Line32" />
+
+	<Line Number="34" Name="AmountOverpaid" Calc="MAX(0, Line33 - Line24)" />
+
+	<Line Number="37" Name="AmountYouOweNow" Calc="MAX(0, Line24 - Line33)" />
+</Form>
