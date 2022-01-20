@@ -18,6 +18,15 @@ namespace TaxStuff
             string returnPath = args[0];
             string outputFolder = args[1];
 
+            if (!File.Exists(returnPath))
+            {
+                throw new Exception("Tax return file does not exist: " + returnPath);
+            }
+            if (!Directory.Exists(outputFolder))
+            {
+                throw new Exception("Output directory does not exist: " + returnPath);
+            }
+
             var taxUniverse = new TaxUniverse(Path.GetDirectoryName(typeof(Program).Assembly.Location));
             var taxReturn2020 = new TaxReturn(returnPath, taxUniverse);
             taxReturn2020.Calculate();
