@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Form>
-  <Line Number="1" Name="ForeignTaxCredit" Calc="SUM(Form1099-DIV.ForeignTaxPaid)" />
-  <!-- TODO: line 2-6 -->
-  <Line Number="8" Calc="Line1" />
+	<!-- Part 1 - Nonrefundable Credits -->
+	<Line Number="1" Name="ForeignTaxCredit" Calc="SUM(Form1099-DIV.ForeignTaxPaid)" />
+	<!-- TODO: line 2-7 -->
+	<Line Number="8" Calc="Line1" />
 
-  <!-- TODO: line 9, 10, and 12-14 -->
-  <Line Number="11" Name="ExcessSocialSecurityTaxWithheld" />
-  <Line Number="15" Calc="Line11" />
+	<!-- Part 1 - Other Payments and Refundable Credits -->
+	<!-- TODO: line 9-14 -->
+	<Line Number="11" Name="ExcessSocialSecurityTaxWithheld" />
+	<Line Number="15" Calc="Line11" />
 </Form>
