@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace TaxStuff.ExpressionEvaluation
@@ -12,7 +13,7 @@ namespace TaxStuff.ExpressionEvaluation
 
         static readonly Dictionary<string, FunctionInfo> sFunctions = new(StringComparer.OrdinalIgnoreCase);
 
-        static void AddFunction<T>() where T : BaseExpression
+        static void AddFunction<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]T>() where T : BaseExpression
         {
             const string EXPRESSION = "Expression";
 

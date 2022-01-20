@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace TaxStuff.DataImport
@@ -8,7 +9,7 @@ namespace TaxStuff.DataImport
     {
         private static readonly Dictionary<string, ConstructorInfo> s_importers = new();
 
-        static void AddImporter<T>() where T : IDataImporter
+        static void AddImporter<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]T>() where T : IDataImporter
         {
             var type = typeof(T);
             var ctor = type.GetConstructor(new Type[] { typeof(string) });

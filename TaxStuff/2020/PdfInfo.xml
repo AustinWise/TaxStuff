@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PdfInfo>
+  <!--
   <Form Name="1040" File="f1040.pdf">
     <Line Number="1" Assist="1. Wages" />
     <Line Number="2b" Assist="2b. Taxable interest" />
@@ -38,4 +39,5 @@
     <Line Number="34" Assist="Refund. 34." />
     <Line Number="37" Assist="Amount You Owe" />
   </Form>
+  -->
 </PdfInfo>
