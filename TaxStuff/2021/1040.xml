@@ -23,17 +23,17 @@
 			<Form Name="1040" ValueExpr="TAX(TaxableIncome)" />
 		</ValueFromFirstFormThatExists>
 	</Line>
-	<Line Number="17" />
+	<Line Number="17" Calc="Form1040-Schedule2.TotalTax" />
 	<Line Number="18" Calc="Line16 + Line17" />
 	<Line Number="19" Name="ChildTaxCredit" />
 	<Line Number="20" Calc="Form1040-Schedule3.Line8" />
 	<Line Number="21" Calc="Line19 + Line20" />
 	<Line Number="22" Calc="MAX(0, Line18 - Line21)" />
-	<Line Number="23" />
+	<Line Number="23" Calc="Form1040-Schedule2.TotalOtherTaxes" />
 	<Line Number="24" Name="TotalTax" Calc="Line22 + Line23" />
 	<Line Number="25a" Name="FederalTaxWithheldOnW-2" Calc="SUM(FormW-2.FederalIncomeTaxWithheld)" />
 	<Line Number="25b" Name="FederalTaxWithheldOn1099" />
-	<Line Number="25c" Name="FederalTaxWithheldOnOtherForms" />
+	<Line Number="25c" Name="FederalTaxWithheldOnOtherForms" Calc="Form8959.TotalAdditionalMedicareTaxWithholding" />
 	<Line Number="25d" Calc="Line25a + Line25b + Line25c" />
 	<Line Number="26" Name="EstimatedTaxPayments" />
 	<Line Number="27a" Name="EarnedIncomeCredit" />
