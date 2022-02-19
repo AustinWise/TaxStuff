@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using TaxStuff.DataImport.OFX;
@@ -22,8 +23,8 @@ namespace TaxStuff.DataImport
 
         class Myreader : XmlTextReader
         {
-            public Myreader(string url)
-                : base(url)
+            public Myreader(TextReader reader)
+                : base(reader)
             {
             }
 
@@ -49,7 +50,8 @@ namespace TaxStuff.DataImport
 
             var ser = new XmlSerializer(typeof(OFX.OFX));
             OFX.OFX ofx;
-            using (var reader = new Myreader(_filePath))
+            using (var tr = new StreamReader(_filePath))
+            using (var reader = new Myreader(tr))
             {
                 ofx = (OFX.OFX)ser.Deserialize(reader);
             }
