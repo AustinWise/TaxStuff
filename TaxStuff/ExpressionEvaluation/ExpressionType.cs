@@ -42,6 +42,14 @@ namespace TaxStuff.ExpressionEvaluation
                 throw new Exception($"Could not find field '{fieldName}' on form '{Form.Name}'.");
             }
 
+            if (lineDef.Calc is object)
+            {
+                env.PushRecursionCheck(Form, lineDef);
+                //ignore result, we are only doing this for the side effect of the recursion check
+                lineDef.Calc.CheckType(env);
+                env.PopRecursionCheck();
+            }
+
             return lineDef.Type;
         }
     }
