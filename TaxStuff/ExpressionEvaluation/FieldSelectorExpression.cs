@@ -7,11 +7,7 @@ namespace TaxStuff.ExpressionEvaluation
         public override ExpressionType CheckType(TypecheckEnvironment env)
         {
             var sourceType = Source.CheckType(env);
-            if (sourceType is ArrayType { ElementType: IHasFieldTypes elementFieldType })
-            {
-                return new ArrayType(elementFieldType.GetFieldType(env, Selector));
-            }
-            else if (sourceType is IHasFieldTypes fieldType)
+            if (sourceType is IHasFieldTypes fieldType)
             {
                 return fieldType.GetFieldType(env, Selector);
             }
