@@ -14,6 +14,7 @@ namespace TaxStuff.FormModel
 
         public FormDefinition Definition { get; }
         public string Name => Definition.Name;
+        public string SSN { get; }
 
         public FormInstance(FormDefinition def, Dictionary<string, decimal> numberValues, Dictionary<string, string> stringValues)
         {
@@ -56,6 +57,7 @@ namespace TaxStuff.FormModel
         {
             var formName = node.AttributeValue("Name");
             this.Definition = taxYear.Forms[formName];
+            this.SSN = node.OptionalAttributeValue("SSN");
 
             foreach (var el in node.Elements())
             {

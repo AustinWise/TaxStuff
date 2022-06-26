@@ -19,6 +19,8 @@ namespace TaxStuff.ExpressionParsing
                     return new SelectBasedOnStatusExpression(env, node);
                 case "Form8949Lines":
                     return new Form8949LinesLiteralExpression(node);
+                case "ExcessSocialSecurityTaxWithheld":
+                    return new ExcessSocialSecurityTaxWithheldExpression(node);
                 default:
                     throw new FileLoadException(node, "Unknown node type: " + node.Name);
             }

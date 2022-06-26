@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Form>
-  <Line Number="1" Name="ForeignTaxCredit" Calc="SUM(Form1099-DIV.ForeignTaxPaid)" />
-  <!-- TODO: line 2-6 -->
-  <Line Number="7" Calc="Line1" />
+	<Line Number="1" Name="ForeignTaxCredit" Calc="SUM(Form1099-DIV.ForeignTaxPaid)" />
+	<!-- TODO: line 2-6 -->
+	<Line Number="7" Calc="Line1" />
 
-  <!-- TODO: line 8, 9, and 11-12 -->
-  <Line Number="10" Name="ExcessSocialSecurityTaxWithheld" />
-  <Line Number="13" Calc="Line10" />
+	<!-- TODO: line 8, 9, and 11-12 -->
+	<Line Number="10" Name="ExcessSocialSecurityTaxWithheld">
+		<ExcessSocialSecurityTaxWithheld MaxSocialSecurityTax="8537.40" />
+	</Line>
+	<Line Number="13" Calc="Line10" />
 </Form>
