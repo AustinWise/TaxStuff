@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form AllowMultiple="true" Calculateable="false">
+    <Enum Name="Line12Codes">
+        <Value Name="C" Description="Taxable cost of group-term life insurance over $50,000." />
+        <Value Name="D" Description="Elective deferrals under a section 401(k) cash or deferred arrangement (plan)." />
+        <Value Name="DD" Description="Cost of employer-sponsored health coverage. (The amount reported with code DD is not taxable.)" />
+    </Enum>
+    <Struct Name="Line12">
+        <Field Name="Code" Type="Line12Codes" />
+        <Field Name="Value" Type="Number" />
+    </Struct>
+    <Enum Name="Line14Codes">
+        <Value Name="CASDI" Description="California state disability insurance" />
+        <Value Name="DISQD" Description="Employee stock plan disqualifying distribution" />
+        <Value Name="VPDI" Description="Voluntary Plan Disability Insurance" />
+        <Value Name="RSU" Description="Restricted Stock Unit income" />
+    </Enum>
+    <Struct Name="Line14">
+        <Field Name="Code" Type="Line14Codes" />
+        <Field Name="Value" Type="Number" />
+    </Struct>
+
+    <Line Number="1" Name="Wages" />
+    <Line Number="2" Name="FederalIncomeTaxWithheld" />
+    <Line Number="3" Name="SocialSecurityWages" />
+    <Line Number="4" Name="SocialSecurityTaxWithheld" />
+    <Line Number="5" Name="MedicareWages" />
+    <Line Number="6" Name="MedicareTaxWithheld" />
+    <Line Number="7" Name="SocialSecurityTips" />
+    <Line Number="8" Name="AllocatedTips" />
+    <Line Number="10" Name="DependentCareBenefits" />
+    <Line Number="11" Name="NonqualifiedPlans" />
+    <!--
+  <Line Number="12" Name="Line12" Type="Line12" AllowMultiple="true" />
+  <Line Number="13" Name="Line13" Type="Checkboxes">
+    <Box Name="StatutoryEmployee" />
+    <Box Name="RetirementPlan" />
+    <Box Name="ThirdPartySickPay" />
+  </Line>
+  <Line Number="14" Name="Line14" Type="Line14" AllowMultiple="true" />
+  -->
+</Form>
