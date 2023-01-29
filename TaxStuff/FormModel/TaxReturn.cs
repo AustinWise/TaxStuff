@@ -35,7 +35,12 @@ namespace TaxStuff.FormModel
                     case "DataImporters":
                         foreach (var el in node.Elements())
                         {
-                            var dataImporter = DataImporterFactory.Create(el.Name.LocalName, el.AttributeValue("File"));
+                            string importPath = el.AttributeValue("File");
+                            if (!Path.IsPathFullyQualified(importPath))
+                            {
+                                importPath = Path.Combine(Path.GetDirectoryName(filePath), importPath);
+                            }
+                            var dataImporter = DataImporterFactory.Create(el.Name.LocalName, importPath);
                             foreach (var f in dataImporter.GetForms(TaxYearDef.Year))
                             {
                                 AddForm(f.ConvertToFormInstance(TaxYearDef));
