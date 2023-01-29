@@ -21,7 +21,7 @@ if (!Directory.Exists(outputFolder))
     throw new Exception("Output directory does not exist: " + returnPath);
 }
 
-var taxUniverse = new TaxUniverse(Path.GetDirectoryName(typeof(Program).Assembly.Location));
+var taxUniverse = new TaxUniverse(Path.GetDirectoryName(AppContext.BaseDirectory));
 var taxReturn = new TaxReturn(returnPath, taxUniverse);
 taxReturn.Calculate();
 
