@@ -143,7 +143,14 @@ namespace TaxStuff.DataImport
 
         static DateTime ParseDate(string value)
         {
-            return DateTime.ParseExact(value, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            const string FORMAT_WITH_DATETIME = "yyyyMMddHHmmss";
+            const string FORMAT_WITH_DATE = "yyyyMMdd";
+            if (value.Length == FORMAT_WITH_DATE.Length)
+                return DateTime.ParseExact(value, FORMAT_WITH_DATE, CultureInfo.InvariantCulture);
+            else if (value.Length == FORMAT_WITH_DATETIME.Length)
+                return DateTime.ParseExact(value, FORMAT_WITH_DATETIME, CultureInfo.InvariantCulture);
+            else
+                throw new ArgumentOutOfRangeException(nameof(value), value, "Unknown date format.");
         }
     }
 }
