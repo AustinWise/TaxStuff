@@ -10,22 +10,24 @@ namespace TaxStuff.ExpressionEvaluation
 {
     class TypecheckEnvironment
     {
-        readonly string mOriginalForm;
-        readonly string mOriginalLine;
-
         readonly Stack<(FormDefinition, LineDefinition)> mRecursionTracker = new();
 
+        /// <summary>
+        /// For use when actually type checking.
+        /// </summary>
         public TypecheckEnvironment(ReadOnlyDictionary<string, FormDefinition> forms, FormDefinition currentForm, LineDefinition currentLine)
         {
             this.Forms = forms;
             this.CurrentForm = currentForm;
-            this.mOriginalForm = currentForm.Name;
-            this.mOriginalLine = currentLine.Number;
             mRecursionTracker.Push((currentForm, currentLine));
         }
 
+        /// <summary>
+        /// For use when parsing the Return. There should be all literal values, not form references.
+        /// </summary>
         public TypecheckEnvironment()
         {
+            this.Forms = new ReadOnlyDictionary<string, FormDefinition>(new Dictionary<string, FormDefinition>());
             mRecursionTracker.Push((null, null));
         }
 

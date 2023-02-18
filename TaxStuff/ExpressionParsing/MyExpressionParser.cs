@@ -203,6 +203,10 @@ namespace TaxStuff.ExpressionParsing
                 else
                 {
                     var fieldName = context.identifier().GetText();
+                    if (_environment.CurrentFormName is null)
+                    {
+                        throw new Exception($"Found '{fieldName}', which looks like a form field reference, but we are currently processing the Return.");
+                    }
                     return new FieldSelectorExpression(new FormReferenceExpression(_environment.CurrentFormName), fieldName);
                 }
             }
