@@ -8,7 +8,7 @@
     <!-- Part 1 - Other Payments and Refundable Credits -->
     <!-- TODO: line 9-14 -->
     <Line Number="11" Name="ExcessSocialSecurityTaxWithheld">
-        <ExcessSocialSecurityTaxWithheld MaxSocialSecurityTax="8853.60" />
+        <ExcessSocialSecurityTaxWithheld MaxSocialSecurityTax="9114" />
     </Line>
     <Line Number="15" Calc="Line11" />
 </Form>
