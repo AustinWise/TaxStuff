@@ -76,8 +76,6 @@ namespace TaxStuff.DataImport
                     var genericForm = (AbstractTaxForm1099)f;
                     if (int.Parse(genericForm.TAXYEAR, CultureInfo.InvariantCulture) != taxYear)
                         throw new Exception($"Tax year does not match, expected {taxYear}, found {genericForm.TAXYEAR}.");
-                    if (genericForm.CORRECTED == BooleanType.Y)
-                        throw new NotImplementedException("Corrected forms not supported.");
 
                     switch (f)
                     {
