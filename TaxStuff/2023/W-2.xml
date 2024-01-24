@@ -4,6 +4,7 @@
         <Value Name="C" Description="Taxable cost of group-term life insurance over $50,000." />
         <Value Name="D" Description="Elective deferrals under a section 401(k) cash or deferred arrangement (plan)." />
         <Value Name="DD" Description="Cost of employer-sponsored health coverage. (The amount reported with code DD is not taxable.)" />
+        <Value Name="W" Description="Employer contributions to a health savings account (HSA)." />
     </Enum>
     <Struct Name="Line12">
         <Field Name="Code" Type="Line12Codes" />

@@ -27,13 +27,4 @@
   <Line Number="8" Name="AllocatedTips" />
   <Line Number="10" Name="DependentCareBenefits" />
   <Line Number="11" Name="NonqualifiedPlans" />
-  <!--
-  <Line Number="12" Name="Line12" Type="Line12" AllowMultiple="true" />
-  <Line Number="13" Name="Line13" Type="Checkboxes">
-    <Box Name="StatutoryEmployee" />
-    <Box Name="RetirementPlan" />
-    <Box Name="ThirdPartySickPay" />
-  </Line>
-  <Line Number="14" Name="Line14" Type="Line14" AllowMultiple="true" />
-  -->
 </Form>

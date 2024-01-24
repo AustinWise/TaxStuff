@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form Name="Net Investment Income Tax—Individuals, Estates, and Trusts">
+    <!-- Part I - Investment Income -->
+    <Line Number="1" Name="TaxableInterest" Calc="Form1040.TaxableInterest" />
+    <Line Number="2" Name="OrdinaryDividends" Calc="Form1040.OrdinaryDividends" />
+    <Line Number="3" Name="Annuities" />
+    <Line Number="4a" Calc="Form1040-Schedule1.Line5" Desc="Rental Real Estate, Royalties, Partnerships, S Corporations, and Trusts" />
+    <Line Number="4b" Desc="Adjustment for Net Income or Loss Derived in the Ordinary Course of a Non-Section 1411 Trade or Business" />
+    <Line Number="4c" Calc="Line4a + Line4b" />
+    <Line Number="5a" Calc="Form1040.Line7 + Form1040-Schedule1.Line4" />
+    <!-- TODO: Lines 5a–5d—Net Gains and Losses Worksheet -->
+    <Line Number="5b" />
+    <Line Number="5c" />
+    <Line Number="5d" Calc="Line5a + Line5b + Line5c" />
+    <Line Number="6" Desc="Adjustments to Investment Income for Certain CFCs and PFICs" />
+    <Line Number="7" Desc="Other Modifications to Investment Income" />
+    <Line Number="8" Calc="Line1 + Line2 + Line3 + Line4c + Line5d + Line6 + Line7" />
+
+    <!-- Part II - Investment Expenses Allocable to Investment Income and Modifications -->
+    <Line Number="9a" Desc="Investment Interest Expense. Revisit if we add Schedule A" />
+    <Line Number="9b" Desc="State, Local, and Foreign Income Tax" />
+    <Line Number="9c" Desc="Miscellaneous Investment Expenses" />
+    <Line Number="9d" Calc="Line9a + Line9b + Line9c" />
+    <Line Number="10" Desc="Additional Modifications" />
+    <Line Number="11" Calc="Line9d + Line10" />
+
+    <!-- Part III - Tax Computation -->
+    <Line Number="12" Name="NetInvestmentIncome" Calc="Line8 - Line11" />
+    <Line Number="13" Name="MAGI" Calc="Form1040.AGI" />
+    <Line Number="14">
+        <SelectBasedOnStatus>
+            <Choice Status="Single" ValueExpr="200000" />
+            <Choice Status="MarriedJoint" ValueExpr="250000" />
+        </SelectBasedOnStatus>
+    </Line>
+    <Line Number="15" Calc="MAX(0, Line13 - Line14)" />
+    <Line Number="16" Calc="MIN(Line12, Line15)" />
+    <Line Number="17" Name="NetInvestmentIncomeTaxForIndividuals" Calc="Line16 * 0.038" />
+</Form>

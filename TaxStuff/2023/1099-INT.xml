@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form AllowMultiple="true">
+    <Line Name="PayerNameAndAddress" Type="String" />
+    <Line Number="1" Name="InterestIncome" />
+    <Line Number="8" Name="TaxExemptInterest" />
+</Form>

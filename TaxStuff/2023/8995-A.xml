@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+    <!-- Part IV - Determine Your Qualified Business Income Deduction -->
+    <Line Number="27" Name="TotalQualifiedBusinessIncomeComponent" />
+    <Line Number="28" Name="QualifiedReitOrPtpIncome" Calc="SUM(Form1099-DIV.Line5)" />
+    <Line Number="29" Name="QualifiedReitOrPtpLossCarryForward" />
+    <Line Number="30" Name="TotalQualifiedReitOrPtpIncome" Calc="MAX(0, Line28 + Line29)" />
+    <Line Number="31" Name="ReitAndPtpComponent" Calc="0.20 * Line30" />
+    <Line Number="32" Name="QualifiedBusinessIncomeDeductionBeforeTheIncomeLlimitation" Calc="Line27 + Line31" />
+    <Line Number="33" Name="TaxableIncomeBeforeQualifiedBusinessIncomeDeduction" Calc="Form1040.TaxableIncomeMinusQualifiedBusinessIncomeDeduction" />
+    <Line Number="34" Name="NetCapitalGain">
+        <ValueFromFirstFormThatExists>
+            <Form Name="1040-ScheduleD" ValueExpr="Form1040.Line3a + MAX(0, MIN(Form1040-ScheduleD.Line15, Form1040-ScheduleD.Line16))" />
+            <Form Name="1040" ValueExpr="Form1040.Line3a + Form1040.Line7" />
+        </ValueFromFirstFormThatExists>
+    </Line>
+    <Line Number="35" Calc="MAX(0, Line33 - Line34)" />
+    <Line Number="36" Calc="0.2 * Line35" />
+    <Line Number="37" Calc="MIN(Line32, Line36)" />
+    <!-- TODO: line 38: DPAD under section 199A(g) allocated from an agricultural or horticultural cooperative -->
+    <Line Number="39" Name="TotalQualifiedBusinessIncomeDeduction" Calc="Line37" />
+</Form>
