@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+    <!-- Part 1 - Income -->
+    <Line Number="1" Name="GrossReceipts" Calc="SUM(Form1099-NEC.NonemployeeCompensation)" />
+    <Line Number="2" Name="ReturnsAndAllowances" />
+    <Line Number="3" Calc="Line1 + Line2" />
+    <Line Number="4" Name="CostOfGoodsSold" />
+    <Line Number="5" Name="GrossProfit" Calc="Line3 - Line4" />
+    <Line Number="6" Name="OtherIncome" />
+    <Line Number="7" Name="GrossIncome" Calc="Line5 + Line6" />
+    <!-- Part 2 - Expenses - TODO -->
+    <Line Number="28" Name="TotalExpenses" />
+    <Line Number="29" Name="TenativeProfit" Calc="Line7 - Line28" />
+    <Line Number="30" Name="ExpenseForBusinessUseOfHome" />
+    <Line Number="31" Name="NetProfit" Calc="Line29 - Line30" />
+    <!-- TODO: line 32: loss -->
+</Form>

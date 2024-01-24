@@ -6,7 +6,8 @@
     <Line Number="3" Name="TotalTax" Calc="Line1 + Line2" />
 
     <!-- Part 2 - Other Taxes -->
+    <Line Number="4" Name="SelfEmploymentTax" Calc="Form1040-ScheduleSE.SelfEmploymentTax" />
     <Line Number="11" Name="AdditionalMedicareTax" Calc="Form8959.TotalAdditionalMedicareTax" />
     <Line Number="12" Name="NetInvestmentIncomeTaxForIndividuals" Calc="Form8960.NetInvestmentIncomeTaxForIndividuals" />
-    <Line Number="21" Name="TotalOtherTaxes" Calc="Line11 + Line12" />
+    <Line Number="21" Name="TotalOtherTaxes" Calc="Line4 + Line11 + Line12" />
 </Form>

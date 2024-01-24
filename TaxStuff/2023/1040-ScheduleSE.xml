@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+    <!-- Part 1 - Self-Employment Tax -->
+    <Line Number="2" Calc="Form1040-ScheduleC.Line31" />
+    <Line Number="3" Calc="Line2" />
+    <!-- If line 3 is more than zero, multiply line 3 by 92.35% (0.9235). Otherwise, enter amount from line 3 -->
+    <Line Number="4a" Calc="MAX(0, 0.9235 * Line3) + MIN(0, Line3)" />
+    <Line Number="4c" Calc="RoundToZeroIfBelow(400, Line4a)" />
+    <Line Number="5a" Name="ChurchIncome" />
+    <Line Number="5b" Calc="RoundToZeroIfBelow(100, 0.9235 * Line5a)" />
+    <Line Number="6" Calc="Line4c + Line5b" />
+    <Line Number="7" Name="WadgesSubjectToSocialSecurityTax" Calc="160200" />
+    <Line Number="8a" Name="TotalSocialSecurityWagesAndTups" Calc="SUM(FormW-2.Wages)" />
+    <!-- TODO: implement support for when line 8a is less than line 7 -->
+    <Line Number="11" Calc="Line6 * 0.029" />
+    <Line Number="12" Name="SelfEmploymentTax" Calc="Line11" />
+    <Line Number="13" Name="DeductionForOneHalfOfSelfEmploymentTax" Calc="Line12 * 0.5" />
+</Form>

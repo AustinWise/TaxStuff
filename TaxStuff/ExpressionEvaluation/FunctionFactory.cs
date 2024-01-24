@@ -41,6 +41,7 @@ namespace TaxStuff.ExpressionEvaluation
             AddFunction<MaxExpression>();
             AddFunction<TaxExpression>();
             AddFunction<FilterForm8949Expression>();
+            AddFunction<RoundToZeroIfBelowExpression>();
         }
 
         public static BaseExpression CreateFunction(string functionName, List<BaseExpression> arguments)

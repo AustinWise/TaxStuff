@@ -7,10 +7,11 @@
     <Line Number="3a" Name="QualifiedDividends" Calc="SUM(Form1099-DIV.QualifiedDividends)" />
     <Line Number="3b" Name="OrdinaryDividends" Calc="SUM(Form1099-DIV.TotalOrdinaryDividends)" />
     <Line Number="7" Name="CapitalGain" Calc="MAX(-3000, Form1040-ScheduleD.NetCapitalGain)"/>
-    <!-- TODO: line 8: from schedule 1 -->
-    <Line Number="9" Name="TotalIncome" Calc="Line1z + Line2b + Line3b + Line7" />
+    <Line Number="8" Calc="Form1040-Schedule1.Line10" />
+    <Line Number="9" Name="TotalIncome" Calc="Line1z + Line2b + Line3b + Line7 + Line8" />
     <!-- TODO: line 10: adjustments from schedule 1 -->
-    <Line Number="11" Name="AGI" Calc="TotalIncome" />
+    <Line Number="10" Name="AdjustmentsToIncome" Calc="Form1040-Schedule1.AdjustmentsToIncome"/>
+    <Line Number="11" Name="AGI" Calc="Line9 - Line10" />
     <Line Number="12" Name="Deductions" />
     <Line Number="13" Name="QualifiedBusinessIncomeDeduction" Calc="Form8995-A.TotalQualifiedBusinessIncomeDeduction" />
     <Line Number="14" Name="AllDeductions" Calc="Line12 + Line13" />
