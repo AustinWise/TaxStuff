@@ -59,10 +59,10 @@ namespace TaxStuff.ExpressionParsing
             lexer.AddErrorListener(vistor);
             ITokenStream tokens = new CommonTokenStream(lexer);
             var parser = new ExpressionParser(tokens);
+            parser.RemoveErrorListeners();
             parser.AddErrorListener(vistor);
             parser.BuildParseTree = true;
             var tree = parser.completeExpression();
-            // TODO: the default error listens write to the console
             BaseExpression result = vistor.Visit(tree);
             if (result is null)
             {
