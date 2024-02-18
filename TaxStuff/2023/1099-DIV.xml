@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Form AllowMultiple="true">
+<Form AllowMultiple="true" Calculateable="false">
     <Line Name="PayerNameAndAddress" Type="String" />
     <Line Number="1a" Name="TotalOrdinaryDividends" />
     <Line Number="1b" Name="QualifiedDividends" />

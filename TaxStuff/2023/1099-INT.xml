@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Form AllowMultiple="true">
+<Form AllowMultiple="true" Calculateable="false">
     <Line Name="PayerNameAndAddress" Type="String" />
     <Line Number="1" Name="InterestIncome" />
+    <Line Number="3" Name="InterestOnUsSavingsBondsAndTreasuryObligations" />
     <Line Number="8" Name="TaxExemptInterest" />
 </Form>

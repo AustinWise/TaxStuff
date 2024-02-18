@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Form>
+<Form AllowMultiple="true" RequireSsn="true">
     <!-- Part 1 - Income -->
     <Line Number="1" Name="GrossReceipts" Calc="SUM(Form1099-NEC.NonemployeeCompensation)" />
     <Line Number="2" Name="ReturnsAndAllowances" />

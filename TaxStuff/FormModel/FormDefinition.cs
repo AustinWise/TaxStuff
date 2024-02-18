@@ -13,6 +13,7 @@ namespace TaxStuff.FormModel
 
             this.AllowMultiple = doc.Root.OptionalBoolAttributeValue("AllowMultiple") ?? false;
             this.Calculateable = doc.Root.OptionalBoolAttributeValue("Calculateable") ?? true;
+            this.RequireSsn = doc.Root.OptionalBoolAttributeValue("RequireSsn") ?? false;
 
             var enums = new Dictionary<string, EnumDefinition>();
             var structs = new Dictionary<string, StructDefinition>();
@@ -50,8 +51,26 @@ namespace TaxStuff.FormModel
         }
 
         public string Name { get; }
+
+        /// <summary>
+        /// Indicates that multiple forms of this type can be included in a return.
+        /// For example multiple W-2 and 1099s can be include. 1040s can not.
+        /// </summary>
         public bool AllowMultiple { get; }
+
+        /// <summary>
+        /// Indicates whether there are any values to calculate on this form.
+        /// </summary>
         public bool Calculateable { get; }
+
+        /// <summary>
+        /// Indicates that the form instance must have a SSN attached to it.
+        /// </summary>
+        /// <remarks>
+        /// For example, W-2s and 1040 Schedule SE is specific to one person
+        /// and have single social security numbers on them.
+        /// </remarks>
+        public bool RequireSsn { get; }
 
         public ReadOnlyDictionary<string, EnumDefinition> Enums { get; }
         public ReadOnlyDictionary<string, StructDefinition> Structs { get; }

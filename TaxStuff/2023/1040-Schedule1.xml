@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Form>
     <!-- Part 1 - Addtional Income -->
-    <Line Number="3" Name="BusinessIncome" Calc="Form1040-ScheduleC.NetProfit" />
+    <Line Number="3" Name="BusinessIncome" Calc="SUM(Form1040-ScheduleC.NetProfit)" />
     <Line Number="4" Name="OtherGainOrLossFromForm4797" />
     <Line Number="5" Name="ScheduleESupplementalIncomeAndLoss" />
     <Line Number="10" Name="AddtionalIncome" Calc="Line3 + Line5 + Line5" />
     <!-- Part 2 - Adjustments to Income -->
-    <Line Number="15" Name="DeductiblePartOfSelfEmploymentTax" Calc="Form1040-ScheduleSE.DeductionForOneHalfOfSelfEmploymentTax" />
+    <Line Number="15" Name="DeductiblePartOfSelfEmploymentTax" Calc="SUM(Form1040-ScheduleSE.DeductionForOneHalfOfSelfEmploymentTax)" />
     <Line Number="26" Name="AdjustmentsToIncome" Calc="Line15" />
 </Form>

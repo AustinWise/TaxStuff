@@ -31,7 +31,13 @@ foreach (var formKvp in taxReturn.Forms)
     Console.WriteLine(formKvp.Key);
     foreach (var form in formKvp.Value.Forms)
     {
-        Console.WriteLine("\tForm");
+        Console.Write("\tForm");
+        if (!string.IsNullOrEmpty(form.SSN))
+        {
+            Console.Write($" (SSN: {form.SSN})");
+        }
+        Console.WriteLine();
+
         var formValues = form.GetValueSnapshot();
         foreach (var lineDef in form.Definition.Lines.Values)
         {

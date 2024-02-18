@@ -42,6 +42,7 @@ namespace TaxStuff.ExpressionEvaluation
             AddFunction<TaxExpression>();
             AddFunction<FilterForm8949Expression>();
             AddFunction<RoundToZeroIfBelowExpression>();
+            AddFunction<SelectSameSsnFormsExpression>();
         }
 
         public static BaseExpression CreateFunction(string functionName, List<BaseExpression> arguments)

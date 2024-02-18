@@ -59,6 +59,11 @@ namespace TaxStuff.FormModel
             this.Definition = taxYear.Forms[formName];
             this.SSN = node.OptionalAttributeValue("SSN");
 
+            if (string.IsNullOrWhiteSpace(SSN) && Definition.RequireSsn)
+            {
+                throw new FileLoadException(node, "Missing SSN attribute.");
+            }
+
             foreach (var el in node.Elements())
             {
                 switch (el.Name.LocalName)

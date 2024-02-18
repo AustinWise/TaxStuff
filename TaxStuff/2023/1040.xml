@@ -3,13 +3,12 @@
     <Line Number="1a" Name="W-2Income" Calc="SUM(FormW-2.Wages)" />
     <Line Number="1z" Calc="Line1a" />
     <Line Number="2a" Name="TaxExemptInterest" Calc="SUM(Form1099-INT.TaxExemptInterest) + SUM(Form1099-DIV.ExemptInterestDividends)" />
-    <Line Number="2b" Name="TaxableInterest" Calc="SUM(Form1099-INT.InterestIncome)" />
+    <Line Number="2b" Name="TaxableInterest" Calc="SUM(Form1099-INT.InterestIncome) + SUM(Form1099-INT.InterestOnUsSavingsBondsAndTreasuryObligations)" />
     <Line Number="3a" Name="QualifiedDividends" Calc="SUM(Form1099-DIV.QualifiedDividends)" />
     <Line Number="3b" Name="OrdinaryDividends" Calc="SUM(Form1099-DIV.TotalOrdinaryDividends)" />
     <Line Number="7" Name="CapitalGain" Calc="MAX(-3000, Form1040-ScheduleD.NetCapitalGain)"/>
     <Line Number="8" Calc="Form1040-Schedule1.Line10" />
     <Line Number="9" Name="TotalIncome" Calc="Line1z + Line2b + Line3b + Line7 + Line8" />
-    <!-- TODO: line 10: adjustments from schedule 1 -->
     <Line Number="10" Name="AdjustmentsToIncome" Calc="Form1040-Schedule1.AdjustmentsToIncome"/>
     <Line Number="11" Name="AGI" Calc="Line9 - Line10" />
     <Line Number="12" Name="Deductions" />

@@ -86,6 +86,7 @@ namespace TaxStuff.DataImport
                             {
                                 PayerNameAndAddress = intForm.PAYERADDR.PAYERNAME1,
                                 InterestIncome = ParseMoney(intForm.INTINCOME),
+                                InterestOnUsSavingsBondsAndTreasuryObligations = ParseMoney(intForm.INTUSBNDTRS),
                                 TaxExemptInterest = ParseMoney(intForm.TAXEXEMPTINT),
                             });
                             break;

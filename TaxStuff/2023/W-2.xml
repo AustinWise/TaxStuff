@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Form AllowMultiple="true" Calculateable="false">
+<Form AllowMultiple="true" Calculateable="false" RequireSsn="true">
     <Enum Name="Line12Codes">
         <Value Name="C" Description="Taxable cost of group-term life insurance over $50,000." />
         <Value Name="D" Description="Elective deferrals under a section 401(k) cash or deferred arrangement (plan)." />

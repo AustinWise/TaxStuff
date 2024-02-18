@@ -7,6 +7,7 @@ namespace TaxStuff.DataImport
     {
         public string PayerNameAndAddress { get; set; }
         public decimal InterestIncome { get; set; }
+        public decimal InterestOnUsSavingsBondsAndTreasuryObligations { get; set; }
         public decimal TaxExemptInterest { get; set; }
 
         public FormInstance ConvertToFormInstance(TaxYearDefinition taxYear)
@@ -15,6 +16,7 @@ namespace TaxStuff.DataImport
             var numberValues = new Dictionary<string, decimal>()
             {
                 { nameof(InterestIncome), InterestIncome },
+                { nameof(InterestOnUsSavingsBondsAndTreasuryObligations), InterestOnUsSavingsBondsAndTreasuryObligations },
                 { nameof(TaxExemptInterest), TaxExemptInterest },
             };
             var stringValues = new Dictionary<string, string>()
