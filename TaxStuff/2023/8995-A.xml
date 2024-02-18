@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Form>
+    <!--
+    Use this form if your taxable income, before your qualified business income deduction,
+    is above $182,100 ($364,200 if married filing jointly),
+    or you’re a patron of an agricultural or horticultural cooperative.
+    -->
+
+    <!-- TODO: implement qualified business income, like form 8995  -->
+
     <!-- Part IV - Determine Your Qualified Business Income Deduction -->
     <Line Number="27" Name="TotalQualifiedBusinessIncomeComponent" />
     <Line Number="28" Name="QualifiedReitOrPtpIncome" Calc="SUM(Form1099-DIV.Line5)" />

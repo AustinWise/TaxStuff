@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+    <!--
+    Use this form if your taxable income, before your qualified business income deduction, is at or below $182,100 ($364,200 if married
+    filing jointly), and you aren’t a patron of an agricultural or horticultural cooperative.
+    -->
+    <Line Number="2" Name="TotalQualifiedBusinessIncomeForTheCurrentYear" Calc="SUM(Form1040-ScheduleC.NetProfit) - SUM(Form1040-ScheduleSE.DeductionForOneHalfOfSelfEmploymentTax)" />
+    <Line Number="3" Name="QualifiedBusinessNetCarryforwardFromThePriorYear" />
+    <Line Number="4" Name="TotalQualifiedBusinessIncome" Calc="MAX(0, Line2 + Line3)" />
+    <Line Number="5" Name="QualifiedBusinessIncomeComponent" Calc="0.20 * Line4" />
+
+    <!-- PTP == Publicly Traded Partnership -->
+    <Line Number="6" Name="QualifiedReitDividendsAndPtpCurrentYear" Calc="SUM(Form1099-DIV.Line5)" />
+    <Line Number="7" Name="QualifiedReitDividendsAndPtpCarryforwardFromPriorYear" />
+    <Line Number="8" Name="TotalQualifiedReitDividendsAndPtpIncome" Calc="MAX(0, Line6 + Line7)" />
+    <Line Number="9" Name="ReitAndPtpComponent" Calc="Line8 * 0.20" />
+
+    <Line Number="10" Name="QualifiedBusinessIncomeDeductionBeforeIncomeLimitation" Calc="Line5 + Line9" />
+    <Line Number="11" Name="TaxableIncomeBeforeQualifiedBusinessIncomeDeduction" Calc="Form1040.Line11 - Form1040.Line12" />
+    <Line Number="12" Name="NetCapitalGain">
+        <ValueFromFirstFormThatExists>
+            <Form Name="1040-ScheduleD" ValueExpr="Form1040.Line3a + MAX(0, MIN(Form1040-ScheduleD.Line15, Form1040-ScheduleD.Line16))" />
+            <Form Name="1040" ValueExpr="Form1040.Line3a + Form1040.Line7" />
+        </ValueFromFirstFormThatExists>
+    </Line>
+    <Line Number="13" Calc="MAX(0, Line11 - Line12)" />
+    <Line Number="14" Name="IncomeLimitation" Calc="Line13 * 0.20" />
+    <Line Number="15" Name="QualifiedBusinessIncomeDeduction" Calc="MIN(Line10, Line14)" />
+
+    <Line Number="16" Name="TotalQualifiedBusinessLossCarryforward" Calc="MIN(0, Line2 + Line3)" />
+    <Line Number="17" Name="TotalQualifiedReitDividendsAndPtpLossCarryforward" Calc="MIN(0, Line6 + Line7)" />
+</Form>
