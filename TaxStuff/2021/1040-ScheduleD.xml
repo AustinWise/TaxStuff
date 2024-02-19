@@ -18,7 +18,7 @@
   <!-- 4 Short-term gain from Form 6252 and short-term gain or (loss) from Forms 4684, 6781, and 8824 -->
   <!-- 5 Net short-term gain or (loss) from partnerships, S corporations, estates, and trusts from Schedule(s) K-1 -->
   <Line Number="6" Name="ShortTermCapitalLossCarryover" Calc="Form1040-ScheduleD-CapitalLossCarryoverWorksheet.ShortTermCapitalLossCarryover" />
-  <Line Number="7" Name="NetShortTermCapitalGain" Calc="Line1ah + Line1bh + Line2h + Line3h + Line6" />
+  <Line Number="7" Name="NetShortTermCapitalGain" Calc="Line1ah + Line1bh + Line2h + Line3h - Line6" />
 
   <Line Number="8ad" Name="LongTermProceeds" />
   <Line Number="8ae" Name="LongTermCost" />
@@ -36,7 +36,7 @@
   <Line Number="10g" Name="BoxFAdjustments" Calc="SUM(FilterForm8949(Form8949, Form8949Code.F).TotalAdjustments)" />
   <Line Number="10h" Name="BoxFGain" Calc="BoxFProceeds - BoxFCost + BoxFAdjustments" />
   <Line Number="14" Name="LongTermCapitalLossCarryover" Calc="Form1040-ScheduleD-CapitalLossCarryoverWorksheet.LongTermCapitalLossCarryover" />
-  <Line Number="15" Name="NetLongTermCapitalGain" Calc="Line8ah + Line8bh + Line9h + Line10h" />
+  <Line Number="15" Name="NetLongTermCapitalGain" Calc="Line8ah + Line8bh + Line9h + Line10h - Line14" />
 
   <Line Number="16" Name="NetCapitalGain" Calc="NetShortTermCapitalGain + NetLongTermCapitalGain" />
 
