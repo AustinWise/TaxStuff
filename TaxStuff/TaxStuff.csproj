@@ -13,7 +13,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Antlr4.Runtime.Standard" Version="4.12.0" />
+        <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
         <PackageReference Include="itext7" Version="7.1.19" />
         <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="8.0.0" />
     </ItemGroup>

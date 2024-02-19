@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml.Linq;
@@ -25,7 +27,7 @@ namespace TaxStuff.FormModel
             return value;
         }
 
-        public static string OptionalAttributeValue(this XElement el, string attributeName)
+        public static string? OptionalAttributeValue(this XElement el, string attributeName)
         {
             var attr = el.Attribute(attributeName);
             if (attr is null)
@@ -100,7 +102,7 @@ namespace TaxStuff.FormModel
 
         public static BaseExpression ExpressionAttributeValue(this XElement el, ParsingEnvironment env, string attributeName)
         {
-            XAttribute attr = el.Attribute(attributeName);
+            XAttribute? attr = el.Attribute(attributeName);
             if (attr is null)
                 throw new FileLoadException(el, $"Missing {attributeName} attribute");
             try

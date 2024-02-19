@@ -1,9 +1,10 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Text;
 using System.Linq;
+using System.Text;
 using TaxStuff.FormModel;
 
 namespace TaxStuff.ExpressionEvaluation
@@ -13,7 +14,7 @@ namespace TaxStuff.ExpressionEvaluation
         readonly Stack<(FormDefinition, LineDefinition)> mRecursionTracker = new();
 
         /// <summary>
-        /// For use when actually type checking.
+        /// For use when type checking lines.
         /// </summary>
         public TypecheckEnvironment(ReadOnlyDictionary<string, FormDefinition> forms, FormDefinition currentForm, LineDefinition currentLine)
         {
@@ -23,19 +24,30 @@ namespace TaxStuff.ExpressionEvaluation
         }
 
         /// <summary>
+        /// For use when type checking asserts.
+        /// </summary>
+        public TypecheckEnvironment(ReadOnlyDictionary<string, FormDefinition> forms, FormDefinition currentForm)
+        {
+            this.Forms = forms;
+            this.CurrentForm = currentForm;
+        }
+
+        /// <summary>
         /// For use when parsing the Return. There should be all literal values, not form references.
         /// </summary>
         public TypecheckEnvironment()
         {
             this.Forms = new ReadOnlyDictionary<string, FormDefinition>(new Dictionary<string, FormDefinition>());
-            mRecursionTracker.Push((null, null));
         }
 
         public ReadOnlyDictionary<string, FormDefinition> Forms { get; }
-        public FormDefinition CurrentForm { get; private set; }
+        public FormDefinition? CurrentForm { get; private set; }
 
         public void PushRecursionCheck(FormDefinition form, LineDefinition line)
         {
+            ArgumentNullException.ThrowIfNull(form);
+            ArgumentNullException.ThrowIfNull(line);
+
             bool foundRecursion = false;
             foreach (var tup in mRecursionTracker)
             {
@@ -66,7 +78,7 @@ namespace TaxStuff.ExpressionEvaluation
         public void PopRecursionCheck()
         {
             mRecursionTracker.Pop();
-            CurrentForm = mRecursionTracker.Peek().Item1;
+            CurrentForm = mRecursionTracker.Count == 0 ? null : mRecursionTracker.Peek().Item1;
         }
     }
 }

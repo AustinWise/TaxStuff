@@ -11,6 +11,10 @@ namespace TaxStuff.ExpressionEvaluation
         Divide,
         Equal,
         NotEqual,
+        LessThan,
+        GreaterThan,
+        LessThanOrEqual,
+        GreaterThanOrEqual,
     }
 
     record BinaryOpExpression(BaseExpression Left, BinaryOp Operation, BaseExpression Right) : BaseExpression
@@ -23,6 +27,10 @@ namespace TaxStuff.ExpressionEvaluation
             { BinaryOp.Divide, new ExpressionType[] { NumberType.Instance } },
             { BinaryOp.Equal, new ExpressionType[] { NumberType.Instance, BoolType.Instance, EnumElementType.Form8949Code } },
             { BinaryOp.NotEqual, new ExpressionType[] { NumberType.Instance, BoolType.Instance, EnumElementType.Form8949Code } },
+            { BinaryOp.LessThan, new ExpressionType[] { NumberType.Instance } },
+            { BinaryOp.GreaterThan, new ExpressionType[] { NumberType.Instance } },
+            { BinaryOp.LessThanOrEqual, new ExpressionType[] { NumberType.Instance } },
+            { BinaryOp.GreaterThanOrEqual, new ExpressionType[] { NumberType.Instance } },
         };
 
         private static readonly Dictionary<BinaryOp, ExpressionType> ResultTypes = new()
@@ -33,6 +41,10 @@ namespace TaxStuff.ExpressionEvaluation
             { BinaryOp.Divide, NumberType.Instance },
             { BinaryOp.Equal, BoolType.Instance },
             { BinaryOp.NotEqual, BoolType.Instance },
+            { BinaryOp.LessThan, BoolType.Instance },
+            { BinaryOp.GreaterThan, BoolType.Instance },
+            { BinaryOp.LessThanOrEqual, BoolType.Instance },
+            { BinaryOp.GreaterThanOrEqual, BoolType.Instance },
         };
 
         public override EvaluationResult Evaluate(EvaluationEnvironment env)

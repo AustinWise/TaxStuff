@@ -13,6 +13,10 @@ DIVIDE   :  '/'   ;
 COMMA    :  ','   ;
 EQUAL    :  '=='  ;
 NEQUAL   :  '!='  ;
+LT       :  '<'  ;
+GT       :  '>'  ;
+LTEQ     :  '<='  ;
+GTEQ     :  '>='  ;
 
 INTEGER : ('0'..'9') ('0'..'9')*;
 
@@ -34,7 +38,7 @@ identifier
    : IDENTIFIER
    ;
 simple
-   :  plusMinus ((EQUAL | NEQUAL) plusMinus)*
+   :  plusMinus ((EQUAL | NEQUAL | LT | GT | LTEQ | GTEQ) plusMinus)*
    ;
 plusMinus
    :  term ((PLUS | MINUS) term)*

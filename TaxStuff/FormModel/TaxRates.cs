@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 
 namespace TaxStuff.FormModel
 {
@@ -21,7 +23,7 @@ namespace TaxStuff.FormModel
 
             var section = mWorksheet.GetSection(status);
 
-            TaxComputationWorksheetLine theLine = null;
+            TaxComputationWorksheetLine? theLine = null;
             foreach (var l in section.Lines)
             {
                 if (taxableAmount >= l.Min)

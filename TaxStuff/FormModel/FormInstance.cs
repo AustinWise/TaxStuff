@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace TaxStuff.FormModel
 
         public FormDefinition Definition { get; }
         public string Name => Definition.Name;
-        public string SSN { get; }
+        public string? SSN { get; }
 
         public FormInstance(FormDefinition def, Dictionary<string, decimal> numberValues, Dictionary<string, string> stringValues)
         {
@@ -69,8 +71,21 @@ namespace TaxStuff.FormModel
                 switch (el.Name.LocalName)
                 {
                     case "Line":
-                        string number = el.OptionalAttributeValue("Number");
-                        string name = el.OptionalAttributeValue("Name");
+                        foreach (var attr in el.Attributes())
+                        {
+                            switch (attr.Name.LocalName)
+                            {
+                                case "Number":
+                                case "Name":
+                                case "Value":
+                                    break;
+                                default:
+                                    throw new FileLoadException(attr, "Unexpected attribute: " + attr.Name.LocalName);
+                            }
+                        }
+
+                        string? number = el.OptionalAttributeValue("Number");
+                        string? name = el.OptionalAttributeValue("Name");
                         LineDefinition lineDef;
                         if (number is null && name is null)
                             throw new FileLoadException(el, "Missing Name and Number attributes on line.");
@@ -101,6 +116,8 @@ namespace TaxStuff.FormModel
                 try
                 {
                     var parsedExpr = MyExpressionParser.Parse(new ParsingEnvironment(), el, "Value");
+                    if (parsedExpr is null)
+                        throw new FileLoadException(el, "Missing value for line.");
                     var actualType = parsedExpr.CheckType(new TypecheckEnvironment());
                     if (actualType != lineDef.Type)
                         throw new Exception($"Expected type {lineDef.Type}, found {actualType}.");
@@ -127,6 +144,19 @@ namespace TaxStuff.FormModel
                     EvaluateField(env, line.Name);
                 }
             }
+            foreach (var assert in Definition.Asserts)
+            {
+                var result = assert.Expr.Evaluate(env) as BoolResult;
+                if (result is null)
+                {
+                    // PROGRAMMING ERROR: the type checker should have caught this
+                    throw new Exception($"On form {Definition.Name}, assert expression '{assert.ExprStr}' did not evaluate to a boolean result.");
+                }
+                if (result.Value != assert.ExpectedValue)
+                {
+                    throw new Exception($"On form {Definition.Name}, assert expression '{assert.ExprStr}' should have evaluated to {assert.ExpectedValue} but was {result.Value}.");
+                }
+            }
         }
 
         public EvaluationResult EvaluateField(EvaluationEnvironment env, string fieldName)
@@ -137,7 +167,7 @@ namespace TaxStuff.FormModel
             else
                 lineDef = Definition.Lines[fieldName];
 
-            if (_values.TryGetValue(lineDef.Name, out EvaluationResult value))
+            if (_values.TryGetValue(lineDef.Name, out EvaluationResult? value))
             {
                 return value;
             }

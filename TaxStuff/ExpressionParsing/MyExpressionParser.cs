@@ -1,4 +1,6 @@
-﻿using Antlr4.Runtime;
+﻿#nullable enable
+
+using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using System;
@@ -10,11 +12,9 @@ using TaxStuff.FormModel;
 
 namespace TaxStuff.ExpressionParsing
 {
-    class MyExpressionParser : ExpressionBaseVisitor<BaseExpression>, IAntlrErrorListener<int>, IAntlrErrorListener<IToken>
+    class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisitor<BaseExpression>, IAntlrErrorListener<int>, IAntlrErrorListener<IToken>
     {
-        private ParsingEnvironment _environment;
-
-        public static BaseExpression Parse(ParsingEnvironment env, XElement node, string attributeName)
+        public static BaseExpression? Parse(ParsingEnvironment env, XElement node, string attributeName)
         {
             var calcStr = node.Attribute(attributeName)?.Value;
             var calcNode = node.Elements().ToArray();
@@ -50,10 +50,7 @@ namespace TaxStuff.ExpressionParsing
 
         public static BaseExpression Parse(ParsingEnvironment env, string input)
         {
-            var vistor = new MyExpressionParser()
-            {
-                _environment = env
-            };
+            var vistor = new MyExpressionParser(env);
             ICharStream stream = CharStreams.fromString(input);
             ExpressionLexer lexer = new ExpressionLexer(stream);
             lexer.AddErrorListener(vistor);
@@ -124,6 +121,18 @@ namespace TaxStuff.ExpressionParsing
                         break;
                     case ExpressionLexer.NEQUAL:
                         binOp = BinaryOp.NotEqual;
+                        break;
+                    case ExpressionLexer.LT:
+                        binOp = BinaryOp.LessThan;
+                        break;
+                    case ExpressionLexer.GT:
+                        binOp = BinaryOp.GreaterThan;
+                        break;
+                    case ExpressionLexer.LTEQ:
+                        binOp = BinaryOp.LessThanOrEqual;
+                        break;
+                    case ExpressionLexer.GTEQ:
+                        binOp = BinaryOp.GreaterThanOrEqual;
                         break;
                     default:
                         throw new Exception("Unexpected op: " + op.Text);
@@ -221,7 +230,7 @@ namespace TaxStuff.ExpressionParsing
         {
             if (aggregate is not null && nextResult is not null)
                 throw new Exception("Aggregation of multiple values is not supported.");
-            return aggregate ?? nextResult;
+            return (aggregate ?? nextResult)!;
         }
     }
 }

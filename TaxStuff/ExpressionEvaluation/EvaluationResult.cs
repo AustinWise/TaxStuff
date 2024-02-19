@@ -46,6 +46,14 @@ namespace TaxStuff.ExpressionEvaluation
                     return new BoolResult(Value == rightNumber.Value);
                 case BinaryOp.NotEqual:
                     return new BoolResult(Value != rightNumber.Value);
+                case BinaryOp.LessThan:
+                    return new BoolResult(Value < rightNumber.Value);
+                case BinaryOp.GreaterThan:
+                    return new BoolResult(Value > rightNumber.Value);
+                case BinaryOp.LessThanOrEqual:
+                    return new BoolResult(Value <= rightNumber.Value);
+                case BinaryOp.GreaterThanOrEqual:
+                    return new BoolResult(Value >= rightNumber.Value);
                 default:
                     throw new NotSupportedException("Unsupported binop: " + op);
             }
