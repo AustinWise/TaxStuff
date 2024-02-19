@@ -36,6 +36,7 @@ namespace TaxStuff.ExpressionEvaluation
 
         static FunctionFactory()
         {
+            AddFunction<IfExpression>();
             AddFunction<SumExpression>();
             AddFunction<MinExpression>();
             AddFunction<MaxExpression>();
