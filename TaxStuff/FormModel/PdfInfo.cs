@@ -2,23 +2,22 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace TaxStuff.FormModel
+namespace TaxStuff.FormModel;
+
+class PdfInfo
 {
-    class PdfInfo
+    public PdfInfo(string folderPath, XDocument doc)
     {
-        public PdfInfo(string folderPath, XDocument doc)
+        ArgumentNullException.ThrowIfNull(doc.Root);
+
+        Forms = new();
+
+        foreach (var node in doc.Root.Elements("Form"))
         {
-            ArgumentNullException.ThrowIfNull(doc.Root);
-
-            Forms = new();
-
-            foreach (var node in doc.Root.Elements("Form"))
-            {
-                var formInfo = new FormPdfInfo(folderPath, node);
-                Forms.Add(formInfo.FormName, formInfo);
-            }
+            var formInfo = new FormPdfInfo(folderPath, node);
+            Forms.Add(formInfo.FormName, formInfo);
         }
-
-        public Dictionary<string, FormPdfInfo> Forms { get; }
     }
+
+    public Dictionary<string, FormPdfInfo> Forms { get; }
 }

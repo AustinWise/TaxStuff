@@ -1,9 +1,8 @@
-﻿namespace TaxStuff.FormModel
+﻿namespace TaxStuff.FormModel;
+
+enum FilingStatus
 {
-    enum FilingStatus
-    {
-        Single,
-        MarriedJoint,
-        // TODO: other status
-    }
+    Single,
+    MarriedJoint,
+    // TODO: other status
 }

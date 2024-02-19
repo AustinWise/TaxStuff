@@ -1,8 +1,7 @@
-﻿namespace TaxStuff.ExpressionEvaluation
+﻿namespace TaxStuff.ExpressionEvaluation;
+
+interface IHasFieldEvaluation
 {
-    interface IHasFieldEvaluation
-    {
-        EvaluationResult EvaluateField(EvaluationEnvironment env, string fieldName);
-        string? SSN { get; }
-    }
+    EvaluationResult EvaluateField(EvaluationEnvironment env, string fieldName);
+    string? SSN { get; }
 }

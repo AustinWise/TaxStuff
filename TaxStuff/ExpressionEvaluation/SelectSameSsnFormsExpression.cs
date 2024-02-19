@@ -1,43 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TaxStuff.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation;
+
+record class SelectSameSsnFormsExpression(BaseExpression FormExpression) : BaseExpression
 {
-    record class SelectSameSsnFormsExpression(BaseExpression FormExpression) : BaseExpression
+    public override ExpressionType CheckType(TypecheckEnvironment env)
     {
-        public override ExpressionType CheckType(TypecheckEnvironment env)
+        var formExprType = FormExpression.CheckType(env);
+        if (formExprType is not ArrayType arrayType || arrayType.ElementType is not FormType)
         {
-            var formExprType = FormExpression.CheckType(env);
-            if (formExprType is not ArrayType arrayType || arrayType.ElementType is not FormType)
-            {
-                string errorMessage = $"In Expression '{FormExpression}' is type '{formExprType}', expected a form array type.";
-                throw new TypecheckException(errorMessage);
-            }
-            return formExprType;
+            string errorMessage = $"In Expression '{FormExpression}' is type '{formExprType}', expected a form array type.";
+            throw new TypecheckException(errorMessage);
+        }
+        return formExprType;
+    }
+
+    public override EvaluationResult Evaluate(EvaluationEnvironment env)
+    {
+        ArgumentNullException.ThrowIfNull(env.CurrentForm);
+        if (string.IsNullOrWhiteSpace(env.CurrentForm.SSN))
+        {
+            throw new InvalidOperationException($"An instance of {env.CurrentForm.Definition.Name} is missing the SSN attribute.");
         }
 
-        public override EvaluationResult Evaluate(EvaluationEnvironment env)
+        var forms = (ArrayResult)FormExpression.Evaluate(env);
+        var ret = new List<FormResult>();
+        foreach (FormResult f in forms.Values)
         {
-            ArgumentNullException.ThrowIfNull(env.CurrentForm);
-            if (string.IsNullOrWhiteSpace(env.CurrentForm.SSN))
+            if (string.IsNullOrWhiteSpace(f.Value.SSN))
             {
-                throw new InvalidOperationException($"An instance of {env.CurrentForm.Definition.Name} is missing the SSN attribute.");
+                throw new InvalidOperationException($"An instance of {f.Def.Name} is missing the SSN attribute.");
             }
-
-            var forms = (ArrayResult)FormExpression.Evaluate(env);
-            var ret = new List<FormResult>();
-            foreach (FormResult f in forms.Values)
+            if (env.CurrentForm.SSN.Equals(f.Value.SSN, StringComparison.CurrentCultureIgnoreCase))
             {
-                if (string.IsNullOrWhiteSpace(f.Value.SSN))
-                {
-                    throw new InvalidOperationException($"An instance of {f.Def.Name} is missing the SSN attribute.");
-                }
-                if (env.CurrentForm.SSN.Equals(f.Value.SSN, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    ret.Add(f);
-                }
+                ret.Add(f);
             }
-            return new ArrayResult(ret);
         }
+        return new ArrayResult(ret);
     }
 }

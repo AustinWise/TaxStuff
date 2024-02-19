@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace TaxStuff.DataImport
+namespace TaxStuff.DataImport;
+
+interface IDataImporter
 {
-    interface IDataImporter
-    {
-        public List<IConvertibleToFormInstance> GetForms(int taxYear);
-    }
+    public List<IConvertibleToFormInstance> GetForms(int taxYear);
 }

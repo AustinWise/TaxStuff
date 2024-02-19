@@ -1,35 +1,34 @@
 ﻿using System;
 using System.Xml;
 
-namespace TaxStuff.FormModel
+namespace TaxStuff.FormModel;
+
+class FileLoadException : Exception
 {
-    class FileLoadException : Exception
+    static string getMessage(IXmlLineInfo element, string message)
     {
-        static string getMessage(IXmlLineInfo element, string message)
+        if (element.HasLineInfo())
         {
-            if (element.HasLineInfo())
-            {
-                return $"Line {element.LineNumber}: {message}";
-            }
-            else
-            {
-                return message;
-            }
+            return $"Line {element.LineNumber}: {message}";
         }
+        else
+        {
+            return message;
+        }
+    }
 
-        public FileLoadException(IXmlLineInfo element, string message)
-            : base(getMessage(element, message))
-        {
-        }
+    public FileLoadException(IXmlLineInfo element, string message)
+        : base(getMessage(element, message))
+    {
+    }
 
-        public FileLoadException(IXmlLineInfo element, string message, Exception innerException)
-            : base(getMessage(element, message), innerException)
-        {
-        }
+    public FileLoadException(IXmlLineInfo element, string message, Exception innerException)
+        : base(getMessage(element, message), innerException)
+    {
+    }
 
-        public FileLoadException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+    public FileLoadException(string message, Exception innerException)
+        : base(message, innerException)
+    {
     }
 }

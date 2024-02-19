@@ -1,9 +1,8 @@
 ﻿using TaxStuff.FormModel;
 
-namespace TaxStuff.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation;
+
+record EvaluationEnvironment(TaxReturn Return, FormInstance CurrentForm)
 {
-    record EvaluationEnvironment(TaxReturn Return, FormInstance CurrentForm)
-    {
-        public TaxRates Rates => Return.TaxYearDef.Rates;
-    }
+    public TaxRates Rates => Return.TaxYearDef.Rates;
 }

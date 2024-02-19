@@ -1,7 +1,6 @@
-﻿namespace TaxStuff.ExpressionParsing
+﻿namespace TaxStuff.ExpressionParsing;
+
+class ParsingEnvironment
 {
-    class ParsingEnvironment
-    {
-        public string? CurrentFormName { get; set; }
-    }
+    public string? CurrentFormName { get; set; }
 }

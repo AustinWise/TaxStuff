@@ -5,41 +5,40 @@ using System.Xml.Linq;
 using TaxStuff.ExpressionParsing;
 using TaxStuff.FormModel;
 
-namespace TaxStuff.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation;
+
+record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseExpression)> Forms) : BaseExpression
 {
-    record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseExpression)> Forms) : BaseExpression
+    static (string, BaseExpression) ParseNode(ParsingEnvironment env, XElement node)
     {
-        static (string, BaseExpression) ParseNode(ParsingEnvironment env, XElement node)
-        {
-            string formName = node.AttributeValue("Name");
-            var expr = node.ExpressionAttributeValue(env, "ValueExpr");
-            return (formName, expr);
-        }
+        string formName = node.AttributeValue("Name");
+        var expr = node.ExpressionAttributeValue(env, "ValueExpr");
+        return (formName, expr);
+    }
 
-        public ValueFromFirstFormThatExistsExpression(ParsingEnvironment env, XElement node)
-            : this(new ReadOnlyCollection<(string, BaseExpression)>(node.Elements("Form").Select(n => ParseNode(env, n)).ToList()))
-        {
-        }
+    public ValueFromFirstFormThatExistsExpression(ParsingEnvironment env, XElement node)
+        : this(new ReadOnlyCollection<(string, BaseExpression)>(node.Elements("Form").Select(n => ParseNode(env, n)).ToList()))
+    {
+    }
 
-        public override ExpressionType CheckType(TypecheckEnvironment env)
+    public override ExpressionType CheckType(TypecheckEnvironment env)
+    {
+        foreach (var (formName, formExpr) in Forms)
         {
-            foreach (var (formName, formExpr) in Forms)
-            {
-                if (!env.Forms.ContainsKey(formName))
-                    throw new Exception("Unknown form name: " + formName);
-                formExpr.ValidateExpressionType(env, NumberType.Instance);
-            }
-            return NumberType.Instance;
+            if (!env.Forms.ContainsKey(formName))
+                throw new Exception("Unknown form name: " + formName);
+            formExpr.ValidateExpressionType(env, NumberType.Instance);
         }
+        return NumberType.Instance;
+    }
 
-        public override EvaluationResult Evaluate(EvaluationEnvironment env)
+    public override EvaluationResult Evaluate(EvaluationEnvironment env)
+    {
+        foreach (var (formName, formExpr) in Forms)
         {
-            foreach (var (formName, formExpr) in Forms)
-            {
-                if (env.Return.Forms.ContainsKey(formName))
-                    return formExpr.Evaluate(env);
-            }
-            throw new Exception("Could not find any forms that matched.");
+            if (env.Return.Forms.ContainsKey(formName))
+                return formExpr.Evaluate(env);
         }
+        throw new Exception("Could not find any forms that matched.");
     }
 }

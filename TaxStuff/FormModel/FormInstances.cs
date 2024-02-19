@@ -2,35 +2,34 @@
 using System.Collections.Generic;
 using TaxStuff.ExpressionEvaluation;
 
-namespace TaxStuff.FormModel
+namespace TaxStuff.FormModel;
+
+class FormInstances
 {
-    class FormInstances
+    public FormDefinition Definition { get; }
+    public List<FormInstance> Forms { get; }
+
+    public FormInstances(FormDefinition def)
     {
-        public FormDefinition Definition { get; }
-        public List<FormInstance> Forms { get; }
+        this.Definition = def ?? throw new ArgumentNullException(nameof(def));
+        this.Forms = new List<FormInstance>();
+    }
 
-        public FormInstances(FormDefinition def)
+    public void AddForm(FormInstance form)
+    {
+        if (Forms.Count != 0 && !Definition.AllowMultiple)
+            throw new InvalidOperationException($"Multiple Form{Definition.Name} are not allowed.");
+        Forms.Add(form);
+    }
+
+    public void Calculate(TaxReturn @return)
+    {
+        if (!Definition.Calculateable)
+            return;
+
+        foreach (var inst in Forms)
         {
-            this.Definition = def ?? throw new ArgumentNullException(nameof(def));
-            this.Forms = new List<FormInstance>();
-        }
-
-        public void AddForm(FormInstance form)
-        {
-            if (Forms.Count != 0 && !Definition.AllowMultiple)
-                throw new InvalidOperationException($"Multiple Form{Definition.Name} are not allowed.");
-            Forms.Add(form);
-        }
-
-        public void Calculate(TaxReturn @return)
-        {
-            if (!Definition.Calculateable)
-                return;
-
-            foreach (var inst in Forms)
-            {
-                inst.Calculate(@return);
-            }
+            inst.Calculate(@return);
         }
     }
 }

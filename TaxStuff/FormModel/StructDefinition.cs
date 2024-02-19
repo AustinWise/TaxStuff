@@ -1,12 +1,11 @@
 ﻿using System.Xml.Linq;
 
-namespace TaxStuff.FormModel
+namespace TaxStuff.FormModel;
+
+class StructDefinition : CompoundDefinition<StructElement>
 {
-    class StructDefinition : CompoundDefinition<StructElement>
+    public StructDefinition(XElement node)
+        : base(node, "Field", el => new StructElement(el))
     {
-        public StructDefinition(XElement node)
-            : base(node, "Field", el => new StructElement(el))
-        {
-        }
     }
 }

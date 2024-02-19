@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace TaxStuff.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation;
+
+class TypecheckException : Exception
 {
-    class TypecheckException : Exception
+    public TypecheckException(string message)
+        : base(message)
     {
-        public TypecheckException(string message)
-            : base(message)
-        {
-        }
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace TaxStuff.FormModel
+﻿namespace TaxStuff.FormModel;
+
+interface IHasName
 {
-    interface IHasName
-    {
-        string Name { get; }
-    }
+    string Name { get; }
 }

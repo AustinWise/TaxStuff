@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 
-namespace TaxStuff.FormModel
+namespace TaxStuff.FormModel;
+
+class TaxComputationWorksheet
 {
-    class TaxComputationWorksheet
+    readonly Dictionary<FilingStatus, TaxComputationWorksheetSection> mSections;
+
+    public TaxComputationWorksheet(XDocument doc)
     {
-        readonly Dictionary<FilingStatus, TaxComputationWorksheetSection> mSections;
+        ArgumentNullException.ThrowIfNull(doc.Root);
 
-        public TaxComputationWorksheet(XDocument doc)
+        mSections = new();
+        foreach (var el in doc.Root.Elements("Section"))
         {
-            ArgumentNullException.ThrowIfNull(doc.Root);
-
-            mSections = new();
-            foreach (var el in doc.Root.Elements("Section"))
-            {
-                var section = new TaxComputationWorksheetSection(el);
-                mSections.Add(section.Status, section);
-            }
+            var section = new TaxComputationWorksheetSection(el);
+            mSections.Add(section.Status, section);
         }
-
-        public TaxComputationWorksheetSection GetSection(FilingStatus status) => mSections[status];
     }
+
+    public TaxComputationWorksheetSection GetSection(FilingStatus status) => mSections[status];
 }

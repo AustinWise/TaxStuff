@@ -3,34 +3,33 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Linq;
 
-namespace TaxStuff.FormModel
+namespace TaxStuff.FormModel;
+
+abstract class CompoundDefinition<TElementType> : IHasName where TElementType : IHasName
 {
-    abstract class CompoundDefinition<TElementType> : IHasName where TElementType : IHasName
+    public string Name { get; }
+    public ReadOnlyCollection<TElementType> Elements { get; }
+
+    protected CompoundDefinition(XElement node, string elementName, Func<XElement, TElementType> factory)
     {
-        public string Name { get; }
-        public ReadOnlyCollection<TElementType> Elements { get; }
+        this.Name = node.AttributeValue("Name");
 
-        protected CompoundDefinition(XElement node, string elementName, Func<XElement, TElementType> factory)
+        var elements = new List<TElementType>();
+        var names = new HashSet<string>();
+        foreach (var el in node.Elements())
         {
-            this.Name = node.AttributeValue("Name");
-
-            var elements = new List<TElementType>();
-            var names = new HashSet<string>();
-            foreach (var el in node.Elements())
+            if (el.Name == elementName)
             {
-                if (el.Name == elementName)
-                {
-                    var element = factory(el);
-                    if (!names.Add(element.Name))
-                        throw new FileLoadException(el, $"Duplicate element named '{element.Name}'.");
-                    elements.Add(element);
-                }
-                else
-                {
-                    throw new FileLoadException(el, $"Unexpected element '{el.Name}'.");
-                }
+                var element = factory(el);
+                if (!names.Add(element.Name))
+                    throw new FileLoadException(el, $"Duplicate element named '{element.Name}'.");
+                elements.Add(element);
             }
-            this.Elements = new ReadOnlyCollection<TElementType>(elements);
+            else
+            {
+                throw new FileLoadException(el, $"Unexpected element '{el.Name}'.");
+            }
         }
+        this.Elements = new ReadOnlyCollection<TElementType>(elements);
     }
 }

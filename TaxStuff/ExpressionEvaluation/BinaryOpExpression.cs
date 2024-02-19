@@ -1,72 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TaxStuff.ExpressionEvaluation
+namespace TaxStuff.ExpressionEvaluation;
+
+enum BinaryOp
 {
-    enum BinaryOp
+    Add,
+    Substract,
+    Multiply,
+    Divide,
+    Equal,
+    NotEqual,
+    LessThan,
+    GreaterThan,
+    LessThanOrEqual,
+    GreaterThanOrEqual,
+}
+
+record BinaryOpExpression(BaseExpression Left, BinaryOp Operation, BaseExpression Right) : BaseExpression
+{
+    private static readonly Dictionary<BinaryOp, ExpressionType[]> ValidTypes = new()
     {
-        Add,
-        Substract,
-        Multiply,
-        Divide,
-        Equal,
-        NotEqual,
-        LessThan,
-        GreaterThan,
-        LessThanOrEqual,
-        GreaterThanOrEqual,
+        { BinaryOp.Add, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.Substract, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.Multiply, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.Divide, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.Equal, new ExpressionType[] { NumberType.Instance, BoolType.Instance, EnumElementType.Form8949Code } },
+        { BinaryOp.NotEqual, new ExpressionType[] { NumberType.Instance, BoolType.Instance, EnumElementType.Form8949Code } },
+        { BinaryOp.LessThan, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.GreaterThan, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.LessThanOrEqual, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.GreaterThanOrEqual, new ExpressionType[] { NumberType.Instance } },
+    };
+
+    private static readonly Dictionary<BinaryOp, ExpressionType> ResultTypes = new()
+    {
+        { BinaryOp.Add, NumberType.Instance },
+        { BinaryOp.Substract, NumberType.Instance },
+        { BinaryOp.Multiply, NumberType.Instance },
+        { BinaryOp.Divide, NumberType.Instance },
+        { BinaryOp.Equal, BoolType.Instance },
+        { BinaryOp.NotEqual, BoolType.Instance },
+        { BinaryOp.LessThan, BoolType.Instance },
+        { BinaryOp.GreaterThan, BoolType.Instance },
+        { BinaryOp.LessThanOrEqual, BoolType.Instance },
+        { BinaryOp.GreaterThanOrEqual, BoolType.Instance },
+    };
+
+    public override EvaluationResult Evaluate(EvaluationEnvironment env)
+    {
+        var left = Left.Evaluate(env);
+        var right = Right.Evaluate(env);
+
+        return left.PerformBinOp(Operation, right);
     }
 
-    record BinaryOpExpression(BaseExpression Left, BinaryOp Operation, BaseExpression Right) : BaseExpression
+    public override ExpressionType CheckType(TypecheckEnvironment env)
     {
-        private static readonly Dictionary<BinaryOp, ExpressionType[]> ValidTypes = new()
+        var lhs = Left.CheckType(env);
+        var rhs = Right.CheckType(env);
+        if (lhs != rhs)
+            throw new Exception($"Left type {lhs} does not match right type {rhs}.");
+        foreach (var valid in ValidTypes[Operation])
         {
-            { BinaryOp.Add, new ExpressionType[] { NumberType.Instance } },
-            { BinaryOp.Substract, new ExpressionType[] { NumberType.Instance } },
-            { BinaryOp.Multiply, new ExpressionType[] { NumberType.Instance } },
-            { BinaryOp.Divide, new ExpressionType[] { NumberType.Instance } },
-            { BinaryOp.Equal, new ExpressionType[] { NumberType.Instance, BoolType.Instance, EnumElementType.Form8949Code } },
-            { BinaryOp.NotEqual, new ExpressionType[] { NumberType.Instance, BoolType.Instance, EnumElementType.Form8949Code } },
-            { BinaryOp.LessThan, new ExpressionType[] { NumberType.Instance } },
-            { BinaryOp.GreaterThan, new ExpressionType[] { NumberType.Instance } },
-            { BinaryOp.LessThanOrEqual, new ExpressionType[] { NumberType.Instance } },
-            { BinaryOp.GreaterThanOrEqual, new ExpressionType[] { NumberType.Instance } },
-        };
-
-        private static readonly Dictionary<BinaryOp, ExpressionType> ResultTypes = new()
-        {
-            { BinaryOp.Add, NumberType.Instance },
-            { BinaryOp.Substract, NumberType.Instance },
-            { BinaryOp.Multiply, NumberType.Instance },
-            { BinaryOp.Divide, NumberType.Instance },
-            { BinaryOp.Equal, BoolType.Instance },
-            { BinaryOp.NotEqual, BoolType.Instance },
-            { BinaryOp.LessThan, BoolType.Instance },
-            { BinaryOp.GreaterThan, BoolType.Instance },
-            { BinaryOp.LessThanOrEqual, BoolType.Instance },
-            { BinaryOp.GreaterThanOrEqual, BoolType.Instance },
-        };
-
-        public override EvaluationResult Evaluate(EvaluationEnvironment env)
-        {
-            var left = Left.Evaluate(env);
-            var right = Right.Evaluate(env);
-
-            return left.PerformBinOp(Operation, right);
+            if (lhs == valid)
+                return ResultTypes[Operation];
         }
-
-        public override ExpressionType CheckType(TypecheckEnvironment env)
-        {
-            var lhs = Left.CheckType(env);
-            var rhs = Right.CheckType(env);
-            if (lhs != rhs)
-                throw new Exception($"Left type {lhs} does not match right type {rhs}.");
-            foreach (var valid in ValidTypes[Operation])
-            {
-                if (lhs == valid)
-                    return ResultTypes[Operation];
-            }
-            throw new Exception($"Type {lhs} is not valid for operation {Operation}.");
-        }
+        throw new Exception($"Type {lhs} is not valid for operation {Operation}.");
     }
 }

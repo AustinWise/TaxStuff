@@ -1,7 +1,6 @@
-﻿namespace TaxStuff.ExpressionEvaluation
+﻿namespace TaxStuff.ExpressionEvaluation;
+
+interface IHasFieldTypes
 {
-    interface IHasFieldTypes
-    {
-        ExpressionType GetFieldType(TypecheckEnvironment env, string fieldName);
-    }
+    ExpressionType GetFieldType(TypecheckEnvironment env, string fieldName);
 }

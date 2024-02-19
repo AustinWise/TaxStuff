@@ -1,12 +1,11 @@
 ﻿using System.Xml.Linq;
 
-namespace TaxStuff.FormModel
+namespace TaxStuff.FormModel;
+
+record StructElement(string Name, string Type) : IHasName
 {
-    record StructElement(string Name, string Type) : IHasName
+    public StructElement(XElement el)
+        : this(el.AttributeValue("Name"), el.AttributeValue("Type"))
     {
-        public StructElement(XElement el)
-            : this(el.AttributeValue("Name"), el.AttributeValue("Type"))
-        {
-        }
     }
 }

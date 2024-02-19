@@ -1,9 +1,8 @@
 ﻿using TaxStuff.FormModel;
 
-namespace TaxStuff.DataImport
+namespace TaxStuff.DataImport;
+
+interface IConvertibleToFormInstance
 {
-    interface IConvertibleToFormInstance
-    {
-        FormInstance ConvertToFormInstance(TaxYearDefinition taxYear);
-    }
+    FormInstance ConvertToFormInstance(TaxYearDefinition taxYear);
 }
