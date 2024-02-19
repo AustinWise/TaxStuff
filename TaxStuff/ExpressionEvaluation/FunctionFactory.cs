@@ -48,7 +48,7 @@ namespace TaxStuff.ExpressionEvaluation
 
         public static BaseExpression CreateFunction(string functionName, List<BaseExpression> arguments)
         {
-            if (!sFunctions.TryGetValue(functionName, out FunctionInfo funcInfo))
+            if (!sFunctions.TryGetValue(functionName, out FunctionInfo? funcInfo))
             {
                 throw new Exception("Unknown function '" + functionName + "'.");
             }

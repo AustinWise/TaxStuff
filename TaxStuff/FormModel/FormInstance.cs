@@ -1,9 +1,8 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using TaxStuff.ExpressionEvaluation;
 using TaxStuff.ExpressionParsing;
@@ -121,11 +120,13 @@ namespace TaxStuff.FormModel
                     var actualType = parsedExpr.CheckType(new TypecheckEnvironment());
                     if (actualType != lineDef.Type)
                         throw new Exception($"Expected type {lineDef.Type}, found {actualType}.");
-                    return parsedExpr.Evaluate(new EvaluationEnvironment(null, null));
+                    return parsedExpr.Evaluate(new EvaluationEnvironment(null!, null!));
                 }
                 catch (Exception ex)
                 {
-                    throw new FileLoadException(attr, "Failed to parse Value", ex);
+                    IXmlLineInfo? lineInfo = attr;
+                    lineInfo ??= el;
+                    throw new FileLoadException(lineInfo, "Failed to parse Value", ex);
                 }
             }
         }
@@ -135,8 +136,9 @@ namespace TaxStuff.FormModel
             return new Dictionary<string, EvaluationResult>(_values);
         }
 
-        public void Calculate(EvaluationEnvironment env)
+        public void Calculate(TaxReturn @return)
         {
+            var env = new EvaluationEnvironment(@return, this);
             foreach (var line in Definition.Lines.Values)
             {
                 if (!_values.ContainsKey(line.Name))

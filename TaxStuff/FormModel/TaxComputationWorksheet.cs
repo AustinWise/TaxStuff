@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace TaxStuff.FormModel
@@ -9,6 +10,8 @@ namespace TaxStuff.FormModel
 
         public TaxComputationWorksheet(XDocument doc)
         {
+            ArgumentNullException.ThrowIfNull(doc.Root);
+
             mSections = new();
             foreach (var el in doc.Root.Elements("Section"))
             {

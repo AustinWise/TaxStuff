@@ -9,7 +9,7 @@ namespace TaxStuff.ExpressionEvaluation
     {
         public override ExpressionType CheckType(TypecheckEnvironment env)
         {
-            if (!env.Forms.TryGetValue(FormName, out FormDefinition def))
+            if (!env.Forms.TryGetValue(FormName, out FormDefinition? def))
             {
                 throw new Exception("Unknown form name: " + FormName);
             }
@@ -26,7 +26,7 @@ namespace TaxStuff.ExpressionEvaluation
 
         public override EvaluationResult Evaluate(EvaluationEnvironment env)
         {
-            if (env.Return.Forms.TryGetValue(FormName, out FormInstances form))
+            if (env.Return.Forms.TryGetValue(FormName, out FormInstances? form))
             {
                 if (form.Definition.AllowMultiple)
                 {

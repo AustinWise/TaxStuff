@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using TaxStuff.DataImport;
@@ -17,6 +18,11 @@ namespace TaxStuff.FormModel
             using var reader = new StreamReader(filePath);
 
             var doc = XDocument.Load(reader, LoadOptions.SetLineInfo);
+
+            if (doc.Root is null)
+            {
+                throw new Exception("Missing root element in " + filePath);
+            }
 
             this.Year = doc.Root.IntAttributeValue("Year");
             this.Status = doc.Root.EnumAttributeValue<FilingStatus>("FilingStatus");
@@ -38,7 +44,7 @@ namespace TaxStuff.FormModel
                             string importPath = el.AttributeValue("File");
                             if (!Path.IsPathFullyQualified(importPath))
                             {
-                                importPath = Path.Combine(Path.GetDirectoryName(filePath), importPath);
+                                importPath = Path.Combine(Path.GetDirectoryName(filePath)!, importPath);
                             }
                             var dataImporter = DataImporterFactory.Create(el.Name.LocalName, importPath);
                             foreach (var f in dataImporter.GetForms(TaxYearDef.Year))
@@ -55,7 +61,7 @@ namespace TaxStuff.FormModel
 
         public void AddForm(FormInstance formInst)
         {
-            FormInstances formList;
+            FormInstances? formList;
             if (!Forms.TryGetValue(formInst.Name, out formList))
             {
                 formList = new FormInstances(formInst.Definition);

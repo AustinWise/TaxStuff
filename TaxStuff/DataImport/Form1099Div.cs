@@ -5,7 +5,7 @@ namespace TaxStuff.DataImport
 {
     class Form1099Div : IConvertibleToFormInstance
     {
-        public string PayerNameAndAddress { get; set; }
+        public string? PayerNameAndAddress { get; set; }
         public decimal TotalOrdinaryDividends { get; set; }
         public decimal QualifiedDividends { get; set; }
         public decimal NondividendDistributions { get; set; }
@@ -27,10 +27,11 @@ namespace TaxStuff.DataImport
                 { nameof(ForeignTaxPaid), ForeignTaxPaid },
                 { nameof(ExemptInterestDividends), ExemptInterestDividends },
             };
-            var stringValues = new Dictionary<string, string>()
+            var stringValues = new Dictionary<string, string>();
+            if (!string.IsNullOrEmpty(PayerNameAndAddress))
             {
-                { nameof(PayerNameAndAddress), PayerNameAndAddress },
-            };
+                stringValues.Add(nameof(PayerNameAndAddress), PayerNameAndAddress);
+            }
             var formInst = new FormInstance(formDef, numberValues, stringValues);
             return formInst;
         }

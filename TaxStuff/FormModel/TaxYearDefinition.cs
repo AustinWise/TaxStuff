@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -53,6 +51,10 @@ namespace TaxStuff.FormModel
             {
                 throw new Exception($"For tax year {year}, there is no TaxComputationWorksheet.");
             }
+            if (pdfInfo is null)
+            {
+                throw new Exception($"For tax year {year}, there is no PdfInfo.");
+            }
 
             this.Year = year;
             this.Forms = new(forms);
@@ -65,7 +67,7 @@ namespace TaxStuff.FormModel
         public int Year { get; }
         public ReadOnlyDictionary<string, FormDefinition> Forms { get; }
         public TaxRates Rates { get; }
-        public PdfInfo? PdfInfo { get; }
+        public PdfInfo PdfInfo { get; }
 
         private void TypeCheck()
         {

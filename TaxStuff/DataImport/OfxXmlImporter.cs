@@ -49,11 +49,16 @@ namespace TaxStuff.DataImport
 
 
             var ser = new XmlSerializer(typeof(OFX.OFX));
-            OFX.OFX ofx;
+            OFX.OFX? ofx;
             using (var tr = new StreamReader(_filePath))
             using (var reader = new Myreader(tr))
             {
-                ofx = (OFX.OFX)ser.Deserialize(reader);
+                ofx = (OFX.OFX?)ser.Deserialize(reader);
+            }
+
+            if (ofx is null)
+            {
+                throw new Exception("OXF deserialized to null!?");
             }
 
             var transactions = new Dictionary<Form8949Code, List<Form8949Line>>()

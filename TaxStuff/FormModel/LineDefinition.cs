@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using TaxStuff.ExpressionEvaluation;
 using TaxStuff.ExpressionParsing;
 
 namespace TaxStuff.FormModel
 {
-    record LineDefinition(string Number, string Name, ExpressionType Type, BaseExpression Calc) : IHasName
+    record LineDefinition(string Number, string Name, ExpressionType Type, BaseExpression? Calc) : IHasName
     {
-        private static ExpressionType GetExprType(XAttribute attr)
+        private static ExpressionType GetExprType(XAttribute? attr)
         {
             if (attr is null || attr.Value == "Number")
                 return NumberType.Instance;
@@ -28,8 +26,8 @@ namespace TaxStuff.FormModel
         }
 
         public LineDefinition(ParsingEnvironment env, XElement el)
-            : this(el.OptionalAttributeValue("Number"),
-                   el.OptionalAttributeValue("Name"),
+            : this(el.OptionalAttributeValue("Number")!,
+                   el.OptionalAttributeValue("Name")!,
                    GetExprType(el.Attribute("Type")),
                    MyExpressionParser.Parse(env, el, "Calc"))
         {

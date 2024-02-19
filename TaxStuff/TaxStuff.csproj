@@ -10,6 +10,7 @@
 		-->
         <NoWarn>$(NoWarn);CS3021</NoWarn>
         <PublishReadyToRun>true</PublishReadyToRun>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>

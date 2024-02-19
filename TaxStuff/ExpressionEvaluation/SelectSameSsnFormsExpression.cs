@@ -18,6 +18,7 @@ namespace TaxStuff.ExpressionEvaluation
 
         public override EvaluationResult Evaluate(EvaluationEnvironment env)
         {
+            ArgumentNullException.ThrowIfNull(env.CurrentForm);
             if (string.IsNullOrWhiteSpace(env.CurrentForm.SSN))
             {
                 throw new InvalidOperationException($"An instance of {env.CurrentForm.Definition.Name} is missing the SSN attribute.");

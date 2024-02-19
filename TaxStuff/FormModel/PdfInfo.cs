@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 
 namespace TaxStuff.FormModel
@@ -7,6 +8,8 @@ namespace TaxStuff.FormModel
     {
         public PdfInfo(string folderPath, XDocument doc)
         {
+            ArgumentNullException.ThrowIfNull(doc.Root);
+
             Forms = new();
 
             foreach (var node in doc.Root.Elements("Form"))

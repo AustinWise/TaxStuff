@@ -5,7 +5,7 @@ namespace TaxStuff.DataImport
 {
     class Form1099Int : IConvertibleToFormInstance
     {
-        public string PayerNameAndAddress { get; set; }
+        public string? PayerNameAndAddress { get; set; }
         public decimal InterestIncome { get; set; }
         public decimal InterestOnUsSavingsBondsAndTreasuryObligations { get; set; }
         public decimal TaxExemptInterest { get; set; }
@@ -19,10 +19,11 @@ namespace TaxStuff.DataImport
                 { nameof(InterestOnUsSavingsBondsAndTreasuryObligations), InterestOnUsSavingsBondsAndTreasuryObligations },
                 { nameof(TaxExemptInterest), TaxExemptInterest },
             };
-            var stringValues = new Dictionary<string, string>()
+            var stringValues = new Dictionary<string, string>();
+            if (!string.IsNullOrEmpty(PayerNameAndAddress))
             {
-                { nameof(PayerNameAndAddress), PayerNameAndAddress },
-            };
+                stringValues.Add(nameof(PayerNameAndAddress), PayerNameAndAddress);
+            }
             var formInst = new FormInstance(formDef, numberValues, stringValues);
             return formInst;
         }

@@ -27,10 +27,9 @@ namespace TaxStuff.FormModel
             if (!Definition.Calculateable)
                 return;
 
-            var env = new EvaluationEnvironment(@return, null);
             foreach (var inst in Forms)
             {
-                inst.Calculate(env);
+                inst.Calculate(@return);
             }
         }
     }

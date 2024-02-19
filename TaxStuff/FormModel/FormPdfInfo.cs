@@ -38,9 +38,9 @@ namespace TaxStuff.FormModel
             XNamespace NS = "http://www.xfa.org/schema/xfa-template/3.0/";
             foreach (var field in xfaXml.Descendants(NS + "field"))
             {
-                string fieldName = field.Attribute("name").Value;
-                string assistName = field.Element(NS + "assist")?.Element(NS + "speak")?.Value;
-                if (assistName != null)
+                string? fieldName = field.Attribute("name")?.Value;
+                string? assistName = field.Element(NS + "assist")?.Element(NS + "speak")?.Value;
+                if (fieldName is not null && assistName is not null)
                     fieldsAndAssistName.Add((fieldName, assistName));
             }
 

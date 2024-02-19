@@ -3,6 +3,6 @@
     interface IHasFieldEvaluation
     {
         EvaluationResult EvaluateField(EvaluationEnvironment env, string fieldName);
-        string SSN { get; }
+        string? SSN { get; }
     }
 }

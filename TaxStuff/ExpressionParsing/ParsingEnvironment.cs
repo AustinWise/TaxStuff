@@ -2,6 +2,6 @@
 {
     class ParsingEnvironment
     {
-        public string CurrentFormName { get; set; }
+        public string? CurrentFormName { get; set; }
     }
 }

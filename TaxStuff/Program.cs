@@ -21,7 +21,7 @@ if (!Directory.Exists(outputFolder))
     throw new Exception("Output directory does not exist: " + returnPath);
 }
 
-var taxUniverse = new TaxUniverse(Path.GetDirectoryName(AppContext.BaseDirectory));
+var taxUniverse = new TaxUniverse(Path.GetDirectoryName(AppContext.BaseDirectory)!);
 var taxReturn = new TaxReturn(returnPath, taxUniverse);
 taxReturn.Calculate();
 
@@ -41,7 +41,7 @@ foreach (var formKvp in taxReturn.Forms)
         var formValues = form.GetValueSnapshot();
         foreach (var lineDef in form.Definition.Lines.Values)
         {
-            if (!formValues.TryGetValue(lineDef.Name, out EvaluationResult value))
+            if (!formValues.TryGetValue(lineDef.Name, out EvaluationResult? value))
                 continue;
 
             Console.Write("\t\t");
@@ -68,7 +68,7 @@ foreach (var formKvp in taxReturn.Forms)
 
 foreach (var pdfForm in taxReturn.TaxYearDef.PdfInfo.Forms.Values)
 {
-    if (taxReturn.Forms.TryGetValue(pdfForm.FormName, out FormInstances formInsts))
+    if (taxReturn.Forms.TryGetValue(pdfForm.FormName, out FormInstances? formInsts))
     {
         int i = 1;
         foreach (var inst in formInsts.Forms)

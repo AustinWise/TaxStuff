@@ -28,7 +28,7 @@ namespace TaxStuff.DataImport
 
         public static IDataImporter Create(string name, string fileName)
         {
-            if (!s_importers.TryGetValue(name, out ConstructorInfo ctor))
+            if (!s_importers.TryGetValue(name, out ConstructorInfo? ctor))
                 throw new Exception($"Unknown importer name: {name}");
             return (IDataImporter)ctor.Invoke(new object[] { fileName });
         }
