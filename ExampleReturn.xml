@@ -8,7 +8,7 @@
     <OfxXml File="Schwab Brokerage.xml" />
   </DataImporters>
   -->
-  <Form Name="W-2">
+  <Form Name="W-2" SSN="test">
     <Line Number="1" Value="150000" />
     <Line Number="2" Value="14000" />
   </Form>

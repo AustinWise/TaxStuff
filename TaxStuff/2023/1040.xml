@@ -16,6 +16,7 @@
         <ValueFromFirstFormThatExists>
             <Form Name="8995-A" ValueExpr="Form8995-A.TotalQualifiedBusinessIncomeDeduction" />
             <Form Name="8995" ValueExpr="Form8995.QualifiedBusinessIncomeDeduction" />
+            <Form Name="1040" ValueExpr="0" />
         </ValueFromFirstFormThatExists>
     </Line>
     <Line Number="14" Name="AllDeductions" Calc="Line12 + Line13" />
