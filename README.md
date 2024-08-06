@@ -1,20 +1,18 @@
 
 # TaxStuff - basic federal tax return calculator
 
-NOTE: work in progress, not ready to be used by anyone for anything other than
-their own amusement.
+NOTE: this is a work in progress; please don't file your taxes based solely on this software. I don't.
 
-How hard could it be to clone TruboTax? Quite hard, given the complexity of the
-tax code. So this is not really user-friendly. It is about on the level of
-[Free File Fillable Forms](https://www.irs.gov/e-file-providers/free-file-fillable-forms):
-it assumes you understand the tax code enough to know which forms you need to
-file.
+This software attempts to automate a subset of the United States Internal Revenue Service forms. The
+intention is to enable the user of the software to estimate their tax liability and to better
+understand their taxes. The software is not a substitute for something like TurboTax: it assumes you
+already know what forms you want to file.
 
 I was inspired by Robert Sesek's excellent [ustaxlib](https://github.com/rsesek/ustaxlib).
 
 # Example
 
-Requires [.NET 5 SDK](https://dotnet.microsoft.com/download/dotnet/5.0) to build
+Requires [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) to build
 and run.
 
 When you run the program, it takes two arguments: the path to the return file
@@ -34,7 +32,7 @@ See example [input file](ExampleReturn.xml) and example
   dividends, and stock transactions. The contents of the 1099-Bs will be turned
   into Form 8949s and will be referenced by !040 Schedule D. The 1009-DIVs and
   1099-INTs will be put into the right places on Form 1040.
-* Fill in the results of tax computations into PDF tax forms.
+* Fill in the results of tax computations into PDF tax forms. (only implemented for the 2020 tax year currently)
 * A custom XML format and expression language for defining tax forms. See the
   [2020 folder](./TaxStuff/2020/) for the forms.
 
@@ -57,24 +55,26 @@ couple of different license, which makes this more complicated.
 # TODO
 
 * Add an `Assert` element in forms to check for errors.
-* Unit tests probably
+* More unit tests
 * Support for references to previous years, to support things like capital loss
   carryover and Schedule J.
 * Support for filling in personal information into PDFs.
 * Support for filtering array values, probably using a bracket syntax. Use cases:
-  *  Replace the special filter function `FilterForm8949` with native filitering
+  * Replace the special filter function `FilterForm8949` with native filitering
      support.
 * Similar to the above filtering, support a "group by" feature.
-    * For 2020 Form 1040 Schedule 3 Line 10, it would be nice  to write something
+  * For 2020 Form 1040 Schedule 3 Line 10, it would be nice  to write something
       like:
+
       ```c#
       FormW-2.GroupBy(f => f.SSN)
              .Select(g => Math.Max(0, g.Sum(f => f.SocialSecurityTaxWithheld) - 8537.40))
              .Sum()
       ```
+
 * Clean up PDF writing
-    * Leave spaces blank when appropriate instead of writing 0.
-    * Round to whole dollars.
+  * Leave spaces blank when appropriate instead of writing 0.
+  * Round to whole dollars.
 * Somehow unify the parsing, typechecking, and evaluation representation of
   language semantics. Particularly `EvaluationResult` and `ExpressionType` have
   a similar shape.
