@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form AllowMultiple="true">
+
+    <!-- This is a simplified form 8949 that only has a single page and single code. -->
+
+    <Line Name="Code" Type="Form8949Code" />
+    <Line Name="Transactions" Type="Form8949Lines" />
+
+    <Line Number="2d" Name="TotalProceeds" Calc="SUM(Transactions.SalePrice)" />
+    <Line Number="2e" Name="TotalCost" Calc="SUM(Transactions.CostBasis)" />
+    <Line Number="2g" Name="TotalAdjustments" Calc="SUM(Transactions.Adjustment)" />
+    <Line Number="2h" Name="TotalGain" Calc="TotalProceeds - TotalCost + TotalAdjustments" />
+</Form>

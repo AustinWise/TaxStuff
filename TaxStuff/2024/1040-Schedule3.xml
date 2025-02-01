@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+    <!-- Part 1 - Nonrefundable Credits -->
+    <Line Number="1" Name="ForeignTaxCredit" Calc="SUM(Form1099-DIV.ForeignTaxPaid)" />
+    <!-- TODO: line 2-7 -->
+    <Line Number="8" Calc="Line1" />
+
+    <!-- Part 1 - Other Payments and Refundable Credits -->
+    <!-- TODO: line 9-14 -->
+    <Line Number="11" Name="ExcessSocialSecurityTaxWithheld">
+        <ExcessSocialSecurityTaxWithheld MaxSocialSecurityTax="10453.20" />
+    </Line>
+    <Line Number="15" Calc="Line11" />
+</Form>
