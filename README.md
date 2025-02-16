@@ -12,8 +12,7 @@ I was inspired by Robert Sesek's excellent [ustaxlib](https://github.com/rsesek/
 
 # Example
 
-Requires [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) to build
-and run.
+Requires [.NET SDK](https://dotnet.microsoft.com) to build and run.
 
 When you run the program, it takes two arguments: the path to the return file
 and a folder to put the PDFs in:
@@ -30,11 +29,11 @@ See example [input file](ExampleReturn.xml) and example
 
 * Can import OFX tax exports (from Schwab for example), to support interest
   dividends, and stock transactions. The contents of the 1099-Bs will be turned
-  into Form 8949s and will be referenced by !040 Schedule D. The 1009-DIVs and
+  into Form 8949s and will be referenced by 1040 Schedule D. The 1009-DIVs and
   1099-INTs will be put into the right places on Form 1040.
 * Fill in the results of tax computations into PDF tax forms. (only implemented for the 2020 tax year currently)
 * A custom XML format and expression language for defining tax forms. See the
-  [2020 folder](./TaxStuff/2020/) for the forms.
+  [2023 folder](./TaxStuff/2023/) for the forms.
 
 # License
 
@@ -54,7 +53,6 @@ couple of different license, which makes this more complicated.
 
 # TODO
 
-* Add an `Assert` element in forms to check for errors.
 * More unit tests
 * Support for references to previous years, to support things like capital loss
   carryover and Schedule J.
@@ -85,7 +83,7 @@ couple of different license, which makes this more complicated.
 
 # Adding support for filling in PDFs
 
-I've only done 1040, the process I'm using to find the name of the fields of the
+I've only done year 2020 form 1040. The process I'm using to find the name of the fields of the
 PDF to fill in is:
 
 1. Use the `XfaForm` iText API to pull out the [XFA form](https://en.wikipedia.org/wiki/XFA)
