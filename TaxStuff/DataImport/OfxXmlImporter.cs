@@ -111,20 +111,22 @@ class OfxXmlImporter : IDataImporter
                     case Tax1099B_V100 stockForm:
                         foreach (var t in stockForm.EXTDBINFO_V100.PROCDET_V100)
                         {
+                            Form8949Code code;
                             if (t.FORM8949CODE == "X")
                             {
-                                // I have no idea what this means.
-                                // But all of these in my form have a SALESPR of around 1
-                                // and a NUMSHRS that is 0.
-                                continue;
+                                // Unknown basis, assume short term and unreported to IRS.
+                                code = Form8949Code.B;
+                            }
+                            else
+                            {
+                                code = Enum.Parse<Form8949Code>(t.FORM8949CODE);
                             }
                             DateTime? acquired = t.Item switch
                             {
                                 string s => ParseDate(s),
                                 BooleanType.Y => null,
-                                _ => throw new Exception($"Unsupported value for acquire time: {t.Item}"),
+                                _ => null,
                             };
-                            var code = Enum.Parse<Form8949Code>(t.FORM8949CODE);
                             transactions[code].Add(new Form8949Line(t.SALEDESCRIPTION, acquired, ParseDate(t.DTSALE), ParseMoney(t.COSTBASIS), ParseMoney(t.SALESPR), ParseMoney(t.TOTALADJ)));
                         }
                         break;
