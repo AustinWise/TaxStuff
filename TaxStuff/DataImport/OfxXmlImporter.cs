@@ -111,6 +111,13 @@ class OfxXmlImporter : IDataImporter
                     case Tax1099B_V100 stockForm:
                         foreach (var t in stockForm.EXTDBINFO_V100.PROCDET_V100)
                         {
+                            if (t.FORM8949CODE == "X")
+                            {
+                                // I have no idea what this means.
+                                // But all of these in my form have a SALESPR of around 1
+                                // and a NUMSHRS that is 0.
+                                continue;
+                            }
                             DateTime? acquired = t.Item switch
                             {
                                 string s => ParseDate(s),
