@@ -17,7 +17,7 @@ record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseEx
     }
 
     public ValueFromFirstFormThatExistsExpression(ParsingEnvironment env, XElement node)
-        : this(new ReadOnlyCollection<(string, BaseExpression)>(node.Elements("Form").Select(n => ParseNode(env, n)).ToList()))
+        : this(new ReadOnlyCollection<(string, BaseExpression)>([.. node.Elements("Form").Select(n => ParseNode(env, n))]))
     {
     }
 

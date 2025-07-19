@@ -3,16 +3,10 @@ using TaxStuff.FormModel;
 
 namespace TaxStuff.DataImport;
 
-class Form8949 : IConvertibleToFormInstance
+class Form8949(Form8949Code code, List<Form8949Line> lines) : IConvertibleToFormInstance
 {
-    public Form8949Code Code { get; }
-    public List<Form8949Line> Lines { get; }
-
-    public Form8949(Form8949Code code, List<Form8949Line> lines)
-    {
-        this.Code = code;
-        this.Lines = lines;
-    }
+    public Form8949Code Code { get; } = code;
+    public List<Form8949Line> Lines { get; } = lines;
 
     public FormInstance ConvertToFormInstance(TaxYearDefinition taxYear)
     {

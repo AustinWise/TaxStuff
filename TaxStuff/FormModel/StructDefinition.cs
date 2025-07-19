@@ -2,10 +2,6 @@
 
 namespace TaxStuff.FormModel;
 
-class StructDefinition : CompoundDefinition<StructElement>
+class StructDefinition(XElement node) : CompoundDefinition<StructElement>(node, "Field", el => new StructElement(el))
 {
-    public StructDefinition(XElement node)
-        : base(node, "Field", el => new StructElement(el))
-    {
-    }
 }

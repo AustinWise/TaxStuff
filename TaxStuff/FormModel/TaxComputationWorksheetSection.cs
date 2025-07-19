@@ -8,7 +8,7 @@ record TaxComputationWorksheetSection(FilingStatus Status, ReadOnlyCollection<Ta
 {
     public TaxComputationWorksheetSection(XElement node)
         : this(node.EnumAttributeValue<FilingStatus>("Status"),
-               new ReadOnlyCollection<TaxComputationWorksheetLine>(node.Elements("Case").Select(n => new TaxComputationWorksheetLine(n)).OrderBy(n => n.Min).ToList()))
+               new ReadOnlyCollection<TaxComputationWorksheetLine>([.. node.Elements("Case").Select(n => new TaxComputationWorksheetLine(n)).OrderBy(n => n.Min)]))
     {
     }
 }

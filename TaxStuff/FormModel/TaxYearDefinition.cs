@@ -75,7 +75,7 @@ class TaxYearDefinition
         {
             foreach (var line in f.Lines.Values)
             {
-                if (line.Calc is object)
+                if (line.Calc is not null)
                 {
                     var env = new TypecheckEnvironment(Forms, f, line);
                     var actualLineType = line.Calc.CheckType(env);

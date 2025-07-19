@@ -2,14 +2,9 @@
 
 namespace TaxStuff.FormModel;
 
-class TaxRates
+class TaxRates(TaxComputationWorksheet worksheet)
 {
-    readonly TaxComputationWorksheet mWorksheet;
-
-    public TaxRates(TaxComputationWorksheet worksheet)
-    {
-        mWorksheet = worksheet ?? throw new ArgumentNullException(nameof(worksheet));
-    }
+    readonly TaxComputationWorksheet mWorksheet = worksheet ?? throw new ArgumentNullException(nameof(worksheet));
 
     public decimal CalculateTax(FilingStatus status, decimal taxableAmount)
     {

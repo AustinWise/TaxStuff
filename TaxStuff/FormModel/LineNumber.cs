@@ -3,16 +3,17 @@ using System.Text.RegularExpressions;
 
 namespace TaxStuff.FormModel;
 
-readonly struct LineNumber : IEquatable<LineNumber>, IComparable<LineNumber>
+readonly partial struct LineNumber : IEquatable<LineNumber>, IComparable<LineNumber>
 {
-    static readonly Regex sLineFormat = new Regex(@"^(?<number>\d+)(?<letter>\w)?$", RegexOptions.ExplicitCapture);
+    [GeneratedRegex(@"^(?<number>\d+)(?<letter>\w)?$", RegexOptions.ExplicitCapture)]
+    private static partial Regex LineFormat { get; }
 
     readonly int _number;
     readonly char _letter;
 
     public LineNumber(string lineNumber)
     {
-        var m = sLineFormat.Match(lineNumber);
+        var m = LineFormat.Match(lineNumber);
         if (!m.Success)
             throw new ArgumentException("Invalid line number: " + lineNumber);
         this._number = int.Parse(m.Groups["number"].Value);
@@ -43,5 +44,15 @@ readonly struct LineNumber : IEquatable<LineNumber>, IComparable<LineNumber>
             return this._number.ToString();
         else
             return $"{_number}{_letter}";
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is LineNumber && Equals((LineNumber)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return _number.GetHashCode() ^ _letter.GetHashCode();
     }
 }

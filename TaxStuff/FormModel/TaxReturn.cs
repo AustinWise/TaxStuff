@@ -26,7 +26,7 @@ class TaxReturn
 
         this.Year = doc.Root.IntAttributeValue("Year");
         this.Status = doc.Root.EnumAttributeValue<FilingStatus>("FilingStatus");
-        this.Forms = new();
+        this.Forms = [];
 
         TaxYearDef = universe.TaxYears[Year];
 
@@ -61,8 +61,7 @@ class TaxReturn
 
     public void AddForm(FormInstance formInst)
     {
-        FormInstances? formList;
-        if (!Forms.TryGetValue(formInst.Name, out formList))
+        if (!Forms.TryGetValue(formInst.Name, out FormInstances? formList))
         {
             formList = new FormInstances(formInst.Definition);
             Forms.Add(formInst.Name, formList);

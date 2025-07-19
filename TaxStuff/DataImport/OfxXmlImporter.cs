@@ -12,22 +12,12 @@ namespace TaxStuff.DataImport;
 /// <summary>
 /// Mostly based on the files exported by Schwab, which are OFX 2.0.2.
 /// </summary>
-class OfxXmlImporter : IDataImporter
+class OfxXmlImporter(string filePath) : IDataImporter
 {
-    readonly string _filePath;
+    readonly string _filePath = filePath;
 
-    public OfxXmlImporter(string filePath)
+    class Myreader(TextReader reader) : XmlTextReader(reader)
     {
-        this._filePath = filePath;
-    }
-
-    class Myreader : XmlTextReader
-    {
-        public Myreader(TextReader reader)
-            : base(reader)
-        {
-        }
-
         public override string NamespaceURI
         {
             get

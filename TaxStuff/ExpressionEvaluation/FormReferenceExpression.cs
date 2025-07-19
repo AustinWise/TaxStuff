@@ -63,7 +63,7 @@ record FormReferenceExpression(string FormName) : BaseExpression
             // return and therefore cannot possiblely be the current form.
             var def = env.Return.TaxYearDef.Forms[FormName];
             if (def.AllowMultiple)
-                return new ArrayResult(new List<EvaluationResult>());
+                return new ArrayResult([]);
             else
                 return new FormResult(def, AllFieldsAreZero.Instance);
         }

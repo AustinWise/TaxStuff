@@ -10,7 +10,7 @@ class PdfInfo
     {
         ArgumentNullException.ThrowIfNull(doc.Root);
 
-        Forms = new();
+        Forms = [];
 
         foreach (var node in doc.Root.Elements("Form"))
         {

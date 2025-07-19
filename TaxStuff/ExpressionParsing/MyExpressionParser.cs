@@ -20,7 +20,7 @@ class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisito
         //make sure there is at most one Calc definition
         if (calcStr is null && calcNode.Length == 0)
             return null;
-        if (calcStr is object && calcNode.Length > 0)
+        if (calcStr is not null && calcNode.Length > 0)
             throw new FileLoadException(node, $"Line contains both and {attributeName} attribute and a {attributeName} node.");
 
         // do some light validation
@@ -50,7 +50,7 @@ class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisito
     {
         var vistor = new MyExpressionParser(env);
         ICharStream stream = CharStreams.fromString(input);
-        ExpressionLexer lexer = new ExpressionLexer(stream);
+        ExpressionLexer lexer = new(stream);
         lexer.AddErrorListener(vistor);
         ITokenStream tokens = new CommonTokenStream(lexer);
         var parser = new ExpressionParser(tokens);
@@ -58,12 +58,7 @@ class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisito
         parser.AddErrorListener(vistor);
         parser.BuildParseTree = true;
         var tree = parser.completeExpression();
-        BaseExpression result = vistor.Visit(tree);
-        if (result is null)
-        {
-            // Probably missed an override of ExpressionBaseVisitor if this is thrown
-            throw new Exception("Programming error, no expression returned.");
-        }
+        BaseExpression result = vistor.Visit(tree) ?? throw new Exception("Programming error, no expression returned.");
         return result;
     }
 
@@ -99,42 +94,20 @@ class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisito
         {
             var op = ((ITerminalNode)(context.children[i])).Symbol;
             var right = Visit(context.children[i + 1]);
-            BinaryOp binOp;
-            switch (op.Type)
+            var binOp = op.Type switch
             {
-                case ExpressionLexer.PLUS:
-                    binOp = BinaryOp.Add;
-                    break;
-                case ExpressionLexer.MINUS:
-                    binOp = BinaryOp.Substract;
-                    break;
-                case ExpressionLexer.TIMES:
-                    binOp = BinaryOp.Multiply;
-                    break;
-                case ExpressionLexer.DIVIDE:
-                    binOp = BinaryOp.Divide;
-                    break;
-                case ExpressionLexer.EQUAL:
-                    binOp = BinaryOp.Equal;
-                    break;
-                case ExpressionLexer.NEQUAL:
-                    binOp = BinaryOp.NotEqual;
-                    break;
-                case ExpressionLexer.LT:
-                    binOp = BinaryOp.LessThan;
-                    break;
-                case ExpressionLexer.GT:
-                    binOp = BinaryOp.GreaterThan;
-                    break;
-                case ExpressionLexer.LTEQ:
-                    binOp = BinaryOp.LessThanOrEqual;
-                    break;
-                case ExpressionLexer.GTEQ:
-                    binOp = BinaryOp.GreaterThanOrEqual;
-                    break;
-                default:
-                    throw new Exception("Unexpected op: " + op.Text);
-            }
+                ExpressionLexer.PLUS => BinaryOp.Add,
+                ExpressionLexer.MINUS => BinaryOp.Substract,
+                ExpressionLexer.TIMES => BinaryOp.Multiply,
+                ExpressionLexer.DIVIDE => BinaryOp.Divide,
+                ExpressionLexer.EQUAL => BinaryOp.Equal,
+                ExpressionLexer.NEQUAL => BinaryOp.NotEqual,
+                ExpressionLexer.LT => BinaryOp.LessThan,
+                ExpressionLexer.GT => BinaryOp.GreaterThan,
+                ExpressionLexer.LTEQ => BinaryOp.LessThanOrEqual,
+                ExpressionLexer.GTEQ => BinaryOp.GreaterThanOrEqual,
+                _ => throw new Exception("Unexpected op: " + op.Text),
+            };
             ret = new BinaryOpExpression(ret, binOp, right);
         }
 
@@ -205,7 +178,7 @@ class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisito
             }
             else if (thingName.StartsWith("Form"))
             {
-                return new FormReferenceExpression(thingName.Substring(4));
+                return new FormReferenceExpression(thingName[4..]);
             }
             else
             {

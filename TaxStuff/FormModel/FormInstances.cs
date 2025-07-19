@@ -4,16 +4,10 @@ using TaxStuff.ExpressionEvaluation;
 
 namespace TaxStuff.FormModel;
 
-class FormInstances
+class FormInstances(FormDefinition def)
 {
-    public FormDefinition Definition { get; }
-    public List<FormInstance> Forms { get; }
-
-    public FormInstances(FormDefinition def)
-    {
-        this.Definition = def ?? throw new ArgumentNullException(nameof(def));
-        this.Forms = new List<FormInstance>();
-    }
+    public FormDefinition Definition { get; } = def ?? throw new ArgumentNullException(nameof(def));
+    public List<FormInstance> Forms { get; } = [];
 
     public void AddForm(FormInstance form)
     {

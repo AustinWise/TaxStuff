@@ -4,7 +4,7 @@ namespace TaxStuff.ExpressionEvaluation;
 
 class AllFieldsAreZero : IHasFieldEvaluation
 {
-    public static readonly AllFieldsAreZero Instance = new AllFieldsAreZero();
+    public static readonly AllFieldsAreZero Instance = new();
 
     private AllFieldsAreZero()
     {

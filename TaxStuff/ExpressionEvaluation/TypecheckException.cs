@@ -2,10 +2,6 @@
 
 namespace TaxStuff.ExpressionEvaluation;
 
-class TypecheckException : Exception
+class TypecheckException(string message) : Exception(message)
 {
-    public TypecheckException(string message)
-        : base(message)
-    {
-    }
 }

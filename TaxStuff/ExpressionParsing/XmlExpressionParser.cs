@@ -11,18 +11,13 @@ static class XmlExpressionParser
 {
     public static BaseExpression Parse(ParsingEnvironment env, XElement node)
     {
-        switch (node.Name.LocalName)
+        return node.Name.LocalName switch
         {
-            case "ValueFromFirstFormThatExists":
-                return new ValueFromFirstFormThatExistsExpression(env, node);
-            case "SelectBasedOnStatus":
-                return new SelectBasedOnStatusExpression(env, node);
-            case "Form8949Lines":
-                return new Form8949LinesLiteralExpression(node);
-            case "ExcessSocialSecurityTaxWithheld":
-                return new ExcessSocialSecurityTaxWithheldExpression(node);
-            default:
-                throw new FileLoadException(node, "Unknown node type: " + node.Name);
-        }
+            "ValueFromFirstFormThatExists" => new ValueFromFirstFormThatExistsExpression(env, node),
+            "SelectBasedOnStatus" => new SelectBasedOnStatusExpression(env, node),
+            "Form8949Lines" => new Form8949LinesLiteralExpression(node),
+            "ExcessSocialSecurityTaxWithheld" => new ExcessSocialSecurityTaxWithheldExpression(node),
+            _ => throw new FileLoadException(node, "Unknown node type: " + node.Name),
+        };
     }
 }

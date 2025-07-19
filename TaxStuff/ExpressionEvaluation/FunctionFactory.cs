@@ -13,7 +13,7 @@ static class FunctionFactory
 
     static readonly Dictionary<string, FunctionInfo> sFunctions = new(StringComparer.OrdinalIgnoreCase);
 
-    static void AddFunction<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]T>() where T : BaseExpression
+    static void AddFunction<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] T>() where T : BaseExpression
     {
         const string EXPRESSION = "Expression";
 
@@ -31,7 +31,7 @@ static class FunctionFactory
                 throw new Exception($"wrong type for parameter '{p.Name}' on constructor for '{type.Name}'.");
         }
 
-        sFunctions.Add(type.Name.Substring(0, type.Name.Length - EXPRESSION.Length), new FunctionInfo(ctor.GetParameters().Length, ctor));
+        sFunctions.Add(type.Name[..^EXPRESSION.Length], new FunctionInfo(ctor.GetParameters().Length, ctor));
     }
 
     static FunctionFactory()

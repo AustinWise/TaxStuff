@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TaxStuff.ExpressionEvaluation;
 
@@ -26,7 +27,7 @@ record class SelectSameSsnFormsExpression(BaseExpression FormExpression) : BaseE
 
         var forms = (ArrayResult)FormExpression.Evaluate(env);
         var ret = new List<FormResult>();
-        foreach (FormResult f in forms.Values)
+        foreach (FormResult f in forms.Values.Cast<FormResult>())
         {
             if (string.IsNullOrWhiteSpace(f.Value.SSN))
             {

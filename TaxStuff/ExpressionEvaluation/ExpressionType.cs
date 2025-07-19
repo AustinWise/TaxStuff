@@ -33,7 +33,7 @@ sealed record FormType(FormDefinition Form) : ExpressionType, IHasFieldTypes
         try
         {
             if (fieldName.StartsWith("Line"))
-                lineDef = Form.LinesByNumber[fieldName.Substring(4)];
+                lineDef = Form.LinesByNumber[fieldName[4..]];
             else
                 lineDef = Form.Lines[fieldName];
         }
@@ -42,7 +42,7 @@ sealed record FormType(FormDefinition Form) : ExpressionType, IHasFieldTypes
             throw new Exception($"Could not find field '{fieldName}' on form '{Form.Name}'.");
         }
 
-        if (lineDef.Calc is object)
+        if (lineDef.Calc is not null)
         {
             env.PushRecursionCheck(Form, lineDef);
             //ignore result, we are only doing this for the side effect of the recursion check
@@ -58,9 +58,7 @@ sealed record ArrayType(ExpressionType ElementType) : ExpressionType, IHasFieldT
 {
     ExpressionType IHasFieldTypes.GetFieldType(TypecheckEnvironment env, string fieldName)
     {
-        var elementFields = ElementType as IHasFieldTypes;
-        if (elementFields is null)
-            throw new NotSupportedException($"Array element type {ElementType} does not support fields.");
+        var elementFields = ElementType as IHasFieldTypes ?? throw new NotSupportedException($"Array element type {ElementType} does not support fields.");
         return new ArrayType(elementFields.GetFieldType(env, fieldName));
     }
 }
@@ -86,20 +84,13 @@ sealed record Form8949LineType() : ExpressionType, IHasFieldTypes
 
     ExpressionType IHasFieldTypes.GetFieldType(TypecheckEnvironment env, string fieldName)
     {
-        switch (fieldName)
+        return fieldName switch
         {
-            case nameof(Form8949Line.CostBasis):
-                return NumberType.Instance;
-            case nameof(Form8949Line.SalePrice):
-                return NumberType.Instance;
-            case nameof(Form8949Line.Adjustment):
-                return NumberType.Instance;
-            case nameof(Form8949Line.Description):
-            case nameof(Form8949Line.Acquired):
-            case nameof(Form8949Line.Sold):
-                throw new NotImplementedException($"Support for field named {fieldName} not yet implemented.");
-            default:
-                throw new Exception("Unknown field name: " + fieldName);
-        }
+            nameof(Form8949Line.CostBasis) => NumberType.Instance,
+            nameof(Form8949Line.SalePrice) => NumberType.Instance,
+            nameof(Form8949Line.Adjustment) => NumberType.Instance,
+            nameof(Form8949Line.Description) or nameof(Form8949Line.Acquired) or nameof(Form8949Line.Sold) => throw new NotImplementedException($"Support for field named {fieldName} not yet implemented."),
+            _ => throw new Exception("Unknown field name: " + fieldName),
+        };
     }
 }

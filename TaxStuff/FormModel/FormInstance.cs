@@ -11,7 +11,7 @@ namespace TaxStuff.FormModel;
 
 class FormInstance : IHasFieldEvaluation
 {
-    readonly Dictionary<string, EvaluationResult> _values = new();
+    readonly Dictionary<string, EvaluationResult> _values = [];
 
     public FormDefinition Definition { get; }
     public string Name => Definition.Name;
@@ -19,8 +19,7 @@ class FormInstance : IHasFieldEvaluation
 
     public FormInstance(FormDefinition def, Dictionary<string, decimal> numberValues, Dictionary<string, string> stringValues)
     {
-        if (def is null)
-            throw new ArgumentNullException(nameof(def));
+        ArgumentNullException.ThrowIfNull(def);
         Definition = def;
 
         foreach (var kvp in numberValues)
@@ -35,8 +34,7 @@ class FormInstance : IHasFieldEvaluation
 
     public FormInstance(FormDefinition def, Form8949Code code, List<Form8949Line> transactions)
     {
-        if (def is null)
-            throw new ArgumentNullException(nameof(def));
+        ArgumentNullException.ThrowIfNull(def);
         Definition = def;
 
         if (def.Name != "8949")
@@ -114,9 +112,7 @@ class FormInstance : IHasFieldEvaluation
 
             try
             {
-                var parsedExpr = MyExpressionParser.Parse(new ParsingEnvironment(), el, "Value");
-                if (parsedExpr is null)
-                    throw new FileLoadException(el, "Missing value for line.");
+                var parsedExpr = MyExpressionParser.Parse(new ParsingEnvironment(), el, "Value") ?? throw new FileLoadException(el, "Missing value for line.");
                 var actualType = parsedExpr.CheckType(new TypecheckEnvironment());
                 if (actualType != lineDef.Type)
                     throw new Exception($"Expected type {lineDef.Type}, found {actualType}.");
@@ -148,12 +144,7 @@ class FormInstance : IHasFieldEvaluation
         }
         foreach (var assert in Definition.Asserts)
         {
-            var result = assert.Expr.Evaluate(env) as BoolResult;
-            if (result is null)
-            {
-                // PROGRAMMING ERROR: the type checker should have caught this
-                throw new Exception($"On form {Definition.Name}, assert expression '{assert.ExprStr}' did not evaluate to a boolean result.");
-            }
+            var result = assert.Expr.Evaluate(env) as BoolResult ?? throw new Exception($"On form {Definition.Name}, assert expression '{assert.ExprStr}' did not evaluate to a boolean result.");
             if (result.Value != assert.ExpectedValue)
             {
                 throw new Exception($"On form {Definition.Name}, assert expression '{assert.ExprStr}' should have evaluated to {assert.ExpectedValue} but was {result.Value}.");
@@ -165,7 +156,7 @@ class FormInstance : IHasFieldEvaluation
     {
         LineDefinition lineDef;
         if (fieldName.StartsWith("Line"))
-            lineDef = Definition.LinesByNumber[fieldName.Substring(4)];
+            lineDef = Definition.LinesByNumber[fieldName[4..]];
         else
             lineDef = Definition.Lines[fieldName];
 
@@ -174,12 +165,12 @@ class FormInstance : IHasFieldEvaluation
             return value;
         }
 
-        if (lineDef.Calc is object)
+        if (lineDef.Calc is not null)
             value = lineDef.Calc.Evaluate(env with { CurrentForm = this });
         else if (lineDef.Type == NumberType.Instance)
             value = EvaluationResult.CreateNumber(0m);
         else if (lineDef.Type is ArrayType)
-            value = new ArrayResult(new List<EvaluationResult>());
+            value = new ArrayResult([]);
         else
             throw new Exception($"Don't know how to make a default value for line {lineDef.Name} of type {lineDef.Type}.");
 

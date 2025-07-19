@@ -12,7 +12,7 @@ class TaxComputationWorksheet
     {
         ArgumentNullException.ThrowIfNull(doc.Root);
 
-        mSections = new();
+        mSections = [];
         foreach (var el in doc.Root.Elements("Section"))
         {
             var section = new TaxComputationWorksheetSection(el);

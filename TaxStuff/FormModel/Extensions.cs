@@ -35,9 +35,7 @@ static class Extensions
 
     public static string AttributeValue(this XElement el, string attributeName)
     {
-        var ret = OptionalAttributeValue(el, attributeName);
-        if (ret is null)
-            throw new FileLoadException(el, $"Missing attribute '{attributeName}'.");
+        var ret = OptionalAttributeValue(el, attributeName) ?? throw new FileLoadException(el, $"Missing attribute '{attributeName}'.");
         if (string.IsNullOrWhiteSpace(ret))
             throw new FileLoadException(el, $"Empty attribute '{attributeName}'.");
         return ret;
@@ -100,9 +98,7 @@ static class Extensions
 
     public static BaseExpression ExpressionAttributeValue(this XElement el, ParsingEnvironment env, string attributeName)
     {
-        XAttribute? attr = el.Attribute(attributeName);
-        if (attr is null)
-            throw new FileLoadException(el, $"Missing {attributeName} attribute");
+        XAttribute? attr = el.Attribute(attributeName) ?? throw new FileLoadException(el, $"Missing {attributeName} attribute");
         try
         {
             return MyExpressionParser.Parse(env, attr.Value);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace TaxStuff.ExpressionEvaluation;
 
@@ -18,7 +19,7 @@ record FilterForm8949Expression(BaseExpression FormsExpr, BaseExpression CodeExp
         var forms = (ArrayResult)FormsExpr.Evaluate(env);
         var code = (Form8949EnumElementResult)CodeExpr.Evaluate(env);
         var ret = new List<FormResult>();
-        foreach (FormResult f in forms.Values)
+        foreach (FormResult f in forms.Values.Cast<FormResult>())
         {
             Debug.Assert(f.Def.Name == "8949");
             var formCode = (Form8949EnumElementResult)f.GetFieldValue(env, "Code");

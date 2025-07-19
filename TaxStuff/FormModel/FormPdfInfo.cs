@@ -14,7 +14,7 @@ class FormPdfInfo
 {
     public string FormName { get; }
     readonly string _filePath;
-    readonly Dictionary<string, string> _lineToFieldName = new();
+    readonly Dictionary<string, string> _lineToFieldName = [];
 
     public FormPdfInfo(string dirPath, XElement node)
     {

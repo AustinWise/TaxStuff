@@ -29,34 +29,21 @@ record NumberResult(decimal Value) : EvaluationResult
 {
     public override EvaluationResult PerformBinOp(BinaryOp op, EvaluationResult rhs)
     {
-        var rightNumber = rhs as NumberResult;
-        if (rightNumber is null)
-            throw new Exception("Expected number.");
-        switch (op)
+        var rightNumber = rhs as NumberResult ?? throw new Exception("Expected number.");
+        return op switch
         {
-            case BinaryOp.Add:
-                return new NumberResult(Value + rightNumber.Value);
-            case BinaryOp.Substract:
-                return new NumberResult(Value - rightNumber.Value);
-            case BinaryOp.Multiply:
-                return new NumberResult(Value * rightNumber.Value);
-            case BinaryOp.Divide:
-                return new NumberResult(Value / rightNumber.Value);
-            case BinaryOp.Equal:
-                return new BoolResult(Value == rightNumber.Value);
-            case BinaryOp.NotEqual:
-                return new BoolResult(Value != rightNumber.Value);
-            case BinaryOp.LessThan:
-                return new BoolResult(Value < rightNumber.Value);
-            case BinaryOp.GreaterThan:
-                return new BoolResult(Value > rightNumber.Value);
-            case BinaryOp.LessThanOrEqual:
-                return new BoolResult(Value <= rightNumber.Value);
-            case BinaryOp.GreaterThanOrEqual:
-                return new BoolResult(Value >= rightNumber.Value);
-            default:
-                throw new NotSupportedException("Unsupported binop: " + op);
-        }
+            BinaryOp.Add => new NumberResult(Value + rightNumber.Value),
+            BinaryOp.Substract => new NumberResult(Value - rightNumber.Value),
+            BinaryOp.Multiply => new NumberResult(Value * rightNumber.Value),
+            BinaryOp.Divide => new NumberResult(Value / rightNumber.Value),
+            BinaryOp.Equal => new BoolResult(Value == rightNumber.Value),
+            BinaryOp.NotEqual => new BoolResult(Value != rightNumber.Value),
+            BinaryOp.LessThan => new BoolResult(Value < rightNumber.Value),
+            BinaryOp.GreaterThan => new BoolResult(Value > rightNumber.Value),
+            BinaryOp.LessThanOrEqual => new BoolResult(Value <= rightNumber.Value),
+            BinaryOp.GreaterThanOrEqual => new BoolResult(Value >= rightNumber.Value),
+            _ => throw new NotSupportedException("Unsupported binop: " + op),
+        };
     }
 
     public override decimal AsNumber() => Value;
@@ -72,18 +59,13 @@ record BoolResult(bool Value) : EvaluationResult
 {
     public override EvaluationResult PerformBinOp(BinaryOp op, EvaluationResult rhs)
     {
-        var rightBool = rhs as BoolResult;
-        if (rightBool is null)
-            throw new Exception("Expected bool.");
-        switch (op)
+        var rightBool = rhs as BoolResult ?? throw new Exception("Expected bool.");
+        return op switch
         {
-            case BinaryOp.Equal:
-                return new BoolResult(Value == rightBool.Value);
-            case BinaryOp.NotEqual:
-                return new BoolResult(Value != rightBool.Value);
-            default:
-                throw new NotSupportedException("Unsupported binop: " + op);
-        }
+            BinaryOp.Equal => new BoolResult(Value == rightBool.Value),
+            BinaryOp.NotEqual => new BoolResult(Value != rightBool.Value),
+            _ => throw new NotSupportedException("Unsupported binop: " + op),
+        };
     }
 
     protected override bool PrintMembers(StringBuilder builder)
@@ -105,7 +87,7 @@ record StringResult(string Value) : EvaluationResult
 record ArrayResult(List<EvaluationResult> Values) : EvaluationResult
 {
     public ArrayResult(IEnumerable<EvaluationResult> values)
-        : this(values.ToList())
+        : this([.. values])
     {
     }
 
@@ -146,18 +128,13 @@ record Form8949EnumElementResult(Form8949Code Code) : EvaluationResult
 
     public override EvaluationResult PerformBinOp(BinaryOp op, EvaluationResult rhs)
     {
-        var right = rhs as Form8949EnumElementResult;
-        if (right is null)
-            throw new Exception("Expected Form8949EnumElementResult.");
-        switch (op)
+        var right = rhs as Form8949EnumElementResult ?? throw new Exception("Expected Form8949EnumElementResult.");
+        return op switch
         {
-            case BinaryOp.Equal:
-                return new BoolResult(this.Code == right.Code);
-            case BinaryOp.NotEqual:
-                return new BoolResult(this.Code != right.Code);
-            default:
-                throw new NotSupportedException("Unsupported binop: " + op);
-        }
+            BinaryOp.Equal => new BoolResult(this.Code == right.Code),
+            BinaryOp.NotEqual => new BoolResult(this.Code != right.Code),
+            _ => throw new NotSupportedException("Unsupported binop: " + op),
+        };
     }
 }
 
@@ -165,20 +142,13 @@ record Form8949LineResult(Form8949Line Line) : EvaluationResult
 {
     public override EvaluationResult GetFieldValue(EvaluationEnvironment env, string fieldName)
     {
-        switch (fieldName)
+        return fieldName switch
         {
-            case nameof(Form8949Line.CostBasis):
-                return new NumberResult(Line.CostBasis);
-            case nameof(Form8949Line.SalePrice):
-                return new NumberResult(Line.SalePrice);
-            case nameof(Form8949Line.Adjustment):
-                return new NumberResult(Line.Adjustment);
-            case nameof(Form8949Line.Description):
-            case nameof(Form8949Line.Acquired):
-            case nameof(Form8949Line.Sold):
-                throw new NotImplementedException($"Support for field named {fieldName} not yet implemented.");
-            default:
-                throw new Exception("Unknown field name: " + fieldName);
-        }
+            nameof(Form8949Line.CostBasis) => new NumberResult(Line.CostBasis),
+            nameof(Form8949Line.SalePrice) => new NumberResult(Line.SalePrice),
+            nameof(Form8949Line.Adjustment) => new NumberResult(Line.Adjustment),
+            nameof(Form8949Line.Description) or nameof(Form8949Line.Acquired) or nameof(Form8949Line.Sold) => throw new NotImplementedException($"Support for field named {fieldName} not yet implemented."),
+            _ => throw new Exception("Unknown field name: " + fieldName),
+        };
     }
 }

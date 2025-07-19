@@ -2,10 +2,6 @@
 
 namespace TaxStuff.FormModel;
 
-class EnumDefinition : CompoundDefinition<EnumElement>
+class EnumDefinition(XElement node) : CompoundDefinition<EnumElement>(node, "Value", el => new EnumElement(el))
 {
-    public EnumDefinition(XElement node)
-        : base(node, "Value", el => new EnumElement(el))
-    {
-    }
 }
