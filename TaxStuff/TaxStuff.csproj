@@ -16,7 +16,7 @@
     <ItemGroup>
         <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
         <PackageReference Include="itext7" Version="7.1.19" />
-        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.1" />
+        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.7" />
     </ItemGroup>
 
     <ItemGroup>

@@ -76,10 +76,10 @@ couple of different license, which makes this more complicated.
 * Somehow unify the parsing, typechecking, and evaluation representation of
   language semantics. Particularly `EvaluationResult` and `ExpressionType` have
   a similar shape.
-* Maybe instead of interpreting the expression language, it could be compiled
-  to C# using a source generator. This might allow for the execution engine
-  having type-safe knowledge of different forms, for the benefit of the OXF
-  transaction importer.
+* Improve loading time. Currently it takes 650ms to load the whole tax universe. This is because it
+  is parsing every year (even though only one is needed) and type checking all the forms. Some ideas
+  for speeding up include only loading the one year that is needed or somehow moving some of the
+  parsing and type checking of XML files to compile time.
 
 # Adding support for filling in PDFs
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using TaxStuff.ExpressionEvaluation;
 using TaxStuff.FormModel;
@@ -21,9 +22,14 @@ if (!Directory.Exists(outputFolder))
     throw new Exception("Output directory does not exist: " + returnPath);
 }
 
+var sw = Stopwatch.StartNew();
 var taxUniverse = new TaxUniverse(Path.GetDirectoryName(AppContext.BaseDirectory)!);
+long parsingDefs = sw.ElapsedMilliseconds;
 var taxReturn = new TaxReturn(returnPath, taxUniverse);
+long parsingReturn = sw.ElapsedMilliseconds;
 taxReturn.Calculate();
+long calculating = sw.ElapsedMilliseconds;
+sw.Stop();
 
 //TODO: a better way of reporting
 foreach (var formKvp in taxReturn.Forms)
@@ -82,3 +88,9 @@ foreach (var pdfForm in taxReturn.TaxYearDef.PdfInfo.Forms.Values)
         }
     }
 }
+
+Console.WriteLine();
+Console.WriteLine("Timings:");
+Console.WriteLine($"\tLoading defs: {parsingDefs} ms");
+Console.WriteLine($"\tLoading return: {parsingReturn - parsingDefs} ms");
+Console.WriteLine($"\tcalculating: {calculating - parsingReturn} ms");
