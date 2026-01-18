@@ -28,7 +28,7 @@ class TaxReturn
         this.Status = doc.Root.EnumAttributeValue<FilingStatus>("FilingStatus");
         this.Forms = [];
 
-        TaxYearDef = universe.TaxYears[Year];
+        TaxYearDef = universe.GetYear(Year);
 
         foreach (var node in doc.Root.Elements())
         {

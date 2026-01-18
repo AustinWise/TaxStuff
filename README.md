@@ -76,10 +76,8 @@ couple of different license, which makes this more complicated.
 * Somehow unify the parsing, typechecking, and evaluation representation of
   language semantics. Particularly `EvaluationResult` and `ExpressionType` have
   a similar shape.
-* Improve loading time. Currently it takes 650ms to load the whole tax universe. This is because it
-  is parsing every year (even though only one is needed) and type checking all the forms. Some ideas
-  for speeding up include only loading the one year that is needed or somehow moving some of the
-  parsing and type checking of XML files to compile time.
+* Add some build time or CI time validation of all tax year definitions. Currently we lazy load only
+  the relevant year for a return, so other years are not getting type checked.
 
 # Adding support for filling in PDFs
 
