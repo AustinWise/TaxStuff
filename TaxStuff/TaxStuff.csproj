@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <!--
 		CS3021: 'type' does not need a CLSCompliant attribute because the assembly does not have a
         CLSCompliant attribute.
@@ -16,7 +16,7 @@
     <ItemGroup>
         <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
         <PackageReference Include="itext7" Version="7.1.19" />
-        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="9.0.7" />
+        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="10.0.2" />
     </ItemGroup>
 
     <ItemGroup>
