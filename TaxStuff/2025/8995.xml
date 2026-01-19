@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Form>
     <!--
-    Use this form if your taxable income, before your qualified business income deduction, is at or below $191,950 ($383,900 if married
+    Use this form if your taxable income, before your qualified business income deduction, is at or below $197,300 ($394,600 if married
     filing jointly), and you aren’t a patron of an agricultural or horticultural cooperative.
     -->
     <!-- TODO: Schedule C and SE <Line Number="2" Name="TotalQualifiedBusinessIncomeForTheCurrentYear" Calc="SUM(Form1040-ScheduleC.NetProfit) - SUM(Form1040-ScheduleSE.DeductionForOneHalfOfSelfEmploymentTax)" />-->

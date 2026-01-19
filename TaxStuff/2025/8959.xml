@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+    <!-- Part 1 - Additional Medicare Tax on Medicare Wages -->
+    <Line Number="1" Name="MedicareWages" Calc="SUM(FormW-2.Line5)" />
+    <Line Number="2" Name="UnreportedTips" />
+    <Line Number="3" Name="WagesFromForm8919" />
+    <Line Number="4" Calc="Line1 + Line2 + Line3" />
+    <Line Number="5">
+        <SelectBasedOnStatus>
+            <Choice Status="Single" ValueExpr="200000" />
+            <Choice Status="MarriedJoint" ValueExpr="250000" />
+        </SelectBasedOnStatus>
+    </Line>
+    <Line Number="6" Calc="MAX(0, Line4 - Line5)" />
+    <Line Number="7" Name="AdditionalMedicareTaxOnMedicareWages" Calc="Line6 * 0.009" />
+
+    <!-- Part 2 - Additional Medicare Tax on Self-Employment Income -->
+    <!-- TODO: Schedule SE <Line Number="8" Calc="MAX(0, SUM(Form1040-ScheduleSE.Line6))" />-->
+    <Line Number="8" />
+    <Line Number="9">
+        <SelectBasedOnStatus>
+            <Choice Status="Single" ValueExpr="200000" />
+            <Choice Status="MarriedJoint" ValueExpr="250000" />
+        </SelectBasedOnStatus>
+    </Line>
+    <Line Number="10" Calc="Line4" />
+    <Line Number="11" Calc="MAX(0, Line9 - Line10)" />
+    <Line Number="12" Calc="MAX(0, Line8 - Line11)" />
+    <Line Number="13" Name="AdditionalMedicareTaxOnSelfEmploymentIncome" Calc="Line12 * 0.009" />
+
+    <!-- TODO Part 3 - Additional Medicare Tax on Railroad Retirement Tax Act (RRTA) Compensation -->
+    <Line Number="17" Name="AdditionalMedicareTaxOnRRTA" />
+
+    <!-- Part 4 - Total Additional Medicare Tax -->
+    <Line Number="18" Name="TotalAdditionalMedicareTax" Calc="Line7 + Line13 + Line17" />
+
+    <!-- Part 5 - Withholding Reconciliation -->
+    <Line Number="19" Name="MedicareTaxWithheld" Calc="SUM(FormW-2.Line6)" />
+    <Line Number="20" Calc="Line1" />
+    <Line Number="21" Name="RegularMedicareTaxWithholding" Calc="Line20 * 0.0145" />
+    <Line Number="22" Name="MedicareTaxWithholdingOnMedicareWages" Calc="MAX(0, Line19 - Line21)" />
+    <!-- TODO: Line 23 Additional Medicare Tax withholding on railroad retirement (RRTA) compensation from Form W-2, box 14 (see instructions)  -->
+    <Line Number="23" />
+    <Line Number="24" Name="TotalAdditionalMedicareTaxWithholding" Calc="Line22 + Line23" />
+</Form>

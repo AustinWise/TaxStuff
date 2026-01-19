@@ -16,11 +16,11 @@
     <Line Number="9" Name="ReitAndPtpComponent" Calc="Line8 * 0.20" />
 
     <Line Number="10" Name="QualifiedBusinessIncomeDeductionBeforeIncomeLimitation" Calc="Line5 + Line9" />
-    <Line Number="11" Name="TaxableIncomeBeforeQualifiedBusinessIncomeDeduction" Calc="Form1040.Line11 - Form1040.Line12" />
+    <Line Number="11" Name="TaxableIncomeBeforeQualifiedBusinessIncomeDeduction" Calc="Form1040.AGI - Form1040.Deductions" />
     <Line Number="12" Name="NetCapitalGain">
         <ValueFromFirstFormThatExists>
             <Form Name="1040-ScheduleD" ValueExpr="Form1040.Line3a + MAX(0, MIN(Form1040-ScheduleD.Line15, Form1040-ScheduleD.Line16))" />
-            <Form Name="1040" ValueExpr="Form1040.Line3a + Form1040.Line7" />
+            <Form Name="1040" ValueExpr="Form1040.Line3a + Form1040.CapitalGain" />
         </ValueFromFirstFormThatExists>
     </Line>
     <Line Number="13" Calc="MAX(0, Line11 - Line12)" />

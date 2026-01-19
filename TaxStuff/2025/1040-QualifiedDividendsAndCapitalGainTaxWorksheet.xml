@@ -12,8 +12,8 @@
     <Line Number="5" Calc="MAX(0, Line1 - Line4)" />
     <Line Number="6">
         <SelectBasedOnStatus>
-            <Choice Status="Single" ValueExpr="41675" />
-            <Choice Status="MarriedJoint" ValueExpr="83350" />
+            <Choice Status="Single" ValueExpr="48350" />
+            <Choice Status="MarriedJoint" ValueExpr="96700" />
         </SelectBasedOnStatus>
     </Line>
     <Line Number="7" Calc="MIN(Line1, Line6)" />
@@ -24,8 +24,8 @@
     <Line Number="12" Calc="Line10 - Line11" />
     <Line Number="13">
         <SelectBasedOnStatus>
-            <Choice Status="Single" ValueExpr="459750" />
-            <Choice Status="MarriedJoint" ValueExpr="517200" />
+            <Choice Status="Single" ValueExpr="533400" />
+            <Choice Status="MarriedJoint" ValueExpr="600050" />
         </SelectBasedOnStatus>
     </Line>
     <Line Number="14" Calc="MIN(Line1, Line13)" />

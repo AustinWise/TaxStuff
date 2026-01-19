@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form AllowMultiple="true" Calculateable="false" RequireSsn="true">
+    <Line Number="1" Name="Wages" />
+    <Line Number="2" Name="FederalIncomeTaxWithheld" />
+    <Line Number="3" Name="SocialSecurityWages" />
+    <Line Number="4" Name="SocialSecurityTaxWithheld" />
+    <Line Number="5" Name="MedicareWages" />
+    <Line Number="6" Name="MedicareTaxWithheld" />
+    <Line Number="7" Name="SocialSecurityTips" />
+    <Line Number="8" Name="AllocatedTips" />
+    <Line Number="10" Name="DependentCareBenefits" />
+    <Line Number="11" Name="NonqualifiedPlans" />
+</Form>

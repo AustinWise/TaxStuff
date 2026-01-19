@@ -55,6 +55,13 @@
         <None Update="2024\*.pdf">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+
+        <None Update="2025\*.xml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="2025\*.pdf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

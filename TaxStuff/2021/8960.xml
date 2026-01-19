@@ -7,7 +7,7 @@
 	<Line Number="4a" Calc="Form1040-Schedule1.Line5" Desc="Rental Real Estate, Royalties, Partnerships, S Corporations, and Trusts" />
 	<Line Number="4b" Desc="Adjustment for Net Income or Loss Derived in the Ordinary Course of a Non-Section 1411 Trade or Business" />
 	<Line Number="4c" Calc="Line4a + Line4b" />
-	<Line Number="5a" Calc="Form1040.Line7 + Form1040-Schedule1.Line4" />
+	<Line Number="5a" Calc="Form1040.CapitalGain + Form1040-Schedule1.Line4" />
 	<!-- TODO: Lines 5a–5d—Net Gains and Losses Worksheet -->
 	<Line Number="5b" />
 	<Line Number="5c" />

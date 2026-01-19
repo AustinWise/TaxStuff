@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form>
+    <Line Number="1" Name="PriorYearTaxableIncome" />
+    <Line Number="2" Name="PriorYearScheduleDLine21LossAsAPositiveAmount" />
+    <Assert IsTrue="Line2 >= 0" />
+    <Line Number="3" Calc="MAX(0, Line1 + Line2)" />
+    <Line Number="4" Calc="MIN(Line2, Line3)" />
+
+    <Line Number="5" Name="PriorYearScheduleDLine7LossAsAPositiveAmount" />
+    <Assert IsTrue="Line5 >= 0" />
+    <Line Number="6" Name="PriorYearScheduleDLine15Gain" />
+    <Assert IsTrue="Line6 >= 0" />
+    <Line Number="7" Calc="Line4 + Line6" />
+
+    <Line Number="8" Name="ShortTermCapitalLossCarryover" Calc="MAX(0, Line5 - Line7)" />
+
+    <Line Number="9" Name="PriorYearScheduleDLine15LossAsAPositiveAmount" />
+    <Assert IsTrue="Line9 >= 0" />
+    <Line Number="10" Name="PriorYearScheduleDLine7Gain" />
+    <Assert IsTrue="Line10 >= 0" />
+    <Line Number="11" Calc="MAX(0, Line4 - Line5)" />
+    <Line Number="12" Calc="Line10 + Line11" />
+    <Line Number="13" Name="LongTermCapitalLossCarryover" Calc="MAX(0, Line9 - Line12)" />
+</Form>

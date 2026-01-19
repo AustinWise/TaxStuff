@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Form AllowMultiple="true" Calculateable="false">
+    <Line Name="PayerNameAndAddress" Type="String" />
+    <Line Number="1a" Name="TotalOrdinaryDividends" />
+    <Line Number="1b" Name="QualifiedDividends" />
+
+    <Line Number="3" Name="NondividendDistributions" />
+    <Line Number="4" Name="FederalIncomeTaxWithheld" />
+    <Line Number="5" Name="Section199ADividends" />
+
+    <Line Number="7" Name="ForeignTaxPaid" />
+
+    <Line Number="12" Name="ExemptInterestDividends" />
+</Form>
