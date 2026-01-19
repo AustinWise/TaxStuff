@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TaxStuff.FormModel;
 
 // TODO: support expressions that reach across years, to support things like 2020 Form 1040 Schedule J
-// TODO: add a mode for loading all years so we can get type checking and run it in CI
 class TaxUniverse
 {
     private readonly ReadOnlyDictionary<int, Lazy<TaxYearDefinition>> _taxYears;
@@ -26,5 +27,31 @@ class TaxUniverse
     public TaxYearDefinition GetYear(int year)
     {
         return _taxYears[year].Value;
+    }
+
+    /// <summary>
+    /// Type check all years in the universe.
+    /// </summary>
+    /// <returns>Any type check or loading errors, keyed by year.</returns>
+    public Dictionary<int, Exception> TypeCheckAllYears()
+    {
+        var retLock = new Lock();
+        var ret = new Dictionary<int, Exception>();
+        Parallel.ForEach(_taxYears, kvp =>
+        {
+            try
+            {
+                _ = kvp.Value.Value;
+            }
+            catch (Exception ex)
+            {
+                using (retLock.EnterScope())
+                {
+                    ret[kvp.Key] = ex;
+                }
+            }
+        });
+
+        return ret;
     }
 }
