@@ -15,17 +15,14 @@
     <!-- TODO: line12a trough 12d, or increased standard deduction for net qualified disaster loss -->
     <Line Number="12e" Name="Deductions" />
     <Line Number="13a" Name="QualifiedBusinessIncomeDeduction">
-        <ValueFromFirstFormThatExists>
+        <ValueFromFirstFormThatExists ValueIfNoMatchingForm="0">
             <Form Name="8995-A" ValueExpr="Form8995-A.TotalQualifiedBusinessIncomeDeduction" />
             <Form Name="8995" ValueExpr="Form8995.QualifiedBusinessIncomeDeduction" />
-            <Form Name="1040" ValueExpr="0" />
         </ValueFromFirstFormThatExists>
     </Line>
-    <!-- TODO: Schedule 1-A for no tax on tips/overtime/Epstein files -->
     <Line Number="13b" Name="AdditionalDeductions">
-        <ValueFromFirstFormThatExists>
+        <ValueFromFirstFormThatExists ValueIfNoMatchingForm="0">
             <Form Name="1040-Schedule1-A" ValueExpr="Form1040-Schedule1-A.TotalAdditionalDeductions" />
-            <Form Name="1040" ValueExpr="0" />
         </ValueFromFirstFormThatExists>
     </Line>
     <Line Number="14" Name="AllDeductions" Calc="Line12e + Line13a + Line13b" />

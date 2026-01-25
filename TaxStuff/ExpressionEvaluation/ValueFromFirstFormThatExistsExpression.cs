@@ -7,7 +7,7 @@ using TaxStuff.FormModel;
 
 namespace TaxStuff.ExpressionEvaluation;
 
-record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseExpression)> Forms) : BaseExpression
+record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseExpression)> Forms, decimal? ValueIfNoMatchingForm) : BaseExpression
 {
     static (string, BaseExpression) ParseNode(ParsingEnvironment env, XElement node)
     {
@@ -17,7 +17,7 @@ record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseEx
     }
 
     public ValueFromFirstFormThatExistsExpression(ParsingEnvironment env, XElement node)
-        : this(new ReadOnlyCollection<(string, BaseExpression)>([.. node.Elements("Form").Select(n => ParseNode(env, n))]))
+        : this(new ReadOnlyCollection<(string, BaseExpression)>([.. node.Elements("Form").Select(n => ParseNode(env, n))]), node.OptionalDecimalAttributeValue("ValueIfNoMatchingForm"))
     {
     }
 
@@ -38,6 +38,10 @@ record ValueFromFirstFormThatExistsExpression(ReadOnlyCollection<(string, BaseEx
         {
             if (env.Return.Forms.ContainsKey(formName))
                 return formExpr.Evaluate(env);
+        }
+        if (ValueIfNoMatchingForm.HasValue)
+        {
+            return EvaluationResult.CreateNumber(ValueIfNoMatchingForm.Value);
         }
         throw new Exception("Could not find any forms that matched.");
     }
