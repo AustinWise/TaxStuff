@@ -22,8 +22,15 @@ record class ExcessSocialSecurityTaxWithheldExpression(decimal MaxSocialSecurity
 
     public override EvaluationResult Evaluate(EvaluationEnvironment env)
     {
-        return new NumberResult(env.Return.Forms["W-2"].Forms.GroupBy(f => f.SSN)
-                                                             .Select(person => Math.Max(0, person.Sum(f => f.EvaluateField(env, "SocialSecurityTaxWithheld").AsNumber()) - MaxSocialSecurityTax))
-                                                             .Sum());
+        if (env.Return.Forms.TryGetValue("W-2", out FormInstances? forms))
+        {
+            return new NumberResult(forms.Forms.GroupBy(f => f.SSN)
+                                               .Sum(person => Math.Max(0, person.Sum(f => f.EvaluateField(env, "SocialSecurityTaxWithheld").AsNumber()) - MaxSocialSecurityTax)));
+            
+        }
+        else
+        {
+            return EvaluationResult.Zero;
+        }
     }
 }

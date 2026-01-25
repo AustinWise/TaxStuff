@@ -6,7 +6,7 @@ record SumExpression(BaseExpression Expression) : BaseExpression
 {
     public override EvaluationResult Evaluate(EvaluationEnvironment env)
     {
-        return EvaluationResult.CreateNumber(((ArrayResult)Expression.Evaluate(env)).Values.Select(v => v.AsNumber()).Sum());
+        return EvaluationResult.CreateNumber(((ArrayResult)Expression.Evaluate(env)).Values.Sum(v => v.AsNumber()));
     }
 
     public override ExpressionType CheckType(TypecheckEnvironment env)
