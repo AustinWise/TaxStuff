@@ -41,6 +41,7 @@ static class FunctionFactory
         AddFunction<MinExpression>();
         AddFunction<MaxExpression>();
         AddFunction<TaxExpression>();
+        AddFunction<FloorExpression>();
         AddFunction<FilterForm8949Expression>();
         AddFunction<RoundToZeroIfBelowExpression>();
         AddFunction<SelectSameSsnFormsExpression>();

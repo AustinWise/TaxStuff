@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Form>
+    <!-- Part I - Modified Adjusted Gross Income -->
+    <Line Number="1" Calc="Form1040.AGI" />
+    <!-- TODO: Form 2555 and 4563 adjustments. -->
+    <Line Number="3" Calc="Line1" />
+    
+    <!-- TODO: Part II - No Tax on Tips -->
+
+    <!-- Part III - No Tax on Overtime -->
+    <Line Number="14a" Name="W2Overtime" />
+    <Line Number="14b" Name="F1099NECOvertime" />
+    <Line Number="14c" Calc="Line14a + Line14b" />
+    <Line Number="15">
+        <SelectBasedOnStatus>
+            <Choice Status="Single" ValueExpr="12500" />
+            <Choice Status="MarriedJoint" ValueExpr="25000" />
+        </SelectBasedOnStatus>
+    </Line>
+    <Line Number="16" Calc="Line3" />
+    <Line Number="17">
+        <SelectBasedOnStatus>
+            <Choice Status="Single" ValueExpr="150000" />
+            <Choice Status="MarriedJoint" ValueExpr="300000" />
+        </SelectBasedOnStatus>
+    </Line>
+    <!--
+        The instructions say "If zero or less, enter the amount from line 15 on line 21".
+        Since that does not work well with our data model, we move this check to the line 21 calculation.
+    -->
+    <Line Number="18" Calc="Line16 - Line17" />
+    <Line Number="19" Calc="FLOOR(Line18 / 1000)" />
+    <Line Number="20" Calc="Line19 * 100" />
+    <Line Number="21" Calc="IF(Line18 &lt;= 0, Line15, MAX(0, Line15 - Line20))" />
+
+    <!-- TODO: Part IV - No Tax on Car Loan Interest -->
+    <!-- TODO: Part V - Enhanced Deduction for Seniors -->
+
+    <!-- Part VI - Total Additional Deductions -->
+    <Line Number="38" Name="TotalAdditionalDeductions" Calc="Line21" />
+</Form>
