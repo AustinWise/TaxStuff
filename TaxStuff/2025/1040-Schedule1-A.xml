@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO: this is based on the draft form, it needs to be updated for the final form. -->
 <Form>
     <!-- Part I - Modified Adjusted Gross Income -->
     <Line Number="1" Calc="Form1040.AGI" />
@@ -11,12 +12,17 @@
     <Line Number="14a" Name="W2Overtime" />
     <Line Number="14b" Name="F1099NECOvertime" />
     <Line Number="14c" Calc="Line14a + Line14b" />
-    <Line Number="15">
+    <!--
+        Line 15 says "Enter the smaller of the amount on line 14c or $12,500 ($25,000 if married filing jointly)".
+        The expression language does not support mixing the expression language and XML, so this is separated out.
+     -->
+    <Line Number="15limit">
         <SelectBasedOnStatus>
             <Choice Status="Single" ValueExpr="12500" />
             <Choice Status="MarriedJoint" ValueExpr="25000" />
         </SelectBasedOnStatus>
     </Line>
+    <Line Number="15" Calc="MIN(Line14c, Line15limit)" />
     <Line Number="16" Calc="Line3" />
     <Line Number="17">
         <SelectBasedOnStatus>
