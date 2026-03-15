@@ -78,6 +78,7 @@ couple of different license, which makes this more complicated.
   a similar shape.
 * Add some build time or CI time validation of all tax year definitions. Currently we lazy load only
   the relevant year for a return, so other years are not getting type checked.
+* Add rounding.
 
 # Adding support for filling in PDFs
 

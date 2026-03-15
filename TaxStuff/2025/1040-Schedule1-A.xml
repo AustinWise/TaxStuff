@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO: this is based on the draft form, it needs to be updated for the final form. -->
 <Form>
     <!-- Part I - Modified Adjusted Gross Income -->
     <Line Number="1" Calc="Form1040.AGI" />
     <!-- TODO: Form 2555 and 4563 adjustments. -->
     <Line Number="3" Calc="Line1" />
-    
+
     <!-- TODO: Part II - No Tax on Tips -->
 
     <!-- Part III - No Tax on Overtime -->

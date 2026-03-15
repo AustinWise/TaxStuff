@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Form>
+    <!-- TODO: Medical and Dental Expenses -->
+    
+    <!-- Taxes You Paid -->
+    <Line Number="5a" Name="StateAndLocalIncomeTaxes" Calc="SUM(FormW-2.StateIncomeTax) + SUM(FormW-2.Line14CASDI)" />
+    <Line Number="5b" Name="StateAndLocalRealEstateTaxes" />
+    <Line Number="5c" Name="StateAndLocalPersonalPropertyTaxes" />
+    <Line Number="5d" Calc="Line5a + Line5b + Line5c" />
+    <!-- TODO: married filing separately and incomes over 500k (250k married filing separately) support-->
+    <Line Number="5e" Calc="MIN(Line5d, 40000)" />
+    <Line Number="6" Name="OtherTaxes" />
+    <Line Number="7" Calc="Line5e + Line6" />
+    
+    <!-- TODO: Interest You Paid-->
+    <!-- Gifts to Charity-->
+    <Line Number="11" Name="GiftsByCash" />
+    <Line Number="12" Name="OtherGifts" />
+    <Line Number="13" Name="GiftCarryover" />
+    <Line Number="14" Calc="Line11 + Line12 + Line13" />
+
+    <!-- TODO: Casualty and Theft Losses-->
+
+    <!-- TODO: Other Itemized Deductions-->
+
+    <!-- Total Itemized Deductions-->
+    <Line Number="17" Name="TotalItemizedDeductions" Calc="Line7 + Line14" />
+</Form>

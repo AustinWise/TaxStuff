@@ -10,4 +10,11 @@
     <Line Number="8" Name="AllocatedTips" />
     <Line Number="10" Name="DependentCareBenefits" />
     <Line Number="11" Name="NonqualifiedPlans" />
+
+    <!-- TODO: generalize the box 14 handling to support multiple values -->
+    <Line Number="14CASDI" />
+
+    <Line Number="15" Name="State" Type="String" />
+    <Line Number="16" Name="StateWages" />
+    <Line Number="17" Name="StateIncomeTax" />
 </Form>

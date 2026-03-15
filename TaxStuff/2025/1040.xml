@@ -13,7 +13,11 @@
     <Line Number="11a" Name="AGI" Calc="Line9 - Line10" />
     <Line Number="11b" Calc="Line11a" />
     <!-- TODO: line12a trough 12d, or increased standard deduction for net qualified disaster loss -->
-    <Line Number="12e" Name="Deductions" />
+    <Line Number="12e" Name="Deductions">
+        <ValueFromFirstFormThatExists ValueIfNoMatchingForm="0">
+            <Form Name="1040-ScheduleA" ValueExpr="Form1040-ScheduleA.TotalItemizedDeductions" />
+        </ValueFromFirstFormThatExists>
+    </Line>
     <Line Number="13a" Name="QualifiedBusinessIncomeDeduction">
         <ValueFromFirstFormThatExists ValueIfNoMatchingForm="0">
             <Form Name="8995-A" ValueExpr="Form8995-A.TotalQualifiedBusinessIncomeDeduction" />
