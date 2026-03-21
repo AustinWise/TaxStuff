@@ -83,17 +83,25 @@ class FormInstance : IHasFieldEvaluation
 
                     string? number = el.OptionalAttributeValue("Number");
                     string? name = el.OptionalAttributeValue("Name");
-                    LineDefinition lineDef;
+                    LineDefinition? lineDef;
                     if (number is null && name is null)
-                        throw new FileLoadException(el, "Missing Name and Number attributes on line.");
+                        throw new FileLoadException(el, "Line has neither Name and Number attributes, it must have one of them.");
                     else if (number is not null && name is not null)
-                        throw new FileLoadException(el, "Missing Name and Number attributes on line.");
+                        throw new FileLoadException(el, "Line has both Name and Number attributes on line, it must have one of them.");
                     else if (name is not null)
-                        lineDef = Definition.Lines[name]; // TODO: nicer exception for missing line
+                    {
+                        if (!Definition.Lines.TryGetValue(name, out lineDef))
+                        {
+                            throw new FileLoadException(el, "Unknown form line name: " + name);
+                        }
+                    }
                     else
                     {
                         Debug.Assert(number is not null);
-                        lineDef = Definition.LinesByNumber[number]; // TODO: nicer exception for missing line
+                        if (!Definition.LinesByNumber.TryGetValue(number, out lineDef))
+                        {
+                            throw new FileLoadException(el, "Unknown form line number: " + number);
+                        }
                     }
 
                     _values.Add(lineDef.Name, ParseValue(lineDef, el));

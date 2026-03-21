@@ -35,8 +35,15 @@ class TaxReturn
             switch (node.Name.LocalName)
             {
                 case "Form":
-                    var formInst = new FormInstance(node, TaxYearDef);
-                    AddForm(formInst);
+                    try
+                    {
+                        var formInst = new FormInstance(node, TaxYearDef);
+                        AddForm(formInst);
+                    }
+                    catch (FileLoadException ex)
+                    {
+                        throw new FileLoadException($"Failed to load tax return '{filePath}'", ex);
+                    }
                     break;
                 case "DataImporters":
                     foreach (var el in node.Elements())
