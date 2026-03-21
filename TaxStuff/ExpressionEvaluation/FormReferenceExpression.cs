@@ -30,6 +30,12 @@ record FormReferenceExpression(string FormName) : BaseExpression
         {
             if (form.Definition.AllowMultiple)
             {
+                // When we are evaluating a form that allows multiple and we find a reference to
+                // that form, we return a the currently evaluating form. This allows us to put
+                // calculations in a form that allows multiple that are local to that form.
+                // This logic does not really make sense if the reference comes from outside the form.
+                // Fortunately the only form that is Calculable and AllowMultiple is 8949 and it has
+                // no references to outside forms.
                 if (env.CurrentForm.Definition == form.Definition)
                 {
                     foreach (var f in form.Forms)
