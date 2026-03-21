@@ -9,7 +9,7 @@ public class ExpressionEvaluationTests
 {
 
     [TestMethod]
-    public void TestArithmaticExpressions()
+    public void TestArithmeticExpressions()
     {
         Test("1 + 2", 3m);
         Test("3 * 4", 12m);
@@ -20,14 +20,14 @@ public class ExpressionEvaluationTests
         {
             var expr = MyExpressionParser.Parse(null, expression);
             var result = expr.Evaluate(new EvaluationEnvironment(null, null));
-            Assert.IsInstanceOfType<NumberResult>(result, $"Expresion '{expression}' did not evaluate to a number type.");
+            Assert.IsInstanceOfType<NumberResult>(result, $"Expression '{expression}' did not evaluate to a number type.");
             decimal actual = ((NumberResult)result).Value;
             Assert.AreEqual(expected, actual, $"Expression '{expression}' did not evaluate to the expected value.");
         }
     }
 
     [TestMethod]
-    public void TestLogicalExpressiosn()
+    public void TestLogicalExpressions()
     {
         Test("1 < 2", true);
         Test("1 > 2", false);
@@ -44,7 +44,7 @@ public class ExpressionEvaluationTests
         {
             var expr = MyExpressionParser.Parse(null, expression);
             var result = expr.Evaluate(new EvaluationEnvironment(null, null));
-            Assert.IsInstanceOfType<BoolResult>(result, $"Expresion '{expression}' did not evaluate to a boolean type.");
+            Assert.IsInstanceOfType<BoolResult>(result, $"Expression '{expression}' did not evaluate to a boolean type.");
             bool actual = ((BoolResult)result).Value;
             Assert.AreEqual(expected, actual, $"Expression '{expression}' did not evaluate to the expected value.");
         }

@@ -79,8 +79,6 @@ couple of different license, which makes this more complicated.
 * Somehow unify the parsing, typechecking, and evaluation representation of
   language semantics. Particularly `EvaluationResult` and `ExpressionType` have
   a similar shape.
-* Add some build time or CI time validation of all tax year definitions. Currently we lazy load only
-  the relevant year for a return, so other years are not getting type checked.
 * Some abstraction for values that are repeatedly used in tax forms but don't appear as lines on forms.
   A specific example is "state tax", which is currently calculated as W-2 Line state income tax paid
   plus CASDI in W-2 Line 14. Ideally this would be defined in one place instead of in each expression
