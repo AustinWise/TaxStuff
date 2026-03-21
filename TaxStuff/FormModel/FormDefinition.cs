@@ -58,6 +58,8 @@ class FormDefinition : IHasName
                     var lineDef = lines.CheckNameAndAdd(node, new LineDefinition(env, node));
                     if (lineDef.Number is not null && !lineByNumber.TryAdd(lineDef.Number, lineDef))
                         throw new FileLoadException(node, $"Duplicate line number '{lineDef.Number}'.");
+                    if (lineDef.Calc is not null && !Calculable)
+                        throw new FileLoadException(node, "Unexpected Calc attribute in non-calculable form.");
                     break;
                 case "Assert":
                     // We don't support loading XML expressions on assert lines
