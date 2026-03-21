@@ -19,7 +19,7 @@ public class ExpressionParsingTests
         ValidateParse("1", new NumberExpression(1));
         ValidateParse("-1", new BinaryOpExpression(new NumberExpression(-1), BinaryOp.Multiply, new NumberExpression(1)));
         ValidateParse("1+2", new BinaryOpExpression(new NumberExpression(1), BinaryOp.Add, new NumberExpression(2)));
-        ValidateParse("1-2", new BinaryOpExpression(new NumberExpression(1), BinaryOp.Substract, new NumberExpression(2)));
+        ValidateParse("1-2", new BinaryOpExpression(new NumberExpression(1), BinaryOp.Subtract, new NumberExpression(2)));
         ValidateParse("1*2", new BinaryOpExpression(new NumberExpression(1), BinaryOp.Multiply, new NumberExpression(2)));
         ValidateParse("1/2", new BinaryOpExpression(new NumberExpression(1), BinaryOp.Divide, new NumberExpression(2)));
         ValidateParse("1+2/3", new BinaryOpExpression(new NumberExpression(1), BinaryOp.Add, new BinaryOpExpression(new NumberExpression(2), BinaryOp.Divide, new NumberExpression(3))));

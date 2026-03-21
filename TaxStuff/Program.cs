@@ -117,12 +117,12 @@ calcCommand.SetAction(parseResult =>
 
     foreach (var pdfForm in taxReturn.TaxYearDef.PdfInfo.Forms.Values)
     {
-        if (taxReturn.Forms.TryGetValue(pdfForm.FormName, out FormInstances? formInsts))
+        if (taxReturn.Forms.TryGetValue(pdfForm.FormName, out FormInstances? formInstances))
         {
             int i = 1;
-            foreach (var inst in formInsts.Forms)
+            foreach (var inst in formInstances.Forms)
             {
-                string outputFileName = formInsts.Forms.Count == 1 ? pdfForm.FormName + ".pdf" : $"{pdfForm.FormName}-{i}.pdf";
+                string outputFileName = formInstances.Forms.Count == 1 ? pdfForm.FormName + ".pdf" : $"{pdfForm.FormName}-{i}.pdf";
                 string outputPath = Path.Combine(outputFolderInfo.FullName, outputFileName);
 
                 pdfForm.Save(outputPath, inst);

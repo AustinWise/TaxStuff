@@ -48,17 +48,17 @@ class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisito
 
     public static BaseExpression Parse(ParsingEnvironment env, string input)
     {
-        var vistor = new MyExpressionParser(env);
+        var visitor = new MyExpressionParser(env);
         ICharStream stream = CharStreams.fromString(input);
         ExpressionLexer lexer = new(stream);
-        lexer.AddErrorListener(vistor);
+        lexer.AddErrorListener(visitor);
         ITokenStream tokens = new CommonTokenStream(lexer);
         var parser = new ExpressionParser(tokens);
         parser.RemoveErrorListeners();
-        parser.AddErrorListener(vistor);
+        parser.AddErrorListener(visitor);
         parser.BuildParseTree = true;
         var tree = parser.completeExpression();
-        BaseExpression result = vistor.Visit(tree) ?? throw new Exception("Programming error, no expression returned.");
+        BaseExpression result = visitor.Visit(tree) ?? throw new Exception("Programming error, no expression returned.");
         return result;
     }
 
@@ -97,7 +97,7 @@ class MyExpressionParser(ParsingEnvironment _environment) : ExpressionBaseVisito
             var binOp = op.Type switch
             {
                 ExpressionLexer.PLUS => BinaryOp.Add,
-                ExpressionLexer.MINUS => BinaryOp.Substract,
+                ExpressionLexer.MINUS => BinaryOp.Subtract,
                 ExpressionLexer.TIMES => BinaryOp.Multiply,
                 ExpressionLexer.DIVIDE => BinaryOp.Divide,
                 ExpressionLexer.EQUAL => BinaryOp.Equal,

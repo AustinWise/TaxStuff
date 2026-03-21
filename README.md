@@ -61,7 +61,7 @@ couple of different license, which makes this more complicated.
   carryover and Schedule J.
 * Support for filling in personal information into PDFs.
 * Support for filtering array values, probably using a bracket syntax. Use cases:
-  * Replace the special filter function `FilterForm8949` with native filitering
+  * Replace the special filter function `FilterForm8949` with native filtering
      support.
 * Similar to the above filtering, support a "group by" feature.
   * For 2020 Form 1040 Schedule 3 Line 10, it would be nice  to write something

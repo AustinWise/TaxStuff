@@ -17,7 +17,7 @@ class FormDefinition : IHasName
             throw new FileLoadException(doc, "Missing root element");
 
         this.AllowMultiple = doc.Root.OptionalBoolAttributeValue("AllowMultiple") ?? false;
-        this.Calculateable = doc.Root.OptionalBoolAttributeValue("Calculateable") ?? true;
+        this.Calculable = doc.Root.OptionalBoolAttributeValue("Calculable") ?? true;
         this.RequireSsn = doc.Root.OptionalBoolAttributeValue("RequireSsn") ?? false;
 
         var enums = new Dictionary<string, EnumDefinition>();
@@ -128,7 +128,7 @@ class FormDefinition : IHasName
     /// <summary>
     /// Indicates whether there are any values to calculate on this form.
     /// </summary>
-    public bool Calculateable { get; }
+    public bool Calculable { get; }
 
     /// <summary>
     /// Indicates that the form instance must have a SSN attached to it.

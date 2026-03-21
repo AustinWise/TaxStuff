@@ -9,7 +9,7 @@ class TaxRates(TaxComputationWorksheet worksheet)
     public decimal CalculateTax(FilingStatus status, decimal taxableAmount)
     {
         if (taxableAmount < 0)
-            throw new ArgumentOutOfRangeException(nameof(taxableAmount), "Negitive taxable amount");
+            throw new ArgumentOutOfRangeException(nameof(taxableAmount), "Negative taxable amount");
 
         if (taxableAmount == 0)
             return 0;

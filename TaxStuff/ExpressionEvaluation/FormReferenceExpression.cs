@@ -60,7 +60,7 @@ record FormReferenceExpression(string FormName) : BaseExpression
             // treated as zero.
             // We don't have to worry about treating references to the current form
             // as non-array, because we know that FormName does not exist in this
-            // return and therefore cannot possiblely be the current form.
+            // return and therefore cannot possibly be the current form.
             var def = env.Return.TaxYearDef.Forms[FormName];
             if (def.AllowMultiple)
                 return new ArrayResult([]);

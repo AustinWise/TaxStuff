@@ -19,9 +19,9 @@ record LineDefinition(string Number, string Name, ExpressionType Type, BaseExpre
         // TODO: implement support for other types
         // Currently we don't have a way of looking up what types are available,
         // so we can't tell if the type if valid or not.
-        // Also the ExpressionType type system is structual, while these lines reference nominal types.
+        // Also the ExpressionType type system is structural, while these lines reference nominal types.
         // That is, ExpressionType describes a shape while Type here is just a name.
-        // So these systems are not really compatible right now, opps.
+        // So these systems are not really compatible right now, oops.
         throw new FileLoadException(attr, "Unsupported line type: " + attr.Value);
     }
 

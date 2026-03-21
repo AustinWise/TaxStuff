@@ -36,7 +36,7 @@ record NumberResult(decimal Value) : EvaluationResult
         return op switch
         {
             BinaryOp.Add => new NumberResult(Value + rightNumber.Value),
-            BinaryOp.Substract => new NumberResult(Value - rightNumber.Value),
+            BinaryOp.Subtract => new NumberResult(Value - rightNumber.Value),
             BinaryOp.Multiply => new NumberResult(Value * rightNumber.Value),
             BinaryOp.Divide => new NumberResult(Value / rightNumber.Value),
             BinaryOp.Equal => new BoolResult(Value == rightNumber.Value),

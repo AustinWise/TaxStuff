@@ -22,16 +22,16 @@ class FormPdfInfo
         _filePath = Path.Combine(dirPath, node.AttributeValue("File"));
 
         using var reader = new PdfReader(_filePath);
-        using var pdfdoc = new PdfDocument(reader);
+        using var pdfDoc = new PdfDocument(reader);
 
-        var pdfformn = iText.Forms.PdfAcroForm.GetAcroForm(pdfdoc, false);
+        var pdfForm = iText.Forms.PdfAcroForm.GetAcroForm(pdfDoc, false);
         var allFieldNames = new List<string>();
-        foreach (var kvp in pdfformn.GetFormFields())
+        foreach (var kvp in pdfForm.GetFormFields())
         {
             allFieldNames.Add(kvp.Key);
         }
 
-        var xfa = new XfaForm(pdfdoc);
+        var xfa = new XfaForm(pdfDoc);
         var xfaXml = xfa.GetDomDocument();
 
         var fieldsAndAssistName = new List<(string, string)>();
@@ -65,9 +65,9 @@ class FormPdfInfo
     {
         using var reader = new PdfReader(_filePath);
         using var writer = new PdfWriter(outputPath);
-        using var pdfdoc = new PdfDocument(reader, writer);
+        using var pdfDoc = new PdfDocument(reader, writer);
 
-        var pdfformn = iText.Forms.PdfAcroForm.GetAcroForm(pdfdoc, false);
+        var pdfForm = iText.Forms.PdfAcroForm.GetAcroForm(pdfDoc, false);
 
         var valueMap = formInst.GetValueSnapshot();
 
@@ -75,7 +75,7 @@ class FormPdfInfo
         {
             var lineDef = formInst.Definition.LinesByNumber[kvp.Key];
             var value = valueMap[lineDef.Name];
-            var field = pdfformn.GetField(kvp.Value);
+            var field = pdfForm.GetField(kvp.Value);
             field.SetValue(FormatResult(value));
         }
 

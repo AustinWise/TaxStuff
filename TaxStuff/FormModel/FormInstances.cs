@@ -18,7 +18,7 @@ class FormInstances(FormDefinition def)
 
     public void Calculate(TaxReturn @return)
     {
-        if (!Definition.Calculateable)
+        if (!Definition.Calculable)
             return;
 
         foreach (var inst in Forms)

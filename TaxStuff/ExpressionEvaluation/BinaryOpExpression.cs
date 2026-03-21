@@ -6,7 +6,7 @@ namespace TaxStuff.ExpressionEvaluation;
 enum BinaryOp
 {
     Add,
-    Substract,
+    Subtract,
     Multiply,
     Divide,
     Equal,
@@ -22,7 +22,7 @@ record BinaryOpExpression(BaseExpression Left, BinaryOp Operation, BaseExpressio
     private static readonly Dictionary<BinaryOp, ExpressionType[]> ValidTypes = new()
     {
         { BinaryOp.Add, new ExpressionType[] { NumberType.Instance } },
-        { BinaryOp.Substract, new ExpressionType[] { NumberType.Instance } },
+        { BinaryOp.Subtract, new ExpressionType[] { NumberType.Instance } },
         { BinaryOp.Multiply, new ExpressionType[] { NumberType.Instance } },
         { BinaryOp.Divide, new ExpressionType[] { NumberType.Instance } },
         { BinaryOp.Equal, new ExpressionType[] { NumberType.Instance, BoolType.Instance, EnumElementType.Form8949Code } },
@@ -36,7 +36,7 @@ record BinaryOpExpression(BaseExpression Left, BinaryOp Operation, BaseExpressio
     private static readonly Dictionary<BinaryOp, ExpressionType> ResultTypes = new()
     {
         { BinaryOp.Add, NumberType.Instance },
-        { BinaryOp.Substract, NumberType.Instance },
+        { BinaryOp.Subtract, NumberType.Instance },
         { BinaryOp.Multiply, NumberType.Instance },
         { BinaryOp.Divide, NumberType.Instance },
         { BinaryOp.Equal, BoolType.Instance },
