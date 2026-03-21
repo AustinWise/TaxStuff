@@ -23,7 +23,7 @@
         I believe this is qualifies as a "reasonable method" per the instructions for this form.
         This might not be right if using the standard deduction.
     -->
-    <Line Number="9b" Desc="State, Local, and Foreign Income Tax" Calc="SUM(FormW-2.StateIncomeTax) * Line8 / Form1040.AGI" />
+    <Line Number="9b" Desc="State, Local, and Foreign Income Tax" Calc="(SUM(FormW-2.StateIncomeTax) + SUM(FormW-2.Line14CASDI)) * Line8 / Form1040.AGI" />
     <Line Number="9c" Desc="Miscellaneous Investment Expenses" />
     <Line Number="9d" Calc="Line9a + Line9b + Line9c" />
     <Line Number="10" Desc="Additional Modifications" />
