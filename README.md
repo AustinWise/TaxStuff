@@ -54,6 +54,9 @@ couple of different license, which makes this more complicated.
 # TODO
 
 * More unit tests
+* Built in support for the standard deduction somehow. Currently if you use that deduction you have
+  get the number from the [IRS website](https://www.irs.gov/help/ita/how-much-is-my-standard-deduction)
+  and include it in the input to the program.
 * Support for references to previous years, to support things like capital loss
   carryover and Schedule J.
 * Support for filling in personal information into PDFs.
