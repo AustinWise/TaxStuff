@@ -61,7 +61,7 @@ class TaxReturn
                     }
                     break;
                 default:
-                    throw new FileLoadException(node, "Unkown node name: " + node.Name);
+                    throw new FileLoadException(node, "Unknown node name: " + node.Name);
             }
         }
     }

@@ -48,8 +48,8 @@ class FormInstance : IHasFieldEvaluation
     {
         var lineDef = Definition.Lines[lineName];
         if (lineDef.Type != valueType)
-            throw new Exception($"Form{Definition.Name}.{lineDef.Name} is should be of type {lineDef.Type}, recieved a {valueType}");
-        _values.Add(lineName, value);
+            throw new Exception($"Form{Definition.Name}.{lineDef.Name} is should be of type {lineDef.Type}, received a {valueType}");
+        _values.Add(lineName, value.Round());
     }
 
     public FormInstance(XElement node, TaxYearDefinition taxYear)
@@ -104,7 +104,7 @@ class FormInstance : IHasFieldEvaluation
                         }
                     }
 
-                    _values.Add(lineDef.Name, ParseValue(lineDef, el));
+                    _values.Add(lineDef.Name, ParseValue(lineDef, el).Round());
 
                     break;
                 default:
@@ -187,7 +187,7 @@ class FormInstance : IHasFieldEvaluation
         else
             throw new Exception($"Don't know how to make a default value for line {lineDef.Name} of type {lineDef.Type}.");
 
-        _values.Add(lineDef.Name, value);
+        _values.Add(lineDef.Name, value.Round());
         return value;
     }
 }

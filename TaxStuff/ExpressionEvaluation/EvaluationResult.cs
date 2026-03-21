@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using TaxStuff.FormModel;
@@ -23,6 +24,8 @@ abstract record EvaluationResult
     }
 
     public virtual decimal AsNumber() => throw new NotSupportedException();
+
+    public virtual EvaluationResult Round() => this;
 }
 
 record NumberResult(decimal Value) : EvaluationResult
@@ -48,9 +51,14 @@ record NumberResult(decimal Value) : EvaluationResult
 
     public override decimal AsNumber() => Value;
 
+    public override EvaluationResult Round()
+    {
+        return new NumberResult(Math.Round(Value, MidpointRounding.AwayFromZero));
+    }
+
     protected override bool PrintMembers(StringBuilder builder)
     {
-        builder.AppendFormat("{0:c}", Value);
+        builder.AppendFormat("{0:#,#;(#,#);}", Value);
         return true;
     }
 }
