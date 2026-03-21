@@ -100,7 +100,7 @@ class FormInstance : IHasFieldEvaluation
 
                     break;
                 default:
-                    throw new FileLoadException(el, "Unkown node name: " + el.Name);
+                    throw new FileLoadException(el, "Unknown node name: " + el.Name);
             }
         }
 
@@ -139,7 +139,7 @@ class FormInstance : IHasFieldEvaluation
         {
             if (!_values.ContainsKey(line.Name))
             {
-                EvaluateField(env, line.Name);
+                EvaluateField(env, line);
             }
         }
         foreach (var assert in Definition.Asserts)
@@ -159,6 +159,11 @@ class FormInstance : IHasFieldEvaluation
             lineDef = Definition.LinesByNumber[fieldName[4..]];
         else
             lineDef = Definition.Lines[fieldName];
+        return EvaluateField(env, lineDef);
+    }
+
+    private EvaluationResult EvaluateField(EvaluationEnvironment env, LineDefinition lineDef)
+    {
 
         if (_values.TryGetValue(lineDef.Name, out EvaluationResult? value))
         {
