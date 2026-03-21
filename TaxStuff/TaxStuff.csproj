@@ -11,17 +11,26 @@
         <NoWarn>$(NoWarn);CS3021</NoWarn>
         <PublishReadyToRun>true</PublishReadyToRun>
         <Nullable>enable</Nullable>
+        <!--
+            The generated code has this expression:
+                o.@Item is global::TaxStuff.DataImport.OFX.BooleanType
+            Where @Item is BooleanType. Since BooleanType is an enum, this expression is always true
+            and raise error CS0183. All these expressions are guarding throw exceptions for
+            type mismatches, so these are harmless.
+         -->
+        <SerializationAssemblyDisabledWarnings>CS0183;$(SerializationAssemblyDisabledWarnings)</SerializationAssemblyDisabledWarnings>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
         <PackageReference Include="itext7" Version="7.1.19" />
-        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="10.0.2" />
-        <PackageReference Include="System.CommandLine" Version="2.0.2" />
+        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="10.0.5" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="System.CommandLine" Version="2.0.5" />
     </ItemGroup>
 
     <ItemGroup>
-        <DotNetCliToolReference Include="Microsoft.XmlSerializer.Generator" Version="10.0.2" />
+        <DotNetCliToolReference Include="Microsoft.XmlSerializer.Generator" Version="10.0.5" />
     </ItemGroup>
 
     <ItemGroup>
