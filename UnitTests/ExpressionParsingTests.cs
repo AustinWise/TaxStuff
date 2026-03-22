@@ -1,19 +1,17 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TaxStuff.ExpressionEvaluation;
+﻿using TaxStuff.ExpressionEvaluation;
 using TaxStuff.ExpressionParsing;
 
 namespace UnitTests;
 
-[TestClass]
 public class ExpressionParsingTests
 {
     static void ValidateParse(string input, BaseExpression expectedParse)
     {
-        var actual = MyExpressionParser.Parse(null, input);
-        Assert.AreEqual(expectedParse, actual, $"\nFrom input '{input}'\nexpected:\n{expectedParse}\nactual:\n{actual}");
+        var actual = MyExpressionParser.Parse(null!, input);
+        Assert.Equal(expectedParse, actual);
     }
 
-    [TestMethod]
+    [Fact]
     public void TestExpressionParsing()
     {
         ValidateParse("1", new NumberExpression(1));

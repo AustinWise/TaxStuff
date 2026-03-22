@@ -1,14 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TaxStuff.ExpressionEvaluation;
+﻿using TaxStuff.ExpressionEvaluation;
 using TaxStuff.ExpressionParsing;
 
 namespace UnitTests;
 
-[TestClass]
 public class ExpressionEvaluationTests
 {
 
-    [TestMethod]
+    [Fact]
     public void TestArithmeticExpressions()
     {
         Test("1 + 2", 3m);
@@ -18,15 +16,15 @@ public class ExpressionEvaluationTests
 
         static void Test(string expression, decimal expected)
         {
-            var expr = MyExpressionParser.Parse(null, expression);
-            var result = expr.Evaluate(new EvaluationEnvironment(null, null));
-            Assert.IsInstanceOfType<NumberResult>(result, $"Expression '{expression}' did not evaluate to a number type.");
+            var expr = MyExpressionParser.Parse(null!, expression);
+            var result = expr.Evaluate(new EvaluationEnvironment(null!, null!));
+            Assert.IsType<NumberResult>(result);
             decimal actual = ((NumberResult)result).Value;
-            Assert.AreEqual(expected, actual, $"Expression '{expression}' did not evaluate to the expected value.");
+            Assert.Equal(expected, actual);
         }
     }
 
-    [TestMethod]
+    [Fact]
     public void TestLogicalExpressions()
     {
         Test("1 < 2", true);
@@ -42,11 +40,11 @@ public class ExpressionEvaluationTests
 
         static void Test(string expression, bool expected)
         {
-            var expr = MyExpressionParser.Parse(null, expression);
-            var result = expr.Evaluate(new EvaluationEnvironment(null, null));
-            Assert.IsInstanceOfType<BoolResult>(result, $"Expression '{expression}' did not evaluate to a boolean type.");
+            var expr = MyExpressionParser.Parse(null!, expression);
+            var result = expr.Evaluate(new EvaluationEnvironment(null!, null!));
+            Assert.IsType<BoolResult>(result);
             bool actual = ((BoolResult)result).Value;
-            Assert.AreEqual(expected, actual, $"Expression '{expression}' did not evaluate to the expected value.");
+            Assert.Equal(expected, actual);
         }
     }
 }
